@@ -9,7 +9,6 @@ import {
   reactive,
   toRefs,
   ref,
-  onUpdated,
   onMounted,
 } from "vue";
 interface Rectangle {
@@ -49,10 +48,11 @@ export default defineComponent({
   },
   setup(props) {
     const { canvas, ctx, shapes } = toRefs(props);
-    const currentShape = ref<Shape | null>(null);
     const state = reactive({
-      offsetX: 0,
-      offsetY: 0,
+      startX: 0,
+      startY: 0,
+      currentShapeIndex: 0,
+      isDragging: false,
     });
     const isPointShape = (x: number, y: number, shape: Shape) => {
       switch (shape.type) {
@@ -107,24 +107,101 @@ export default defineComponent({
     };
     const onMouseDown = (event: MouseEvent) => {
       if (canvas.value) {
-        const mouseX =
+        event.preventDefault();
+        state.startX =
           event.clientX - canvas.value?.getBoundingClientRect().left;
-        const mouseY =
+        state.startY =
           event.clientY - canvas.value?.getBoundingClientRect().top;
+        let index = 0;
         for (let shape of shapes.value) {
-          if (isPointShape(mouseX, mouseY, shape)) {
-            state.offsetX = mouseX - shape.x;
-            state.offsetY = mouseY - shape.y;
-            console.log(state.offsetX, state.offsetY);
-            break;
+          if (isPointShape(state.startX, state.startY, shape)) {
+            state.currentShapeIndex = index;
+            state.isDragging = true;
+            return;
+          }
+          index++;
+        }
+      }
+    };
+    const onMouseUp = (event: MouseEvent) => {
+      if (!state.isDragging) {
+        return;
+      }
+      event.preventDefault();
+      state.isDragging = false;
+    };
+    const onMouseOut = (event: MouseEvent) => {
+      if (!state.isDragging) {
+        return;
+      }
+      event.preventDefault();
+      state.isDragging = false;
+    };
+    const onMouseMove = (event: MouseEvent) => {
+      if (!state.isDragging) return;
+      else {
+        event.preventDefault();
+        if (canvas.value) {
+          const mouseX =
+            event.clientX - canvas.value?.getBoundingClientRect().left;
+          const mouseY =
+            event.clientY - canvas.value?.getBoundingClientRect().top;
+          const currentShape = shapes.value[state.currentShapeIndex];
+          const dx = mouseX - state.startX;
+          const dy = mouseY - state.startY;
+          currentShape.x += dx;
+          currentShape.y += dy;
+          draw_shape();
+          state.startX = mouseX;
+          state.startY = mouseY;
+        }
+      }
+    };
+    const draw_shape = () => {
+      if (canvas.value && ctx.value) {
+        ctx.value?.clearRect(0, 0, canvas.value?.width, canvas.value?.height);
+        for (let shape of shapes.value) {
+          switch (shape.type) {
+            case "rectangle":
+              ctx.value.strokeRect(shape.x, shape.y, shape.width, shape.height);
+              break;
+            case "triangle":
+              ctx.value.beginPath();
+              ctx.value.moveTo(shape.x, shape.y - shape.height / 2);
+              ctx.value.lineTo(
+                shape.x - shape.base / 2,
+                shape.y + shape.height / 2
+              );
+              ctx.value.lineTo(
+                shape.x + shape.base / 2,
+                shape.y + shape.height / 2
+              );
+              ctx.value.closePath();
+              ctx.value.stroke();
+              break;
+            case "circle":
+              ctx.value.beginPath();
+              ctx.value.arc(shape.x, shape.y, shape.radius, 0, 2 * Math.PI);
+              ctx.value.stroke();
+              break;
           }
         }
       }
     };
     onMounted(() => {
       canvas.value?.addEventListener("mousedown", onMouseDown);
+      canvas.value?.addEventListener("mouseup", onMouseUp);
+      canvas.value?.addEventListener("mouseout", onMouseOut);
+      canvas.value?.addEventListener("mousemove", onMouseMove);
     });
-    return { state, isPointShape, onMouseDown };
+    return {
+      state,
+      isPointShape,
+      onMouseDown,
+      onMouseUp,
+      onMouseOut,
+      onMouseMove,
+    };
   },
 });
 </script>
