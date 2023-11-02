@@ -8,7 +8,7 @@ import {
   PropType,
   reactive,
   toRefs,
-  ref,
+  onBeforeUnmount,
   onMounted,
 } from "vue";
 interface Rectangle {
@@ -193,6 +193,12 @@ export default defineComponent({
       canvas.value?.addEventListener("mouseup", onMouseUp);
       canvas.value?.addEventListener("mouseout", onMouseOut);
       canvas.value?.addEventListener("mousemove", onMouseMove);
+    });
+    onBeforeUnmount(() => {
+      canvas.value?.removeEventListener("mousedown", onMouseDown);
+      canvas.value?.removeEventListener("mouseup", onMouseUp);
+      canvas.value?.removeEventListener("mouseout", onMouseOut);
+      canvas.value?.removeEventListener("mousemove", onMouseMove);
     });
     return {
       state,

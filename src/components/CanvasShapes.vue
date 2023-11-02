@@ -45,7 +45,6 @@ export default defineComponent({
     });
     const addShape = (shape: Shape) => {
       state.shapes.push(shape);
-      console.log(state.shapes);
     };
 
     onMounted(() => {

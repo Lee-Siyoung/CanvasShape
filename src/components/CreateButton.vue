@@ -28,7 +28,6 @@ export default defineComponent({
         const y = canvas.value.height / 4;
         const width = 80;
         const height = 60;
-        console.log(canvas.value.width, canvas.value.height);
         ctx.value.strokeRect(x, y, width, height);
         const shape = {
           type: "rectangle",
