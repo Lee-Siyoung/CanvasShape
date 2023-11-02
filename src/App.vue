@@ -1,15 +1,15 @@
 <template>
-  <CanvasFigure />
+  <CanvasShapes />
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import CanvasFigure from "./components/CanvasFigure.vue";
+import CanvasShapes from "./components/CanvasShapes.vue";
 
 export default defineComponent({
   name: "App",
   components: {
-    CanvasFigure,
+    CanvasShapes,
   },
 });
 </script>
