@@ -35,6 +35,7 @@ export default defineComponent({
           y,
           width,
           height,
+          click: false,
         };
         emit("addShape", shape);
       }
@@ -58,6 +59,7 @@ export default defineComponent({
           y,
           height,
           base,
+          click: false,
         };
         emit("addShape", shape);
       }
@@ -76,6 +78,7 @@ export default defineComponent({
           x,
           y,
           radius,
+          click: false,
         };
         emit("addShape", shape);
       }

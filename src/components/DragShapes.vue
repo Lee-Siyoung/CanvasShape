@@ -17,6 +17,7 @@ interface Rectangle {
   y: number;
   width: number;
   height: number;
+  click: boolean;
 }
 interface Triangle {
   type: "triangle";
@@ -24,12 +25,14 @@ interface Triangle {
   y: number;
   height: number;
   base: number;
+  click: boolean;
 }
 interface Circle {
   type: "circle";
   x: number;
   y: number;
   radius: number;
+  click: boolean;
 }
 type Shape = Triangle | Circle | Rectangle;
 export default defineComponent({
@@ -46,7 +49,7 @@ export default defineComponent({
       required: true,
     },
   },
-  setup(props) {
+  setup(props, { emit }) {
     const { canvas, ctx, shapes } = toRefs(props);
     const state = reactive({
       startX: 0,
@@ -101,7 +104,8 @@ export default defineComponent({
         }
         case "circle": {
           const distance = Math.sqrt((x - shape.x) ** 2 + (y - shape.y) ** 2);
-          return distance <= shape.radius;
+          if (distance <= shape.radius) return true;
+          else return false;
         }
       }
     };
@@ -114,9 +118,10 @@ export default defineComponent({
           event.clientY - canvas.value?.getBoundingClientRect().top;
         let index = 0;
         for (let shape of shapes.value) {
-          if (isPointShape(state.startX, state.startY, shape)) {
+          if (isPointShape(state.startX, state.startY, shape) && ctx.value) {
             state.currentShapeIndex = index;
             state.isDragging = true;
+
             return;
           }
           index++;
