@@ -56,7 +56,6 @@ export default defineComponent({
     const onKeyUp = (event: KeyboardEvent) => {
       if (event.key === "Delete") {
         toDeletedShapes.value = shapes.value.filter((shape) => !shape.click);
-        console.log(toDeletedShapes.value);
         draw_shape();
         emit("deleteShapes", toDeletedShapes.value);
       }
