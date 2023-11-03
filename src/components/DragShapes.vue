@@ -114,10 +114,14 @@ export default defineComponent({
         event.preventDefault();
         for (let shape of shapes.value) {
           if (isPointShape(state.startX, state.startY, shape)) {
-            if (shape.click === false) shape.click = true;
-            else shape.click = false;
+            if (shape.click === false) {
+              shape.click = true;
+            } else {
+              shape.click = false;
+            }
           }
         }
+        draw_shape();
       }
     };
 
@@ -180,9 +184,16 @@ export default defineComponent({
         for (let shape of shapes.value) {
           switch (shape.type) {
             case "rectangle":
+              if (shape.click == true) {
+                ctx.value.strokeStyle = "red";
+              } else ctx.value.strokeStyle = "black ";
               ctx.value.strokeRect(shape.x, shape.y, shape.width, shape.height);
+
               break;
             case "triangle":
+              if (shape.click == true) {
+                ctx.value.strokeStyle = "red";
+              } else ctx.value.strokeStyle = "black ";
               ctx.value.beginPath();
               ctx.value.moveTo(shape.x, shape.y - shape.height / 2);
               ctx.value.lineTo(
@@ -197,6 +208,9 @@ export default defineComponent({
               ctx.value.stroke();
               break;
             case "circle":
+              if (shape.click == true) {
+                ctx.value.strokeStyle = "red";
+              } else ctx.value.strokeStyle = "black ";
               ctx.value.beginPath();
               ctx.value.arc(shape.x, shape.y, shape.radius, 0, 2 * Math.PI);
               ctx.value.stroke();
