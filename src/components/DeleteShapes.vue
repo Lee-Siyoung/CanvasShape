@@ -9,6 +9,7 @@ import {
   toRefs,
   onMounted,
   onBeforeUnmount,
+  ref,
 } from "vue";
 interface Rectangle {
   type: "rectangle";
@@ -51,39 +52,55 @@ export default defineComponent({
   emits: ["deleteShapes"],
   setup(props, { emit }) {
     const { canvas, ctx, shapes } = toRefs(props);
-
-    const onDoubleClick = () => {
-      for (let shape of shapes.value) {
-        //if (isPointShape(state.startX, state.startY, shape) && ctx.value) {
-        if (shape.click) {
-          console.log("클릭해제");
-          shape.click = false;
-        } else {
-          console.log("클릭");
-          shape.click = true;
-        }
-        return;
-      }
-    };
-    //};
+    const toDeletedShapes = ref<Shape[]>([]);
     const onKeyUp = (event: KeyboardEvent) => {
       if (event.key === "Delete") {
-        const toDeleteShapes = shapes.value.filter((shape) => shape.click);
-        emit("deleteShapes", toDeleteShapes);
-        //draw_shape();
+        toDeletedShapes.value = shapes.value.filter((shape) => !shape.click);
+        console.log(toDeletedShapes.value);
+        draw_shape();
+        emit("deleteShapes", toDeletedShapes.value);
+      }
+    };
+    const draw_shape = () => {
+      if (canvas.value && ctx.value) {
+        ctx.value?.clearRect(0, 0, canvas.value?.width, canvas.value?.height);
+        for (let shape of toDeletedShapes.value) {
+          switch (shape.type) {
+            case "rectangle":
+              ctx.value.strokeRect(shape.x, shape.y, shape.width, shape.height);
+              break;
+            case "triangle":
+              ctx.value.beginPath();
+              ctx.value.moveTo(shape.x, shape.y - shape.height / 2);
+              ctx.value.lineTo(
+                shape.x - shape.base / 2,
+                shape.y + shape.height / 2
+              );
+              ctx.value.lineTo(
+                shape.x + shape.base / 2,
+                shape.y + shape.height / 2
+              );
+              ctx.value.closePath();
+              ctx.value.stroke();
+              break;
+            case "circle":
+              ctx.value.beginPath();
+              ctx.value.arc(shape.x, shape.y, shape.radius, 0, 2 * Math.PI);
+              ctx.value.stroke();
+              break;
+          }
+        }
       }
     };
 
     onMounted(() => {
-      canvas.value?.addEventListener("dblclick", onDoubleClick);
       window.addEventListener("keyup", onKeyUp);
     });
     onBeforeUnmount(() => {
-      canvas.value?.removeEventListener("dblclick", onDoubleClick);
       window.removeEventListener("keyup", onKeyUp);
     });
 
-    return {};
+    return { onKeyUp, draw_shape };
   },
 });
 </script>

@@ -59,10 +59,7 @@ export default defineComponent({
       state.shapes.push(shape);
     };
     const deleteShapes = (toDeleteShapes: Shape[]) => {
-      const updatedShapes = state.shapes.filter(
-        (shape) => !toDeleteShapes.includes(shape)
-      );
-      state.shapes = updatedShapes;
+      state.shapes = toDeleteShapes;
     };
 
     onMounted(() => {

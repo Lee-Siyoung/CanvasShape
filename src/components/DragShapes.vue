@@ -49,7 +49,7 @@ export default defineComponent({
       required: true,
     },
   },
-  setup(props, { emit }) {
+  setup(props) {
     const { canvas, ctx, shapes } = toRefs(props);
     const state = reactive({
       startX: 0,
@@ -109,6 +109,18 @@ export default defineComponent({
         }
       }
     };
+    const onDoubleClick = (event: MouseEvent) => {
+      if (canvas.value) {
+        event.preventDefault();
+        for (let shape of shapes.value) {
+          if (isPointShape(state.startX, state.startY, shape)) {
+            if (shape.click === false) shape.click = true;
+            else shape.click = false;
+          }
+        }
+      }
+    };
+
     const onMouseDown = (event: MouseEvent) => {
       if (canvas.value) {
         event.preventDefault();
@@ -118,7 +130,7 @@ export default defineComponent({
           event.clientY - canvas.value?.getBoundingClientRect().top;
         let index = 0;
         for (let shape of shapes.value) {
-          if (isPointShape(state.startX, state.startY, shape) && ctx.value) {
+          if (isPointShape(state.startX, state.startY, shape)) {
             state.currentShapeIndex = index;
             state.isDragging = true;
 
@@ -198,12 +210,14 @@ export default defineComponent({
       canvas.value?.addEventListener("mouseup", onMouseUp);
       canvas.value?.addEventListener("mouseout", onMouseOut);
       canvas.value?.addEventListener("mousemove", onMouseMove);
+      canvas.value?.addEventListener("dblclick", onDoubleClick);
     });
     onBeforeUnmount(() => {
       canvas.value?.removeEventListener("mousedown", onMouseDown);
       canvas.value?.removeEventListener("mouseup", onMouseUp);
       canvas.value?.removeEventListener("mouseout", onMouseOut);
       canvas.value?.removeEventListener("mousemove", onMouseMove);
+      canvas.value?.removeEventListener("dblclick", onDoubleClick);
     });
     return {
       state,
@@ -212,6 +226,7 @@ export default defineComponent({
       onMouseUp,
       onMouseOut,
       onMouseMove,
+      onDoubleClick,
     };
   },
 });
