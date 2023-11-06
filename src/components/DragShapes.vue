@@ -118,7 +118,6 @@ export default defineComponent({
           }
           shape.draw(ctx.value);
         }
-        console.log(shapes.value);
       }
     };
     onMounted(() => {
