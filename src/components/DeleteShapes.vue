@@ -10,6 +10,7 @@ import {
   onMounted,
   onBeforeUnmount,
   ref,
+  reactive,
 } from "vue";
 interface Rectangle {
   type: "rectangle";
@@ -53,6 +54,7 @@ export default defineComponent({
   setup(props, { emit }) {
     const { canvas, ctx, shapes } = toRefs(props);
     const toDeletedShapes = ref<Shape[]>([]);
+    const state = reactive({ clickColor: "red", notClickColor: "black" });
     const onKeyUp = (event: KeyboardEvent) => {
       if (event.key === "Delete") {
         toDeletedShapes.value = shapes.value.filter((shape) => !shape.click);
@@ -68,15 +70,15 @@ export default defineComponent({
           switch (shape.type) {
             case "rectangle":
               if (shape.click == true) {
-                ctx.value.strokeStyle = "red";
-              } else ctx.value.strokeStyle = "black ";
+                ctx.value.strokeStyle = state.clickColor;
+              } else ctx.value.strokeStyle = state.notClickColor;
               ctx.value.strokeRect(shape.x, shape.y, shape.width, shape.height);
 
               break;
             case "triangle":
               if (shape.click == true) {
-                ctx.value.strokeStyle = "red";
-              } else ctx.value.strokeStyle = "black ";
+                ctx.value.strokeStyle = state.clickColor;
+              } else ctx.value.strokeStyle = state.notClickColor;
               ctx.value.beginPath();
               ctx.value.moveTo(shape.x, shape.y - shape.height / 2);
               ctx.value.lineTo(
@@ -92,8 +94,8 @@ export default defineComponent({
               break;
             case "circle":
               if (shape.click == true) {
-                ctx.value.strokeStyle = "red";
-              } else ctx.value.strokeStyle = "black ";
+                ctx.value.strokeStyle = state.clickColor;
+              } else ctx.value.strokeStyle = state.notClickColor;
               ctx.value.beginPath();
               ctx.value.arc(shape.x, shape.y, shape.radius, 0, 2 * Math.PI);
               ctx.value.stroke();
@@ -110,7 +112,7 @@ export default defineComponent({
       window.removeEventListener("keyup", onKeyUp);
     });
 
-    return { onKeyUp, draw_shape };
+    return { state, onKeyUp, draw_shape };
   },
 });
 </script>

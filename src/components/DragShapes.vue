@@ -56,6 +56,8 @@ export default defineComponent({
       startY: 0,
       currentShapeIndex: 0,
       isDragging: false,
+      clickColor: "red",
+      notClickColor: "black",
     });
     const isPointShape = (x: number, y: number, shape: Shape) => {
       switch (shape.type) {
@@ -174,7 +176,6 @@ export default defineComponent({
         return;
       }
       event.preventDefault();
-      //state.isDragging = false; 여기가 canvas경계 막히는지
     };
     const onMouseMove = (event: MouseEvent) => {
       if (!state.isDragging) return;
@@ -203,15 +204,15 @@ export default defineComponent({
           switch (shape.type) {
             case "rectangle":
               if (shape.click == true) {
-                ctx.value.strokeStyle = "red";
-              } else ctx.value.strokeStyle = "black ";
+                ctx.value.strokeStyle = state.clickColor;
+              } else ctx.value.strokeStyle = state.notClickColor;
               ctx.value.strokeRect(shape.x, shape.y, shape.width, shape.height);
 
               break;
             case "triangle":
               if (shape.click == true) {
-                ctx.value.strokeStyle = "red";
-              } else ctx.value.strokeStyle = "black ";
+                ctx.value.strokeStyle = state.clickColor;
+              } else ctx.value.strokeStyle = state.notClickColor;
               ctx.value.beginPath();
               ctx.value.moveTo(shape.x, shape.y - shape.height / 2);
               ctx.value.lineTo(
@@ -227,8 +228,8 @@ export default defineComponent({
               break;
             case "circle":
               if (shape.click == true) {
-                ctx.value.strokeStyle = "red";
-              } else ctx.value.strokeStyle = "black ";
+                ctx.value.strokeStyle = state.clickColor;
+              } else ctx.value.strokeStyle = state.notClickColor;
               ctx.value.beginPath();
               ctx.value.arc(shape.x, shape.y, shape.radius, 0, 2 * Math.PI);
               ctx.value.stroke();
