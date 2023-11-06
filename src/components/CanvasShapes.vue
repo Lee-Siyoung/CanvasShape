@@ -73,6 +73,10 @@ export default defineComponent({
 </script>
 
 <style scoped>
+div {
+  margin: 0;
+  height: 100vh;
+}
 canvas {
   border: 1px solid black;
 }

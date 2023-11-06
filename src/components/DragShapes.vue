@@ -156,7 +156,7 @@ export default defineComponent({
         return;
       }
       event.preventDefault();
-      state.isDragging = false;
+      //state.isDragging = false; 여기가 canvas경계 막히는지 안막히는지 하는거
     };
     const onMouseMove = (event: MouseEvent) => {
       if (!state.isDragging) return;
@@ -220,18 +220,18 @@ export default defineComponent({
       }
     };
     onMounted(() => {
-      canvas.value?.addEventListener("mousedown", onMouseDown);
-      canvas.value?.addEventListener("mouseup", onMouseUp);
-      canvas.value?.addEventListener("mouseout", onMouseOut);
-      canvas.value?.addEventListener("mousemove", onMouseMove);
-      canvas.value?.addEventListener("dblclick", onDoubleClick);
+      window.addEventListener("mousedown", onMouseDown);
+      window.addEventListener("mouseup", onMouseUp);
+      window.addEventListener("mouseout", onMouseOut);
+      window.addEventListener("mousemove", onMouseMove);
+      window.addEventListener("dblclick", onDoubleClick);
     });
     onBeforeUnmount(() => {
-      canvas.value?.removeEventListener("mousedown", onMouseDown);
-      canvas.value?.removeEventListener("mouseup", onMouseUp);
-      canvas.value?.removeEventListener("mouseout", onMouseOut);
-      canvas.value?.removeEventListener("mousemove", onMouseMove);
-      canvas.value?.removeEventListener("dblclick", onDoubleClick);
+      window.removeEventListener("mousedown", onMouseDown);
+      window.removeEventListener("mouseup", onMouseUp);
+      window.removeEventListener("mouseout", onMouseOut);
+      window.removeEventListener("mousemove", onMouseMove);
+      window.removeEventListener("dblclick", onDoubleClick);
     });
     return {
       state,
