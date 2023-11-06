@@ -53,6 +53,7 @@ export default defineComponent({
         ctx.value.lineTo(x + base / 2, y + height / 2);
         ctx.value.closePath();
         ctx.value.stroke();
+
         const shape = {
           type: "triangle",
           x,

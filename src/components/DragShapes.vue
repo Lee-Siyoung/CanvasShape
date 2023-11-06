@@ -109,7 +109,7 @@ export default defineComponent({
         }
       }
     };
-    const onDoubleClick = (event: MouseEvent) => {
+    const onClick = (event: MouseEvent) => {
       if (canvas.value) {
         event.preventDefault();
         for (let shape of shapes.value) {
@@ -137,7 +137,13 @@ export default defineComponent({
           if (isPointShape(state.startX, state.startY, shape)) {
             state.currentShapeIndex = index;
             state.isDragging = true;
-
+            if (isPointShape(state.startX, state.startY, shape)) {
+              if (shape.click === false) {
+                shape.click = true;
+              } else {
+                shape.click = false;
+              }
+            }
             return;
           }
           index++;
@@ -150,13 +156,25 @@ export default defineComponent({
       }
       event.preventDefault();
       state.isDragging = false;
+      for (let shape of shapes.value) {
+        if (isPointShape(state.startX, state.startY, shape)) {
+          if (isPointShape(state.startX, state.startY, shape)) {
+            if (shape.click === false) {
+              shape.click = true;
+            } else {
+              shape.click = false;
+            }
+          }
+          return;
+        }
+      }
     };
     const onMouseOut = (event: MouseEvent) => {
       if (!state.isDragging) {
         return;
       }
       event.preventDefault();
-      //state.isDragging = false; 여기가 canvas경계 막히는지 안막히는지 하는거
+      //state.isDragging = false; 여기가 canvas경계 막히는지
     };
     const onMouseMove = (event: MouseEvent) => {
       if (!state.isDragging) return;
@@ -224,14 +242,14 @@ export default defineComponent({
       window.addEventListener("mouseup", onMouseUp);
       window.addEventListener("mouseout", onMouseOut);
       window.addEventListener("mousemove", onMouseMove);
-      window.addEventListener("dblclick", onDoubleClick);
+      window.addEventListener("click", onClick);
     });
     onBeforeUnmount(() => {
       window.removeEventListener("mousedown", onMouseDown);
       window.removeEventListener("mouseup", onMouseUp);
       window.removeEventListener("mouseout", onMouseOut);
       window.removeEventListener("mousemove", onMouseMove);
-      window.removeEventListener("dblclick", onDoubleClick);
+      window.removeEventListener("click", onClick);
     });
     return {
       state,
@@ -240,7 +258,7 @@ export default defineComponent({
       onMouseUp,
       onMouseOut,
       onMouseMove,
-      onDoubleClick,
+      onClick,
     };
   },
 });
