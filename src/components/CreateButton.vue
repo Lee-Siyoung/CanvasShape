@@ -33,7 +33,6 @@ export default defineComponent({
           false
         );
         rectangle.draw(ctx.value);
-        console.log(rectangle);
         emit("addShape", rectangle);
       }
     };
@@ -47,7 +46,6 @@ export default defineComponent({
           false
         );
         triangle.draw(ctx.value);
-        console.log(triangle);
         emit("addShape", triangle);
       }
     };
@@ -60,7 +58,6 @@ export default defineComponent({
           false
         );
         circle.draw(ctx.value);
-        console.log(circle);
         emit("addShape", circle);
       }
     };

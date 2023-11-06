@@ -17,34 +17,11 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, reactive, ref } from "vue";
+import { Shape } from "../class/shape";
 import CreateButton from "./CreateButton.vue";
 import DragShapes from "./DragShapes.vue";
 import DeleteShapes from "./DeleteShapes.vue";
 
-interface Rectangle {
-  type: "rectangle";
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  click: boolean;
-}
-interface Triangle {
-  type: "triangle";
-  x: number;
-  y: number;
-  height: number;
-  base: number;
-  click: boolean;
-}
-interface Circle {
-  type: "circle";
-  x: number;
-  y: number;
-  radius: number;
-  click: boolean;
-}
-type Shape = Triangle | Circle | Rectangle;
 export default defineComponent({
   components: { CreateButton, DragShapes, DeleteShapes },
   setup() {
@@ -53,11 +30,13 @@ export default defineComponent({
 
     const state = reactive({
       shapes: [] as Shape[],
-      isPointShape: false,
     });
+
     const addShape = (shape: Shape) => {
       state.shapes.push(shape);
+      console.log(state.shapes);
     };
+
     const deleteShapes = (toDeleteShapes: Shape[]) => {
       state.shapes = toDeleteShapes;
     };
@@ -67,6 +46,7 @@ export default defineComponent({
         ctx.value = canvas.value?.getContext("2d");
       }
     });
+
     return { canvas, ctx, state, addShape, deleteShapes };
   },
 });

@@ -11,30 +11,8 @@ import {
   onBeforeUnmount,
   onMounted,
 } from "vue";
-interface Rectangle {
-  type: "rectangle";
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  click: boolean;
-}
-interface Triangle {
-  type: "triangle";
-  x: number;
-  y: number;
-  height: number;
-  base: number;
-  click: boolean;
-}
-interface Circle {
-  type: "circle";
-  x: number;
-  y: number;
-  radius: number;
-  click: boolean;
-}
-type Shape = Triangle | Circle | Rectangle;
+
+import { Shape } from "../class/shape";
 export default defineComponent({
   props: {
     canvas: {
@@ -59,68 +37,12 @@ export default defineComponent({
       clickColor: "red",
       notClickColor: "black",
     });
-    const isPointShape = (x: number, y: number, shape: Shape) => {
-      switch (shape.type) {
-        case "rectangle": {
-          const shape_left = shape.x;
-          const shape_right = shape.x + shape.width;
-          const shape_top = shape.y;
-          const shape_bottom = shape.y + shape.height;
-          if (
-            x > shape_left &&
-            x < shape_right &&
-            y > shape_top &&
-            y < shape_bottom
-          ) {
-            return true;
-          } else {
-            return false;
-          }
-        }
-        case "triangle": {
-          const A = { x: shape.x, y: shape.y - shape.height / 2 };
-          const B = {
-            x: shape.x - shape.base / 2,
-            y: shape.y + shape.height / 2,
-          };
-          const C = {
-            x: shape.x + shape.base / 2,
-            y: shape.y + shape.height / 2,
-          };
-
-          const areaOrig = Math.abs(
-            (A.x * (B.y - C.y) + B.x * (C.y - A.y) + C.x * (A.y - B.y)) / 2.0
-          );
-
-          const area1 = Math.abs(
-            (x * (B.y - C.y) + B.x * (C.y - y) + C.x * (y - B.y)) / 2.0
-          );
-          const area2 = Math.abs(
-            (A.x * (y - C.y) + x * (C.y - A.y) + C.x * (A.y - y)) / 2.0
-          );
-          const area3 = Math.abs(
-            (A.x * (B.y - y) + B.x * (y - A.y) + x * (A.y - B.y)) / 2.0
-          );
-          if (areaOrig == area1 + area2 + area3) return true;
-          else return false;
-        }
-        case "circle": {
-          const distance = Math.sqrt((x - shape.x) ** 2 + (y - shape.y) ** 2);
-          if (distance <= shape.radius) return true;
-          else return false;
-        }
-      }
-    };
     const onClick = (event: MouseEvent) => {
       if (canvas.value) {
         event.preventDefault();
         for (let shape of shapes.value) {
-          if (isPointShape(state.startX, state.startY, shape)) {
-            if (shape.click === false) {
-              shape.click = true;
-            } else {
-              shape.click = false;
-            }
+          if (shape.isPointInside(state.startX, state.startY)) {
+            shape.toggleClick();
           }
         }
         draw_shape();
@@ -136,16 +58,10 @@ export default defineComponent({
           event.clientY - canvas.value?.getBoundingClientRect().top;
         let index = 0;
         for (let shape of shapes.value) {
-          if (isPointShape(state.startX, state.startY, shape)) {
+          if (shape.isPointInside(state.startX, state.startY)) {
             state.currentShapeIndex = index;
             state.isDragging = true;
-            if (isPointShape(state.startX, state.startY, shape)) {
-              if (shape.click === false) {
-                shape.click = true;
-              } else {
-                shape.click = false;
-              }
-            }
+            shape.toggleClick();
             return;
           }
           index++;
@@ -159,14 +75,8 @@ export default defineComponent({
       event.preventDefault();
       state.isDragging = false;
       for (let shape of shapes.value) {
-        if (isPointShape(state.startX, state.startY, shape)) {
-          if (isPointShape(state.startX, state.startY, shape)) {
-            if (shape.click === false) {
-              shape.click = true;
-            } else {
-              shape.click = false;
-            }
-          }
+        if (shape.isPointInside(state.startX, state.startY)) {
+          shape.toggleClick();
           return;
         }
       }
@@ -201,41 +111,14 @@ export default defineComponent({
       if (canvas.value && ctx.value) {
         ctx.value?.clearRect(0, 0, canvas.value?.width, canvas.value?.height);
         for (let shape of shapes.value) {
-          switch (shape.type) {
-            case "rectangle":
-              if (shape.click == true) {
-                ctx.value.strokeStyle = state.clickColor;
-              } else ctx.value.strokeStyle = state.notClickColor;
-              ctx.value.strokeRect(shape.x, shape.y, shape.width, shape.height);
-
-              break;
-            case "triangle":
-              if (shape.click == true) {
-                ctx.value.strokeStyle = state.clickColor;
-              } else ctx.value.strokeStyle = state.notClickColor;
-              ctx.value.beginPath();
-              ctx.value.moveTo(shape.x, shape.y - shape.height / 2);
-              ctx.value.lineTo(
-                shape.x - shape.base / 2,
-                shape.y + shape.height / 2
-              );
-              ctx.value.lineTo(
-                shape.x + shape.base / 2,
-                shape.y + shape.height / 2
-              );
-              ctx.value.closePath();
-              ctx.value.stroke();
-              break;
-            case "circle":
-              if (shape.click == true) {
-                ctx.value.strokeStyle = state.clickColor;
-              } else ctx.value.strokeStyle = state.notClickColor;
-              ctx.value.beginPath();
-              ctx.value.arc(shape.x, shape.y, shape.radius, 0, 2 * Math.PI);
-              ctx.value.stroke();
-              break;
+          if (shape.click) {
+            ctx.value.strokeStyle = state.clickColor;
+          } else {
+            ctx.value.strokeStyle = state.notClickColor;
           }
+          shape.draw(ctx.value);
         }
+        console.log(shapes.value);
       }
     };
     onMounted(() => {
@@ -254,7 +137,6 @@ export default defineComponent({
     });
     return {
       state,
-      isPointShape,
       onMouseDown,
       onMouseUp,
       onMouseOut,
