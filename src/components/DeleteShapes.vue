@@ -28,23 +28,23 @@ export default defineComponent({
       required: true,
     },
   },
-  emits: ["deleteShapes"],
+  emits: ["deletedShapes"],
   setup(props, { emit }) {
     const { canvas, ctx, shapes } = toRefs(props);
-    const toDeletedShapes = ref<Shape[]>([]);
+    const DeletedShapes = ref<Shape[]>([]);
     const state = reactive({ clickColor: "red", notClickColor: "black" });
     const onKeyUp = (event: KeyboardEvent) => {
       if (event.key === "Delete") {
-        toDeletedShapes.value = shapes.value.filter((shape) => !shape.click);
+        DeletedShapes.value = shapes.value.filter((shape) => !shape.isClick);
         draw_shape();
-        emit("deleteShapes", toDeletedShapes.value);
+        emit("deletedShapes", DeletedShapes.value);
       }
     };
     const draw_shape = () => {
       if (canvas.value && ctx.value) {
         ctx.value?.clearRect(0, 0, canvas.value?.width, canvas.value?.height);
-        for (let shape of toDeletedShapes.value) {
-          if (shape.click) {
+        for (let shape of DeletedShapes.value) {
+          if (shape.isClick) {
             ctx.value.strokeStyle = state.clickColor;
           } else {
             ctx.value.strokeStyle = state.notClickColor;

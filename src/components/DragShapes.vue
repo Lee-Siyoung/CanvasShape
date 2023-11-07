@@ -32,7 +32,7 @@ export default defineComponent({
     const state = reactive({
       startX: 0,
       startY: 0,
-      currentShapeIndex: 0,
+      ShapeIndex: 0,
       isDragging: false,
       clickColor: "red",
       notClickColor: "black",
@@ -59,7 +59,7 @@ export default defineComponent({
         let index = 0;
         for (let shape of shapes.value) {
           if (shape.isPointInside(state.startX, state.startY)) {
-            state.currentShapeIndex = index;
+            state.ShapeIndex = index;
             state.isDragging = true;
             shape.toggleClick();
             return;
@@ -96,7 +96,7 @@ export default defineComponent({
             event.clientX - canvas.value?.getBoundingClientRect().left;
           const mouseY =
             event.clientY - canvas.value?.getBoundingClientRect().top;
-          const currentShape = shapes.value[state.currentShapeIndex];
+          const currentShape = shapes.value[state.ShapeIndex];
           const dx = mouseX - state.startX;
           const dy = mouseY - state.startY;
           currentShape.x += dx;
@@ -111,7 +111,7 @@ export default defineComponent({
       if (canvas.value && ctx.value) {
         ctx.value?.clearRect(0, 0, canvas.value?.width, canvas.value?.height);
         for (let shape of shapes.value) {
-          if (shape.click) {
+          if (shape.isClick) {
             ctx.value.strokeStyle = state.clickColor;
           } else {
             ctx.value.strokeStyle = state.notClickColor;

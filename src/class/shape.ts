@@ -1,18 +1,19 @@
 export abstract class Shape {
   x: number;
   y: number;
-  click: boolean;
+  isClick: boolean;
 
   constructor(x: number, y: number, click = false) {
     this.x = x;
     this.y = y;
-    this.click = click;
+    this.isClick = click;
   }
 
   abstract draw(ctx: CanvasRenderingContext2D): void;
   abstract isPointInside(x: number, y: number): boolean;
+
   toggleClick() {
-    this.click = !this.click;
+    this.isClick = !this.isClick;
   }
 }
 

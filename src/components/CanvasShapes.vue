@@ -1,6 +1,6 @@
 <template>
   <canvas ref="canvas" width="800" height="500"></canvas>
-  <CreateButton :canvas="canvas" :ctx="ctx" @addShape="addShape" />
+  <Button :canvas="canvas" :ctx="ctx" @addShape="addShape" />
   <DragShapes
     v-if="canvas !== null"
     :canvas="canvas"
@@ -11,19 +11,19 @@
     :canvas="canvas"
     :ctx="ctx"
     :shapes="state.shapes"
-    @deleteShapes="deleteShapes"
+    @deletedShapes="deletedShapes"
   />
 </template>
 
 <script lang="ts">
 import { defineComponent, onMounted, reactive, ref } from "vue";
 import { Shape } from "../class/shape";
-import CreateButton from "./CreateButton.vue";
+import Button from "./Button.vue";
 import DragShapes from "./DragShapes.vue";
 import DeleteShapes from "./DeleteShapes.vue";
 
 export default defineComponent({
-  components: { CreateButton, DragShapes, DeleteShapes },
+  components: { Button, DragShapes, DeleteShapes },
   setup() {
     const canvas = ref<HTMLCanvasElement | null>(null);
     const ctx = ref<CanvasRenderingContext2D | null>(null);
@@ -36,8 +36,8 @@ export default defineComponent({
       state.shapes.push(shape);
     };
 
-    const deleteShapes = (toDeleteShapes: Shape[]) => {
-      state.shapes = toDeleteShapes;
+    const deletedShapes = (DeletedShapes: Shape[]) => {
+      state.shapes = DeletedShapes;
     };
 
     onMounted(() => {
@@ -46,7 +46,7 @@ export default defineComponent({
       }
     });
 
-    return { canvas, ctx, state, addShape, deleteShapes };
+    return { canvas, ctx, state, addShape, deletedShapes };
   },
 });
 </script>
