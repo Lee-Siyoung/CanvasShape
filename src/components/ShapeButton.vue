@@ -1,4 +1,3 @@
-<!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <div>
     <button @click="drawRectangle">사각형</button>
@@ -9,7 +8,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType, toRefs } from "vue";
-import { Rectangle, Triangle, Circle } from "../class/shape";
+import { Rectangle, Triangle, Circle } from "../class/extendsShape";
 
 export default defineComponent({
   props: {
@@ -26,12 +25,14 @@ export default defineComponent({
     const { canvas, ctx } = toRefs(props);
     const drawRectangle = () => {
       if (canvas.value && ctx.value) {
+        const width = Math.random() * 100 + 30;
+        const height = Math.random() * 100 + 30;
         const rectangle = new Rectangle(
-          canvas.value.width / 2,
-          canvas.value.height / 4,
-          80,
-          60,
-          false
+          Math.random() * (canvas.value.width - width),
+          Math.random() * (canvas.value.height - height),
+          false,
+          width,
+          height
         );
         rectangle.draw(ctx.value);
         emit("addShape", rectangle);
@@ -39,12 +40,14 @@ export default defineComponent({
     };
     const drawTriangle = () => {
       if (canvas.value && ctx.value) {
+        const width = Math.random() * 100 + 30;
+        const height = Math.random() * 100 + 30;
         const triangle = new Triangle(
-          canvas.value.width / 5,
-          canvas.value.height / 2,
-          80,
-          60,
-          false
+          Math.random() * (canvas.value.width - width),
+          Math.random() * (canvas.value.height - height),
+          false,
+          width,
+          height
         );
         triangle.draw(ctx.value);
         emit("addShape", triangle);
@@ -52,11 +55,12 @@ export default defineComponent({
     };
     const drawCircle = () => {
       if (canvas.value && ctx.value) {
+        const radius = Math.random() * 100 + 30;
         const circle = new Circle(
-          canvas.value.width / 1.2,
-          canvas.value.height / 2,
-          40,
-          false
+          Math.random() * (canvas.value.width - radius * 2),
+          Math.random() * (canvas.value.height - radius),
+          false,
+          radius
         );
         circle.draw(ctx.value);
         emit("addShape", circle);

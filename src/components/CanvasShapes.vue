@@ -1,6 +1,6 @@
 <template>
   <canvas ref="canvas" width="800" height="500"></canvas>
-  <Button :canvas="canvas" :ctx="ctx" @addShape="addShape" />
+  <ShapeButton :canvas="canvas" :ctx="ctx" @addShape="addShape" />
 </template>
 
 <script lang="ts">
@@ -12,10 +12,10 @@ import {
   onBeforeUnmount,
 } from "vue";
 import { Shape } from "../class/shape";
-import Button from "./Button.vue";
+import ShapeButton from "./ShapeButton.vue";
 
 export default defineComponent({
-  components: { Button },
+  components: { ShapeButton },
   setup() {
     const canvas = ref<HTMLCanvasElement | null>(null);
     const ctx = ref<CanvasRenderingContext2D | null>(null);
@@ -39,7 +39,7 @@ export default defineComponent({
         event.preventDefault();
         for (let shape of state.shapes) {
           if (shape.isPointInside(state.startX, state.startY)) {
-            shape.toggleClick();
+            shape.selectClick();
           }
         }
         draw_shape();
@@ -58,7 +58,7 @@ export default defineComponent({
           if (shape.isPointInside(state.startX, state.startY)) {
             state.ShapeIndex = index;
             state.isDragging = true;
-            shape.toggleClick();
+            shape.selectClick();
             return;
           }
           index++;
@@ -73,7 +73,7 @@ export default defineComponent({
       state.isDragging = false;
       for (let shape of state.shapes) {
         if (shape.isPointInside(state.startX, state.startY)) {
-          shape.toggleClick();
+          shape.selectClick();
           return;
         }
       }
