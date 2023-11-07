@@ -48,16 +48,16 @@ export class Triangle extends Shape {
 
   draw(ctx: CanvasRenderingContext2D) {
     ctx.beginPath();
-    ctx.moveTo(this.x, this.y - this.height / 2);
-    ctx.lineTo(this.x - this.width / 2, this.y + this.height / 2);
-    ctx.lineTo(this.x + this.width / 2, this.y + this.height / 2);
+    ctx.moveTo(this.x, this.y);
+    ctx.lineTo(this.x - this.width, this.y + this.height);
+    ctx.lineTo(this.x + this.width, this.y + this.height);
     ctx.closePath();
     ctx.stroke();
   }
   isPointInside(x: number, y: number): boolean {
-    const aPoint = { x: this.x, y: this.y - this.height / 2 };
-    const bPoint = { x: this.x - this.width / 2, y: this.y + this.height / 2 };
-    const cPoint = { x: this.x + this.width / 2, y: this.y + this.height / 2 };
+    const aPoint = { x: this.x, y: this.y };
+    const bPoint = { x: this.x - this.width, y: this.y + this.height };
+    const cPoint = { x: this.x + this.width, y: this.y + this.height };
 
     const areaOrig =
       (-bPoint.y * cPoint.x +
