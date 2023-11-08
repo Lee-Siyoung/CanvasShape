@@ -10,16 +10,16 @@
 import { defineComponent } from "vue";
 
 export default defineComponent({
-  emits: ["addShape", "CheckShape"],
+  emits: ["checkShape"],
   setup(_, { emit }) {
     const drawRectangle = () => {
-      emit("CheckShape", "rectangle");
+      emit("checkShape", "rectangle");
     };
     const drawTriangle = () => {
-      emit("CheckShape", "triangle");
+      emit("checkShape", "triangle");
     };
     const drawCircle = () => {
-      emit("CheckShape", "circle");
+      emit("checkShape", "circle");
     };
     return { drawRectangle, drawTriangle, drawCircle };
   },

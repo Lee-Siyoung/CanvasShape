@@ -1,6 +1,6 @@
 <template>
   <canvas ref="canvas" width="800" height="500"></canvas>
-  <ShapeButton @CheckShape="checkShape" />
+  <ShapeButton @checkShape="checkShape" />
 </template>
 
 <script lang="ts">
@@ -22,16 +22,16 @@ export default defineComponent({
     const ctx = ref<CanvasRenderingContext2D | null>(null);
     const state = reactive({
       shapes: [] as Shape[],
-      startX: 0,
-      startY: 0,
+      mouseX: 0,
+      mouseY: 0,
       ShapeIndex: 0,
       isDragging: false,
       clickColor: "red",
       notClickColor: "black",
     });
-    const checkShape = (test: string) => {
+    const checkShape = (Shape: string) => {
       if (canvas.value && ctx.value) {
-        const IShape = newShape(canvas.value, ctx.value, test);
+        const IShape = newShape(canvas.value, ctx.value, Shape);
         if (IShape) {
           state.shapes.push(IShape);
         }
@@ -40,9 +40,19 @@ export default defineComponent({
     const onClick = (event: MouseEvent) => {
       if (canvas.value) {
         event.preventDefault();
-        for (const shape of state.shapes) {
-          if (shape.isPointInside(state.startX, state.startY)) {
-            shape.selectClick();
+        if (event.ctrlKey) {
+          for (const shape of state.shapes) {
+            if (shape.isPointInside(state.mouseX, state.mouseY)) {
+              shape.selectClick();
+            }
+          }
+        } else {
+          for (const shape of state.shapes) {
+            if (shape.isPointInside(state.mouseX, state.mouseY)) {
+              shape.selectClick();
+            } else {
+              shape.isClick = false;
+            }
           }
         }
         drawShape();
@@ -51,19 +61,31 @@ export default defineComponent({
     const onMouseDown = (event: MouseEvent) => {
       if (canvas.value) {
         event.preventDefault();
-        state.startX =
+        state.mouseX =
           event.clientX - canvas.value?.getBoundingClientRect().left;
-        state.startY =
+        state.mouseY =
           event.clientY - canvas.value?.getBoundingClientRect().top;
         let index = 0;
-        for (const shape of state.shapes) {
-          if (shape.isPointInside(state.startX, state.startY)) {
-            state.ShapeIndex = index;
-            state.isDragging = true;
-            shape.selectClick();
-            return;
+        if (event.ctrlKey) {
+          for (const shape of state.shapes) {
+            if (shape.isPointInside(state.mouseX, state.mouseY)) {
+              state.ShapeIndex = index;
+              state.isDragging = true;
+              shape.selectClick();
+            }
+            index++;
           }
-          index++;
+        } else {
+          for (const shape of state.shapes) {
+            if (shape.isPointInside(state.mouseX, state.mouseY)) {
+              state.ShapeIndex = index;
+              state.isDragging = true;
+              shape.selectClick();
+            } else {
+              shape.isClick = false;
+            }
+            index++;
+          }
         }
       }
     };
@@ -74,9 +96,8 @@ export default defineComponent({
       event.preventDefault();
       state.isDragging = false;
       for (const shape of state.shapes) {
-        if (shape.isPointInside(state.startX, state.startY)) {
+        if (shape.isPointInside(state.mouseX, state.mouseY)) {
           shape.selectClick();
-          return;
         }
       }
     };
@@ -85,18 +106,18 @@ export default defineComponent({
       else {
         event.preventDefault();
         if (canvas.value) {
-          const mouseX =
+          const moveX =
             event.clientX - canvas.value?.getBoundingClientRect().left;
-          const mouseY =
+          const moveY =
             event.clientY - canvas.value?.getBoundingClientRect().top;
           const currentShape = state.shapes[state.ShapeIndex];
-          const dx = mouseX - state.startX;
-          const dy = mouseY - state.startY;
+          const dx = moveX - state.mouseX;
+          const dy = moveY - state.mouseY;
           currentShape.x += dx;
           currentShape.y += dy;
           drawShape();
-          state.startX = mouseX;
-          state.startY = mouseY;
+          state.mouseX = moveX;
+          state.mouseY = moveY;
         }
       }
     };
@@ -141,11 +162,6 @@ export default defineComponent({
       canvas,
       ctx,
       state,
-      onMouseDown,
-      onMouseUp,
-      onMouseMove,
-      onClick,
-      onKeyUp,
       checkShape,
     };
   },
