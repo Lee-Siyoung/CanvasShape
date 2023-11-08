@@ -1,6 +1,7 @@
 <template>
   <canvas ref="canvas" width="800" height="500"></canvas>
   <ShapeButton @checkShape="checkShape" />
+  <History :shapes="state.shapes" />
 </template>
 
 <script lang="ts">
@@ -14,9 +15,15 @@ import {
 import { Shape } from "./class/shape";
 import { newShape } from "./class/newShape";
 import ShapeButton from "./components/ShapeButton.vue";
+import History from "./components/History.vue";
+interface Action {
+  type: "create" | "move" | "delete";
+  shapes: Shape[];
+  index: number;
+}
 
 export default defineComponent({
-  components: { ShapeButton },
+  components: { ShapeButton, History },
   setup() {
     const canvas = ref<HTMLCanvasElement | null>(null);
     const ctx = ref<CanvasRenderingContext2D | null>(null);
@@ -28,6 +35,8 @@ export default defineComponent({
       isDragging: false,
       clickColor: "red",
       notClickColor: "black",
+      redo: [] as Action[],
+      undo: [] as Action[],
     });
     const checkShape = (Shape: string) => {
       if (canvas.value && ctx.value) {
