@@ -125,11 +125,9 @@ export default defineComponent({
       if (canvas.value && ctx.value) {
         ctx.value?.clearRect(0, 0, canvas.value?.width, canvas.value?.height);
         for (const shape of state.shapes) {
-          if (shape.isClick) {
-            ctx.value.strokeStyle = state.clickColor;
-          } else {
-            ctx.value.strokeStyle = state.notClickColor;
-          }
+          ctx.value.strokeStyle = shape.isClick
+            ? state.clickColor
+            : state.notClickColor;
           shape.draw(ctx.value);
         }
       }
