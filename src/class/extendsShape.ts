@@ -28,6 +28,9 @@ export class Rectangle extends Shape {
       x > shape_left && x < shape_right && y > shape_top && y < shape_bottom
     );
   }
+  clone(): Shape {
+    return new Rectangle(this.x, this.y, this.isClick, this.width, this.height);
+  }
 }
 
 export class Triangle extends Shape {
@@ -80,6 +83,9 @@ export class Triangle extends Shape {
       sign;
     return area1 > 0 && area2 > 0 && area1 + area2 < 2 * areaOrig * sign;
   }
+  clone(): Shape {
+    return new Triangle(this.x, this.y, this.isClick, this.width, this.height);
+  }
 }
 
 export class Circle extends Shape {
@@ -98,5 +104,8 @@ export class Circle extends Shape {
   isPointInside(x: number, y: number): boolean {
     const distance = Math.sqrt((x - this.x) ** 2 + (y - this.y) ** 2);
     return distance <= this.radius;
+  }
+  clone(): Shape {
+    return new Circle(this.x, this.y, this.isClick, this.radius);
   }
 }

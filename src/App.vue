@@ -1,7 +1,8 @@
 <template>
   <canvas ref="canvas" width="800" height="500"></canvas>
   <ShapeButton @checkShape="checkShape" />
-  <History :shapes="state.shapes" />
+  <button @click="undo">Undo</button>
+  <button @click="redo">Redo</button>
 </template>
 
 <script lang="ts">
@@ -15,15 +16,9 @@ import {
 import { Shape } from "./class/shape";
 import { newShape } from "./class/newShape";
 import ShapeButton from "./components/ShapeButton.vue";
-import History from "./components/History.vue";
-interface Action {
-  type: "create" | "move" | "delete";
-  shapes: Shape[];
-  index: number;
-}
 
 export default defineComponent({
-  components: { ShapeButton, History },
+  components: { ShapeButton },
   setup() {
     const canvas = ref<HTMLCanvasElement | null>(null);
     const ctx = ref<CanvasRenderingContext2D | null>(null);
@@ -35,14 +30,48 @@ export default defineComponent({
       isDragging: false,
       clickColor: "red",
       notClickColor: "black",
-      redo: [] as Action[],
-      undo: [] as Action[],
+      undoStack: [] as Shape[][],
+      redoStack: [] as Shape[][],
     });
+    const cloneShapes = (shapes: Shape[]) => {
+      return shapes.map((shape) =>
+        Object.assign(Object.create(Object.getPrototypeOf(shape)), shape)
+      );
+    };
+    const undo = () => {
+      if (state.undoStack.length > 0) {
+        const previousState = state.undoStack.pop();
+        if (previousState) {
+          state.redoStack.push(cloneShapes(state.shapes));
+          state.shapes = previousState;
+          drawShape();
+        }
+        console.log(state.undoStack);
+      }
+    };
+    const redo = () => {
+      if (state.redoStack.length > 0) {
+        const nextState = state.redoStack.pop();
+        if (nextState) {
+          state.undoStack.push(cloneShapes(state.shapes));
+          state.shapes = nextState;
+          drawShape();
+        }
+      }
+      console.log(state.redoStack);
+    };
+    const saveUndo = () => {
+      state.undoStack.push(cloneShapes(state.shapes));
+      state.redoStack = [];
+    };
+
     const checkShape = (Shape: string) => {
       if (canvas.value && ctx.value) {
         const IShape = newShape(canvas.value, ctx.value, Shape);
         if (IShape) {
+          saveUndo();
           state.shapes.push(IShape);
+          drawShape();
         }
       }
     };
@@ -109,6 +138,7 @@ export default defineComponent({
           shape.selectClick();
         }
       }
+      saveUndo();
     };
     const onMouseMove = (event: MouseEvent) => {
       if (!state.isDragging) return;
@@ -143,6 +173,7 @@ export default defineComponent({
     };
     const onKeyUp = (event: KeyboardEvent) => {
       if (event.key === "Delete") {
+        saveUndo();
         state.shapes = state.shapes.filter((shape) => !shape.isClick);
         drawShape();
       }
@@ -170,6 +201,8 @@ export default defineComponent({
       ctx,
       state,
       checkShape,
+      undo,
+      redo,
     };
   },
 });
