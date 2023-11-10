@@ -34,6 +34,7 @@ export default defineComponent({
       redoStack: [] as Shape[][],
     });
     const cloneShapes = (shapes: Shape[]) => {
+      console.log("cloneShape 실행");
       console.log(
         shapes.map((shape) =>
           Object.assign(Object.create(Object.getPrototypeOf(shape)), shape)
@@ -49,6 +50,8 @@ export default defineComponent({
         if (previousState) {
           state.redoStack.push(cloneShapes(state.shapes));
           state.shapes = previousState;
+          console.log("undo 실행");
+          console.log(state.shapes);
           drawShape();
         }
       }
@@ -60,6 +63,8 @@ export default defineComponent({
         if (nextState) {
           state.undoStack.push(cloneShapes(state.shapes));
           state.shapes = nextState;
+          console.log("redo 실행");
+          console.log(state.shapes);
           drawShape();
         }
       }
@@ -138,12 +143,12 @@ export default defineComponent({
       }
       event.preventDefault();
       state.isDragging = false;
+      saveUndo();
       for (const shape of state.shapes) {
         if (shape.isPointInside(state.mouseX, state.mouseY)) {
           shape.selectClick();
         }
       }
-      saveUndo();
     };
     const onMouseMove = (event: MouseEvent) => {
       if (!state.isDragging) return;
