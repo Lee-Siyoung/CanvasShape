@@ -34,6 +34,11 @@ export default defineComponent({
       redoStack: [] as Shape[][],
     });
     const cloneShapes = (shapes: Shape[]) => {
+      console.log(
+        shapes.map((shape) =>
+          Object.assign(Object.create(Object.getPrototypeOf(shape)), shape)
+        )
+      );
       return shapes.map((shape) =>
         Object.assign(Object.create(Object.getPrototypeOf(shape)), shape)
       );
@@ -46,9 +51,9 @@ export default defineComponent({
           state.shapes = previousState;
           drawShape();
         }
-        console.log(state.undoStack);
       }
     };
+
     const redo = () => {
       if (state.redoStack.length > 0) {
         const nextState = state.redoStack.pop();
@@ -57,12 +62,13 @@ export default defineComponent({
           state.shapes = nextState;
           drawShape();
         }
-        console.log(state.redoStack);
       }
     };
     const saveUndo = () => {
       state.undoStack.push(cloneShapes(state.shapes));
-      state.redoStack = [];
+      if (state.redoStack.length > 0) {
+        state.redoStack = [];
+      }
     };
 
     const checkShape = (Shape: string) => {
@@ -71,7 +77,6 @@ export default defineComponent({
         if (IShape) {
           state.shapes.push(IShape);
           saveUndo();
-          drawShape();
         }
       }
     };
