@@ -57,8 +57,8 @@ export default defineComponent({
           state.shapes = nextState;
           drawShape();
         }
+        console.log(state.redoStack);
       }
-      console.log(state.redoStack);
     };
     const saveUndo = () => {
       state.undoStack.push(cloneShapes(state.shapes));
@@ -69,8 +69,8 @@ export default defineComponent({
       if (canvas.value && ctx.value) {
         const IShape = newShape(canvas.value, ctx.value, Shape);
         if (IShape) {
-          saveUndo();
           state.shapes.push(IShape);
+          saveUndo();
           drawShape();
         }
       }
@@ -181,6 +181,7 @@ export default defineComponent({
     onMounted(() => {
       if (canvas.value) {
         ctx.value = canvas.value?.getContext("2d");
+        saveUndo();
       }
       window.addEventListener("mousedown", onMouseDown);
       window.addEventListener("mouseup", onMouseUp);
