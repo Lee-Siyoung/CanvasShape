@@ -16,7 +16,6 @@ import {
 import { Shape } from "./class/shape";
 import { newShape } from "./class/newShape";
 import ShapeButton from "./components/ShapeButton.vue";
-
 export default defineComponent({
   components: { ShapeButton },
   setup() {
@@ -31,26 +30,25 @@ export default defineComponent({
       clickColor: "red",
       notClickColor: "black",
       history: [] as Shape[][],
-      currentHistoryIndex: -1,
+      historyIdx: -1,
     });
     const updateHistory = () => {
-      state.history = state.history.slice(0, state.currentHistoryIndex + 1);
+      state.history = state.history.slice(0, state.historyIdx + 1);
       state.history.push(state.shapes.map((shape) => shape.clone()));
-      state.currentHistoryIndex++;
+      state.historyIdx++;
     };
     const undo = () => {
-      if (state.currentHistoryIndex > 0) {
-        state.currentHistoryIndex--;
-        state.shapes = state.history[state.currentHistoryIndex].map((shape) =>
+      if (state.historyIdx > 0) {
+        state.historyIdx--;
+        state.shapes = state.history[state.historyIdx].map((shape) =>
           shape.clone()
         );
       }
     };
-
     const redo = () => {
-      if (state.currentHistoryIndex < state.history.length - 1) {
-        state.currentHistoryIndex++;
-        state.shapes = state.history[state.currentHistoryIndex].map((shape) =>
+      if (state.historyIdx < state.history.length - 1) {
+        state.historyIdx++;
+        state.shapes = state.history[state.historyIdx].map((shape) =>
           shape.clone()
         );
       }
