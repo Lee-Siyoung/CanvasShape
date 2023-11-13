@@ -30,49 +30,29 @@ export default defineComponent({
       isDragging: false,
       clickColor: "red",
       notClickColor: "black",
-      undoStack: [] as Shape[][],
-      redoStack: [] as Shape[][],
+      history: [] as Shape[][],
+      currentHistoryIndex: -1,
     });
-    const cloneShapes = (shapes: Shape[]) => {
-      console.log("cloneShape 실행");
-      console.log(
-        shapes.map((shape) =>
-          Object.assign(Object.create(Object.getPrototypeOf(shape)), shape)
-        )
-      );
-      return shapes.map((shape) =>
-        Object.assign(Object.create(Object.getPrototypeOf(shape)), shape)
-      );
+    const updateHistory = () => {
+      state.history = state.history.slice(0, state.currentHistoryIndex + 1);
+      state.history.push(state.shapes.map((shape) => shape.clone()));
+      state.currentHistoryIndex++;
     };
     const undo = () => {
-      if (state.undoStack.length > 0) {
-        const previousState = state.undoStack.pop();
-        if (previousState) {
-          state.redoStack.push(cloneShapes(state.shapes));
-          state.shapes = previousState;
-          console.log("undo 실행");
-          console.log(state.shapes);
-          drawShape();
-        }
+      if (state.currentHistoryIndex > 0) {
+        state.currentHistoryIndex--;
+        state.shapes = state.history[state.currentHistoryIndex].map((shape) =>
+          shape.clone()
+        );
       }
     };
 
     const redo = () => {
-      if (state.redoStack.length > 0) {
-        const nextState = state.redoStack.pop();
-        if (nextState) {
-          state.undoStack.push(cloneShapes(state.shapes));
-          state.shapes = nextState;
-          console.log("redo 실행");
-          console.log(state.shapes);
-          drawShape();
-        }
-      }
-    };
-    const saveUndo = () => {
-      state.undoStack.push(cloneShapes(state.shapes));
-      if (state.redoStack.length > 0) {
-        state.redoStack = [];
+      if (state.currentHistoryIndex < state.history.length - 1) {
+        state.currentHistoryIndex++;
+        state.shapes = state.history[state.currentHistoryIndex].map((shape) =>
+          shape.clone()
+        );
       }
     };
 
@@ -81,7 +61,7 @@ export default defineComponent({
         const IShape = newShape(canvas.value, ctx.value, Shape);
         if (IShape) {
           state.shapes.push(IShape);
-          saveUndo();
+          updateHistory();
         }
       }
     };
@@ -143,7 +123,7 @@ export default defineComponent({
       }
       event.preventDefault();
       state.isDragging = false;
-      saveUndo();
+      updateHistory();
       for (const shape of state.shapes) {
         if (shape.isPointInside(state.mouseX, state.mouseY)) {
           shape.selectClick();
@@ -183,7 +163,7 @@ export default defineComponent({
     };
     const onKeyUp = (event: KeyboardEvent) => {
       if (event.key === "Delete") {
-        saveUndo();
+        updateHistory();
         state.shapes = state.shapes.filter((shape) => !shape.isClick);
         drawShape();
       }
@@ -191,7 +171,7 @@ export default defineComponent({
     onMounted(() => {
       if (canvas.value) {
         ctx.value = canvas.value?.getContext("2d");
-        saveUndo();
+        updateHistory();
       }
       window.addEventListener("mousedown", onMouseDown);
       window.addEventListener("mouseup", onMouseUp);
