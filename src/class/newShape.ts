@@ -1,8 +1,11 @@
-import { Rectangle, Triangle, Circle /* Text */ } from "./extendsShape";
+import { Rectangle, Triangle, Circle, Text } from "./extendsShape";
 export const newShape = (
   canvas: HTMLCanvasElement,
   ctx: CanvasRenderingContext2D,
-  shape: string
+  shape: string,
+  textContent?: string,
+  fontSize?: number,
+  fontFamily?: string
 ) => {
   if (shape == "rectangle" && canvas && ctx) {
     const width = Math.random() * 100 + 30;
@@ -35,18 +38,15 @@ export const newShape = (
       radius
     );
     return circle;
-  } /* else if (shape == "text" && canvas && ctx) {
-    const width = Math.random() * 100 + 30;
-    const height = Math.random() * 100 + 30;
-    const texts = "hello world";
+  } else if (shape == "text" && canvas && ctx) {
     const text = new Text(
-      Math.random() * (canvas.width - width),
-      Math.random() * (canvas.height - height),
+      Math.random() * canvas.width,
+      Math.random() * canvas.height,
       false,
-      texts,
-      width,
-      height
+      textContent || "example",
+      fontSize || 16,
+      fontFamily || "Arial"
     );
     return text;
-  } */
+  }
 };

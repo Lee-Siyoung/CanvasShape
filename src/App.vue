@@ -58,7 +58,6 @@ export default defineComponent({
     const checkShape = (Shape: string) => {
       if (canvas.value && ctx.value) {
         const IShape = newShape(canvas.value, ctx.value, Shape);
-        console.log(Shape);
         if (IShape) {
           state.shapes.push(IShape);
           updateHistory();

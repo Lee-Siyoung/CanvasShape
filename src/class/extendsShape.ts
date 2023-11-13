@@ -110,46 +110,54 @@ export class Circle extends Shape {
   }
 }
 
-/* export class Text extends Shape {
-  texts: string;
-  width: number;
-  height: number;
+export class Text extends Shape {
+  content: string;
+  fontSize: number;
+  fontFamily: string;
 
   constructor(
     x: number,
     y: number,
     isClick: boolean,
-    texts: string,
-    width: number,
-    height: number
+    content: string,
+    fontSize = 16,
+    fontFamily = "Arial"
   ) {
     super(x, y, isClick);
-    this.texts = texts;
-    this.width = width;
-    this.height = height;
+    this.content = content;
+    this.fontSize = fontSize;
+    this.fontFamily = fontFamily;
   }
 
   draw(ctx: CanvasRenderingContext2D) {
-    ctx.fillText(this.texts, this.x, this.y);
+    ctx.font = `${this.fontSize}px ${this.fontFamily}`;
+    ctx.fillText(this.content, this.x, this.y);
   }
   isPointInside(x: number, y: number): boolean {
-    const shape_left = this.x;
-    const shape_right = this.x + this.width;
-    const shape_top = this.y;
-    const shape_bottom = this.y + this.height;
-    return (
-      x > shape_left && x < shape_right && y > shape_top && y < shape_bottom
-    );
+    const ctx = document.createElement("canvas").getContext("2d");
+    if (!ctx) {
+      return false;
+    }
+    ctx.font = `${this.fontSize}px ${this.fontFamily}`;
+    const textMetrics = ctx.measureText(this.content);
+    const textWidth = textMetrics.width;
+    const textHeight = this.fontSize;
+    const textLeft = this.x;
+    const textRight = this.x + textWidth;
+    const textTop = this.y - textHeight;
+    const textBottom = this.y;
+
+    return x >= textLeft && x <= textRight && y >= textTop && y <= textBottom;
   }
+
   clone(): Shape {
     return new Text(
       this.x,
       this.y,
       this.isClick,
-      this.texts,
-      this.width,
-      this.height
+      this.content,
+      this.fontSize,
+      this.fontFamily
     );
   }
 }
- */
