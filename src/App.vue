@@ -14,6 +14,7 @@ import {
 } from "vue";
 import { Shape } from "./class/shape";
 import { newShape } from "./class/newShape";
+import { History } from "./class/history";
 import ShapeButton from "./components/ShapeButton.vue";
 import RedoUndo from "./components/RedoUndo.vue";
 export default defineComponent({
@@ -29,29 +30,18 @@ export default defineComponent({
       isDragging: false,
       clickColor: "red",
       notClickColor: "black",
-      history: [] as Shape[][],
-      historyIdx: -1,
     });
-    const updateHistory = () => {
-      state.history = state.history.slice(0, state.historyIdx + 1);
-      state.history.push(state.shapes.map((shape) => shape.clone()));
-      state.historyIdx++;
-      console.log(state.historyIdx);
-    };
+    const history = new History([] as Shape[][], -1);
     const undo = () => {
-      if (state.historyIdx > 0) {
-        state.historyIdx--;
-        state.shapes = state.history[state.historyIdx].map((shape) =>
-          shape.clone()
-        );
+      const newShapes = history.undo();
+      if (newShapes !== undefined) {
+        state.shapes = newShapes;
       }
     };
     const redo = () => {
-      if (state.historyIdx < state.history.length - 1) {
-        state.historyIdx++;
-        state.shapes = state.history[state.historyIdx].map((shape) =>
-          shape.clone()
-        );
+      const newShapes = history.redo();
+      if (newShapes !== undefined) {
+        state.shapes = newShapes;
       }
     };
 
@@ -60,7 +50,7 @@ export default defineComponent({
         const IShape = newShape(canvas.value, ctx.value, Shape);
         if (IShape) {
           state.shapes.push(IShape);
-          updateHistory();
+          history.updateHistory(state.shapes);
         }
       }
     };
@@ -122,7 +112,7 @@ export default defineComponent({
       }
       event.preventDefault();
       state.isDragging = false;
-      updateHistory();
+      history.updateHistory(state.shapes);
       for (const shape of state.shapes) {
         if (shape.isPointInside(state.mouseX, state.mouseY)) {
           shape.selectClick();
@@ -162,7 +152,7 @@ export default defineComponent({
     };
     const onKeyUp = (event: KeyboardEvent) => {
       if (event.key === "Delete") {
-        updateHistory();
+        history.updateHistory(state.shapes);
         state.shapes = state.shapes.filter((shape) => !shape.isClick);
         drawShape();
       }
@@ -170,7 +160,7 @@ export default defineComponent({
     onMounted(() => {
       if (canvas.value) {
         ctx.value = canvas.value?.getContext("2d");
-        updateHistory();
+        history.updateHistory(state.shapes);
       }
       window.addEventListener("mousedown", onMouseDown);
       window.addEventListener("mouseup", onMouseUp);
