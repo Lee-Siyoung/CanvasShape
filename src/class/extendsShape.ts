@@ -109,3 +109,47 @@ export class Circle extends Shape {
     return new Circle(this.x, this.y, this.isClick, this.radius);
   }
 }
+
+/* export class Text extends Shape {
+  texts: string;
+  width: number;
+  height: number;
+
+  constructor(
+    x: number,
+    y: number,
+    isClick: boolean,
+    texts: string,
+    width: number,
+    height: number
+  ) {
+    super(x, y, isClick);
+    this.texts = texts;
+    this.width = width;
+    this.height = height;
+  }
+
+  draw(ctx: CanvasRenderingContext2D) {
+    ctx.fillText(this.texts, this.x, this.y);
+  }
+  isPointInside(x: number, y: number): boolean {
+    const shape_left = this.x;
+    const shape_right = this.x + this.width;
+    const shape_top = this.y;
+    const shape_bottom = this.y + this.height;
+    return (
+      x > shape_left && x < shape_right && y > shape_top && y < shape_bottom
+    );
+  }
+  clone(): Shape {
+    return new Text(
+      this.x,
+      this.y,
+      this.isClick,
+      this.texts,
+      this.width,
+      this.height
+    );
+  }
+}
+ */

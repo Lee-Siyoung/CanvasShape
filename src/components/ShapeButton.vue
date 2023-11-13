@@ -3,6 +3,7 @@
     <button @click="drawRectangle">사각형</button>
     <button @click="drawTriangle">삼각형</button>
     <button @click="drawCircle">원</button>
+    <!-- <button @click="drawText">텍스트</button> -->
   </div>
 </template>
 
@@ -21,7 +22,10 @@ export default defineComponent({
     const drawCircle = () => {
       emit("checkShape", "circle");
     };
-    return { drawRectangle, drawTriangle, drawCircle };
+    /* const drawText = () => {
+      emit("checkShape", "text");
+    }; */
+    return { drawRectangle, drawTriangle, drawCircle /* drawText */ };
   },
 });
 </script>

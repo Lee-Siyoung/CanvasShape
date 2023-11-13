@@ -1,8 +1,7 @@
 <template>
   <canvas ref="canvas" width="800" height="500"></canvas>
   <ShapeButton @checkShape="checkShape" />
-  <button @click="undo">Undo</button>
-  <button @click="redo">Redo</button>
+  <RedoUndo @clickUndo="undo" @clickRedo="redo" />
 </template>
 
 <script lang="ts">
@@ -16,8 +15,9 @@ import {
 import { Shape } from "./class/shape";
 import { newShape } from "./class/newShape";
 import ShapeButton from "./components/ShapeButton.vue";
+import RedoUndo from "./components/RedoUndo.vue";
 export default defineComponent({
-  components: { ShapeButton },
+  components: { ShapeButton, RedoUndo },
   setup() {
     const canvas = ref<HTMLCanvasElement | null>(null);
     const ctx = ref<CanvasRenderingContext2D | null>(null);
@@ -36,6 +36,7 @@ export default defineComponent({
       state.history = state.history.slice(0, state.historyIdx + 1);
       state.history.push(state.shapes.map((shape) => shape.clone()));
       state.historyIdx++;
+      console.log(state.historyIdx);
     };
     const undo = () => {
       if (state.historyIdx > 0) {
@@ -57,6 +58,7 @@ export default defineComponent({
     const checkShape = (Shape: string) => {
       if (canvas.value && ctx.value) {
         const IShape = newShape(canvas.value, ctx.value, Shape);
+        console.log(Shape);
         if (IShape) {
           state.shapes.push(IShape);
           updateHistory();
