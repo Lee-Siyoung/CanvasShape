@@ -14,7 +14,7 @@ import {
 } from "vue";
 import { Shape } from "./class/shape";
 import { newShape } from "./class/newShape";
-import { History } from "./class/history";
+import { History, IHistory } from "./class/history";
 import ShapeButton from "./components/ShapeButton.vue";
 import RedoUndo from "./components/RedoUndo.vue";
 export default defineComponent({
@@ -26,34 +26,31 @@ export default defineComponent({
       shapes: [] as Shape[],
       mouseX: 0,
       mouseY: 0,
+      oriX: 0,
+      oriY: 0,
       ShapeIndex: 0,
       isDragging: false,
       clickColor: "red",
       notClickColor: "black",
-      id: 0,
+      shapeId: 0,
+      history: new History([] as IHistory[], -1),
     });
-    const history = new History([] as Shape[][], -1);
-    const undo = () => {
-      const newShapes = history.undo();
-      if (newShapes !== undefined) {
-        state.shapes = newShapes;
-      }
-    };
     const redo = () => {
-      const newShapes = history.redo();
-      if (newShapes !== undefined) {
-        state.shapes = newShapes;
-      }
+      state.history.redo(state.shapes);
+      drawShape();
+    };
+    const undo = () => {
+      state.history.undo(state.shapes);
+      drawShape();
     };
 
     const checkShape = (Shape: string) => {
       if (canvas.value && ctx.value) {
-        const IShape = newShape(state.id, canvas.value, ctx.value, Shape);
-        state.id++;
-        console.log(IShape);
+        const IShape = newShape(state.shapeId, canvas.value, ctx.value, Shape);
+        state.shapeId++;
         if (IShape) {
+          state.history.pushHistory({ type: "create", shape: IShape });
           state.shapes.push(IShape);
-          history.updateHistory(state.shapes);
         }
       }
     };
@@ -90,6 +87,8 @@ export default defineComponent({
           for (const shape of state.shapes) {
             if (shape.isPointInside(state.mouseX, state.mouseY)) {
               state.ShapeIndex = index;
+              state.oriX = state.shapes[state.ShapeIndex].x;
+              state.oriY = state.shapes[state.ShapeIndex].y;
               state.isDragging = true;
               shape.selectClick();
             }
@@ -99,6 +98,8 @@ export default defineComponent({
           for (const shape of state.shapes) {
             if (shape.isPointInside(state.mouseX, state.mouseY)) {
               state.ShapeIndex = index;
+              state.oriX = state.shapes[state.ShapeIndex].x;
+              state.oriY = state.shapes[state.ShapeIndex].y;
               state.isDragging = true;
               shape.selectClick();
             } else {
@@ -114,8 +115,18 @@ export default defineComponent({
         return;
       }
       event.preventDefault();
+      const moveShape = state.shapes[state.ShapeIndex];
+      if (state.oriX !== moveShape.x && state.oriY !== moveShape.y) {
+        state.history.pushHistory({
+          type: "move",
+          shapeId: moveShape.id,
+          oldX: state.oriX,
+          oldY: state.oriY,
+          newX: moveShape.x,
+          newY: moveShape.y,
+        });
+      }
       state.isDragging = false;
-      history.updateHistory(state.shapes);
       for (const shape of state.shapes) {
         if (shape.isPointInside(state.mouseX, state.mouseY)) {
           shape.selectClick();
@@ -131,11 +142,8 @@ export default defineComponent({
             event.clientX - canvas.value?.getBoundingClientRect().left;
           const moveY =
             event.clientY - canvas.value?.getBoundingClientRect().top;
-          const currentShape = state.shapes[state.ShapeIndex];
-          const dx = moveX - state.mouseX;
-          const dy = moveY - state.mouseY;
-          currentShape.x += dx;
-          currentShape.y += dy;
+          state.shapes[state.ShapeIndex].x += moveX - state.mouseX;
+          state.shapes[state.ShapeIndex].y += moveY - state.mouseY;
           drawShape();
           state.mouseX = moveX;
           state.mouseY = moveY;
@@ -155,7 +163,10 @@ export default defineComponent({
     };
     const onKeyUp = (event: KeyboardEvent) => {
       if (event.key === "Delete") {
-        history.updateHistory(state.shapes);
+        const deleteShapes = state.shapes.filter((shape) => shape.isClick);
+        for (const shape of deleteShapes) {
+          state.history.pushHistory({ type: "delete", shape });
+        }
         state.shapes = state.shapes.filter((shape) => !shape.isClick);
         drawShape();
       }
@@ -163,7 +174,7 @@ export default defineComponent({
     onMounted(() => {
       if (canvas.value) {
         ctx.value = canvas.value?.getContext("2d");
-        history.updateHistory(state.shapes);
+        state.history.pushHistory({ type: "delete", shape: state.shapes[0] });
       }
       window.addEventListener("mousedown", onMouseDown);
       window.addEventListener("mouseup", onMouseUp);
@@ -192,7 +203,7 @@ export default defineComponent({
 </script>
 <style>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
