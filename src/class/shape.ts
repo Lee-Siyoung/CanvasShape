@@ -1,9 +1,11 @@
 export abstract class Shape {
+  id: number;
   x: number;
   y: number;
   isClick: boolean;
 
-  constructor(x: number, y: number, isClick = false) {
+  constructor(id: number, x: number, y: number, isClick = false) {
+    this.id = id;
     this.x = x;
     this.y = y;
     this.isClick = isClick;

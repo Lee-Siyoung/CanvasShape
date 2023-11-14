@@ -30,6 +30,7 @@ export default defineComponent({
       isDragging: false,
       clickColor: "red",
       notClickColor: "black",
+      id: 0,
     });
     const history = new History([] as Shape[][], -1);
     const undo = () => {
@@ -47,7 +48,9 @@ export default defineComponent({
 
     const checkShape = (Shape: string) => {
       if (canvas.value && ctx.value) {
-        const IShape = newShape(canvas.value, ctx.value, Shape);
+        const IShape = newShape(state.id, canvas.value, ctx.value, Shape);
+        state.id++;
+        console.log(IShape);
         if (IShape) {
           state.shapes.push(IShape);
           history.updateHistory(state.shapes);

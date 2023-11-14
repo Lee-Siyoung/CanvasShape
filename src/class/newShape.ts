@@ -1,5 +1,6 @@
 import { Rectangle, Triangle, Circle, Text } from "./extendsShape";
 export const newShape = (
+  id: number,
   canvas: HTMLCanvasElement,
   ctx: CanvasRenderingContext2D,
   shape: string,
@@ -11,6 +12,7 @@ export const newShape = (
     const width = Math.random() * 100 + 30;
     const height = Math.random() * 100 + 30;
     const rectangle = new Rectangle(
+      id,
       Math.random() * (canvas.width - width),
       Math.random() * (canvas.height - height),
       false,
@@ -22,6 +24,7 @@ export const newShape = (
     const width = Math.random() * 100 + 30;
     const height = Math.random() * 100 + 30;
     const triangle = new Triangle(
+      id,
       Math.random() * (canvas.width - width),
       Math.random() * (canvas.height - height),
       false,
@@ -32,6 +35,7 @@ export const newShape = (
   } else if (shape == "circle" && canvas && ctx) {
     const radius = Math.random() * 100 + 30;
     const circle = new Circle(
+      id,
       Math.random() * (canvas.width - radius),
       Math.random() * (canvas.height - radius),
       false,
@@ -40,6 +44,7 @@ export const newShape = (
     return circle;
   } else if (shape == "text" && canvas && ctx) {
     const text = new Text(
+      id,
       Math.random() * canvas.width,
       Math.random() * canvas.height,
       false,

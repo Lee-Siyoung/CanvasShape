@@ -5,13 +5,14 @@ export class Rectangle extends Shape {
   height: number;
 
   constructor(
+    id: number,
     x: number,
     y: number,
     isClick: boolean,
     width: number,
     height: number
   ) {
-    super(x, y, isClick);
+    super(id, x, y, isClick);
     this.width = width;
     this.height = height;
   }
@@ -29,7 +30,14 @@ export class Rectangle extends Shape {
     );
   }
   clone(): Shape {
-    return new Rectangle(this.x, this.y, this.isClick, this.width, this.height);
+    return new Rectangle(
+      this.id,
+      this.x,
+      this.y,
+      this.isClick,
+      this.width,
+      this.height
+    );
   }
 }
 
@@ -38,13 +46,14 @@ export class Triangle extends Shape {
   height: number;
 
   constructor(
+    id: number,
     x: number,
     y: number,
     isClick: boolean,
     width: number,
     height: number
   ) {
-    super(x, y, isClick);
+    super(id, x, y, isClick);
     this.width = width;
     this.height = height;
   }
@@ -84,15 +93,28 @@ export class Triangle extends Shape {
     return area1 > 0 && area2 > 0 && area1 + area2 < 2 * areaOrig * sign;
   }
   clone(): Shape {
-    return new Triangle(this.x, this.y, this.isClick, this.width, this.height);
+    return new Triangle(
+      this.id,
+      this.x,
+      this.y,
+      this.isClick,
+      this.width,
+      this.height
+    );
   }
 }
 
 export class Circle extends Shape {
   radius: number;
 
-  constructor(x: number, y: number, isClick: boolean, radius: number) {
-    super(x, y, isClick);
+  constructor(
+    id: number,
+    x: number,
+    y: number,
+    isClick: boolean,
+    radius: number
+  ) {
+    super(id, x, y, isClick);
     this.radius = radius;
   }
 
@@ -106,7 +128,7 @@ export class Circle extends Shape {
     return distance <= this.radius;
   }
   clone(): Shape {
-    return new Circle(this.x, this.y, this.isClick, this.radius);
+    return new Circle(this.id, this.x, this.y, this.isClick, this.radius);
   }
 }
 
@@ -116,6 +138,7 @@ export class Text extends Shape {
   fontFamily: string;
 
   constructor(
+    id: number,
     x: number,
     y: number,
     isClick: boolean,
@@ -123,7 +146,7 @@ export class Text extends Shape {
     fontSize = 16,
     fontFamily = "Arial"
   ) {
-    super(x, y, isClick);
+    super(id, x, y, isClick);
     this.content = content;
     this.fontSize = fontSize;
     this.fontFamily = fontFamily;
@@ -152,6 +175,7 @@ export class Text extends Shape {
 
   clone(): Shape {
     return new Text(
+      this.id,
       this.x,
       this.y,
       this.isClick,
