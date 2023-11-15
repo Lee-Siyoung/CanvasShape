@@ -1,15 +1,22 @@
 import { Shape } from "./shape";
-export type IHistory =
-  | { type: "create"; shape: Shape }
-  | {
-      type: "move";
-      shapeId: number;
-      oldX: number;
-      oldY: number;
-      newX: number;
-      newY: number;
-    }
-  | { type: "delete"; shape: Shape };
+interface Create {
+  shape: Shape;
+}
+interface Move {
+  shapeId: number;
+  oldX: number;
+  oldY: number;
+  newX: number;
+  newY: number;
+}
+interface Delete {
+  shape: Shape;
+}
+export interface IHistory {
+  Create?: Create;
+  Move?: Move;
+  Delete?: Delete;
+}
 
 export class History {
   history: IHistory[];
@@ -30,21 +37,17 @@ export class History {
     if (this.historyId > 0) {
       const historyId = this.history[this.historyId];
       this.historyId--;
-      switch (historyId.type) {
-        case "create":
-          shape.pop();
-          break;
-        case "move": {
-          const moveShape = shape.find((s) => s.id === historyId.shapeId);
-          if (moveShape) {
-            moveShape.x = historyId.oldX;
-            moveShape.y = historyId.oldY;
-          }
-          break;
+      if (historyId.Create) {
+        shape.pop();
+      } else if (historyId.Move) {
+        const moveHistory = historyId.Move;
+        const moveShape = shape.find((s) => s.id === moveHistory.shapeId);
+        if (moveShape) {
+          moveShape.x = historyId.Move.oldX;
+          moveShape.y = historyId.Move.oldY;
         }
-        case "delete":
-          shape.push(historyId.shape);
-          break;
+      } else if (historyId.Delete) {
+        shape.push(historyId.Delete.shape);
       }
     }
   }
@@ -53,21 +56,18 @@ export class History {
     if (this.historyId < this.history.length - 1) {
       this.historyId++;
       const historyId = this.history[this.historyId];
-      switch (historyId.type) {
-        case "create":
-          shape.push(historyId.shape);
-          break;
-        case "move": {
-          const moveShape = shape.find((s) => s.id === historyId.shapeId);
-          if (moveShape) {
-            moveShape.x = historyId.newX;
-            moveShape.y = historyId.newY;
-          }
-          break;
+      if (historyId.Create) {
+        shape.push(historyId.Create.shape);
+      } else if (historyId.Move) {
+        const moveHistory = historyId.Move;
+        const moveShape = shape.find((s) => s.id === moveHistory.shapeId);
+        if (moveShape) {
+          moveShape.x = historyId.Move.newX;
+          moveShape.y = historyId.Move.newY;
         }
-        case "delete":
-          shape = shape.filter((shape) => shape.id !== historyId.shape.id);
-          break;
+      } else if (historyId.Delete) {
+        const deleteHistory = historyId.Delete;
+        shape = shape.filter((shape) => shape.id !== deleteHistory.shape.id);
       }
     }
   }

@@ -17,6 +17,7 @@ import { newShape } from "./class/newShape";
 import { History, IHistory } from "./class/history";
 import ShapeButton from "./components/ShapeButton.vue";
 import RedoUndo from "./components/RedoUndo.vue";
+import { MouseEventClass } from "./class/mouseEvent";
 export default defineComponent({
   components: { ShapeButton, RedoUndo },
   setup() {
@@ -35,13 +36,16 @@ export default defineComponent({
       shapeId: 0,
       history: new History([] as IHistory[], -1),
     });
+    const mouseEvent = new MouseEventClass(state);
     const redo = () => {
       state.history.redo(state.shapes);
-      drawShape();
+      if (canvas.value && ctx.value)
+        mouseEvent.drawShape(canvas.value, ctx.value);
     };
     const undo = () => {
       state.history.undo(state.shapes);
-      drawShape();
+      if (canvas.value && ctx.value)
+        mouseEvent.drawShape(canvas.value, ctx.value);
     };
 
     const checkShape = (Shape: string) => {
@@ -49,126 +53,36 @@ export default defineComponent({
         const IShape = newShape(state.shapeId, canvas.value, ctx.value, Shape);
         state.shapeId++;
         if (IShape) {
-          state.history.pushHistory({ type: "create", shape: IShape });
+          state.history.pushHistory({
+            Create: { shape: IShape },
+          });
           state.shapes.push(IShape);
         }
       }
     };
     const onClick = (event: MouseEvent) => {
-      if (canvas.value) {
-        event.preventDefault();
-        if (event.ctrlKey) {
-          for (const shape of state.shapes) {
-            if (shape.isPointInside(state.mouseX, state.mouseY)) {
-              shape.selectClick();
-            }
-          }
-        } else {
-          for (const shape of state.shapes) {
-            if (shape.isPointInside(state.mouseX, state.mouseY)) {
-              shape.selectClick();
-            } else {
-              shape.isClick = false;
-            }
-          }
-        }
-        drawShape();
-      }
+      if (canvas.value && ctx.value)
+        mouseEvent.onClick(canvas.value, ctx.value, event);
     };
     const onMouseDown = (event: MouseEvent) => {
-      if (canvas.value) {
-        event.preventDefault();
-        state.mouseX =
-          event.clientX - canvas.value?.getBoundingClientRect().left;
-        state.mouseY =
-          event.clientY - canvas.value?.getBoundingClientRect().top;
-        let index = 0;
-        if (event.ctrlKey) {
-          for (const shape of state.shapes) {
-            if (shape.isPointInside(state.mouseX, state.mouseY)) {
-              state.ShapeIndex = index;
-              state.oriX = state.shapes[state.ShapeIndex].x;
-              state.oriY = state.shapes[state.ShapeIndex].y;
-              state.isDragging = true;
-              shape.selectClick();
-            }
-            index++;
-          }
-        } else {
-          for (const shape of state.shapes) {
-            if (shape.isPointInside(state.mouseX, state.mouseY)) {
-              state.ShapeIndex = index;
-              state.oriX = state.shapes[state.ShapeIndex].x;
-              state.oriY = state.shapes[state.ShapeIndex].y;
-              state.isDragging = true;
-              shape.selectClick();
-            } else {
-              shape.isClick = false;
-            }
-            index++;
-          }
-        }
-      }
-    };
-    const onMouseUp = (event: MouseEvent) => {
-      if (!state.isDragging) {
-        return;
-      }
-      event.preventDefault();
-      const moveShape = state.shapes[state.ShapeIndex];
-      if (state.oriX !== moveShape.x && state.oriY !== moveShape.y) {
-        state.history.pushHistory({
-          type: "move",
-          shapeId: moveShape.id,
-          oldX: state.oriX,
-          oldY: state.oriY,
-          newX: moveShape.x,
-          newY: moveShape.y,
-        });
-      }
-      state.isDragging = false;
-      for (const shape of state.shapes) {
-        if (shape.isPointInside(state.mouseX, state.mouseY)) {
-          shape.selectClick();
-        }
-      }
+      if (canvas.value) mouseEvent.onMouseDown(canvas.value, event);
     };
     const onMouseMove = (event: MouseEvent) => {
-      if (!state.isDragging) return;
-      else {
-        event.preventDefault();
-        if (canvas.value) {
-          const moveX =
-            event.clientX - canvas.value?.getBoundingClientRect().left;
-          const moveY =
-            event.clientY - canvas.value?.getBoundingClientRect().top;
-          state.shapes[state.ShapeIndex].x += moveX - state.mouseX;
-          state.shapes[state.ShapeIndex].y += moveY - state.mouseY;
-          drawShape();
-          state.mouseX = moveX;
-          state.mouseY = moveY;
-        }
-      }
+      if (canvas.value && ctx.value)
+        mouseEvent.onMouseMove(canvas.value, ctx.value, event);
     };
-    const drawShape = () => {
-      if (canvas.value && ctx.value) {
-        ctx.value?.clearRect(0, 0, canvas.value?.width, canvas.value?.height);
-        for (const shape of state.shapes) {
-          ctx.value.strokeStyle = shape.isClick
-            ? state.clickColor
-            : state.notClickColor;
-          shape.draw(ctx.value);
-        }
-      }
+    const onMouseUp = (event: MouseEvent) => {
+      mouseEvent.onMouseUp(event);
     };
+
     const onKeyUp = (event: KeyboardEvent) => {
-      if (event.key === "Delete") {
+      if (event.key === "Delete" && canvas.value && ctx.value) {
         const deleteShapes = state.shapes.filter((shape) => shape.isClick);
         for (const shape of deleteShapes) {
-          state.history.pushHistory({ type: "delete", shape });
+          state.history.pushHistory({ Delete: { shape } });
         }
         state.shapes = state.shapes.filter((shape) => !shape.isClick);
-        drawShape();
+        mouseEvent.drawShape(canvas.value, ctx.value);
       } else if (event.ctrlKey && event.key === "z") {
         undo();
       } else if (event.ctrlKey && event.shiftKey && event.key === "Z") {
@@ -178,7 +92,7 @@ export default defineComponent({
     onMounted(() => {
       if (canvas.value) {
         ctx.value = canvas.value?.getContext("2d");
-        state.history.pushHistory({ type: "delete", shape: state.shapes[0] });
+        state.history.pushHistory({ Delete: { shape: state.shapes[0] } });
       }
       window.addEventListener("mousedown", onMouseDown);
       window.addEventListener("mouseup", onMouseUp);
