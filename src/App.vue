@@ -169,6 +169,10 @@ export default defineComponent({
         }
         state.shapes = state.shapes.filter((shape) => !shape.isClick);
         drawShape();
+      } else if (event.ctrlKey && event.key === "z") {
+        undo();
+      } else if (event.ctrlKey && event.shiftKey && event.key === "Z") {
+        redo();
       }
     };
     onMounted(() => {
