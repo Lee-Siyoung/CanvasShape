@@ -1,4 +1,4 @@
-import { History } from "./history/history";
+import { History } from "./history";
 import { Shape } from "./shape";
 export type State = {
   shapes: Shape[];

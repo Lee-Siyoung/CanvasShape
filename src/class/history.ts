@@ -1,9 +1,4 @@
-import { Shape } from "../shape";
-import { redoCreate } from "./redo/redoCreate";
-import { redoDelete } from "./redo/redoDelete";
-import { undoCreate } from "./undo/undoCreate";
-import { undoDelete } from "./undo/undoDelete";
-import { undoMove } from "./undo/undoMove";
+import { Shape } from "./shape";
 interface Create {
   shape: Shape;
 }
@@ -43,11 +38,16 @@ export class History {
       const historyId = this.history[this.historyId];
       this.historyId--;
       if (historyId.Create) {
-        undoCreate(shape);
+        shape.pop();
       } else if (historyId.Move) {
-        undoMove(shape, historyId);
+        const moveHistory = historyId.Move;
+        const moveShape = shape.find((s) => s.id === moveHistory.shapeId);
+        if (moveShape) {
+          moveShape.x = historyId.Move.oldX;
+          moveShape.y = historyId.Move.oldY;
+        }
       } else if (historyId.Delete) {
-        undoDelete(shape, historyId);
+        shape.push(historyId.Delete.shape);
       }
     }
   }
@@ -57,11 +57,17 @@ export class History {
       this.historyId++;
       const historyId = this.history[this.historyId];
       if (historyId.Create) {
-        redoCreate(shape, historyId);
+        shape.push(historyId.Create.shape);
       } else if (historyId.Move) {
-        undoMove(shape, historyId);
+        const moveHistory = historyId.Move;
+        const moveShape = shape.find((s) => s.id === moveHistory.shapeId);
+        if (moveShape) {
+          moveShape.x = historyId.Move.newX;
+          moveShape.y = historyId.Move.newY;
+        }
       } else if (historyId.Delete) {
-        redoDelete(shape, historyId);
+        const deleteHistory = historyId.Delete;
+        shape = shape.filter((shape) => shape.id !== deleteHistory.shape.id);
       }
     }
   }
