@@ -17,12 +17,12 @@ import { newShape } from "./class/newShape";
 import { History, IHistory } from "./class/history/history";
 import ShapeButton from "./components/ShapeButton.vue";
 import RedoUndo from "./components/RedoUndo.vue";
-import { MouseEventClass } from "./class/mouseEvent/mouseEvent";
 import { keyboardEventClass } from "./class/keyboardEvent";
 import { click } from "./class/mouseEvent/Click";
 import { mouseDown } from "./class/mouseEvent/MouseDown";
 import { mouseMove } from "./class/mouseEvent/MouseMove";
 import { mouseUp } from "./class/mouseEvent/MouseUp";
+import { drawShape } from "./class/utils/drawShape";
 export default defineComponent({
   components: { ShapeButton, RedoUndo },
   setup() {
@@ -41,17 +41,14 @@ export default defineComponent({
       shapeId: 0,
       history: new History([] as IHistory[], -1),
     });
-    const mouseEvent = new MouseEventClass(state);
     const KeyboardEventClass = new keyboardEventClass(state);
     const redo = () => {
       state.history.redo(state.shapes);
-      if (canvas.value && ctx.value)
-        mouseEvent.drawShape(canvas.value, ctx.value);
+      if (canvas.value && ctx.value) drawShape(canvas.value, ctx.value, state);
     };
     const undo = () => {
       state.history.undo(state.shapes);
-      if (canvas.value && ctx.value)
-        mouseEvent.drawShape(canvas.value, ctx.value);
+      if (canvas.value && ctx.value) drawShape(canvas.value, ctx.value, state);
     };
 
     const checkShape = (Shape: string) => {
@@ -68,14 +65,14 @@ export default defineComponent({
     };
     const onClick = (event: MouseEvent) => {
       if (canvas.value && ctx.value)
-        click(canvas.value, ctx.value, state, event, mouseEvent);
+        click(canvas.value, ctx.value, state, event);
     };
     const onMouseDown = (event: MouseEvent) => {
       if (canvas.value) mouseDown(canvas.value, state, event);
     };
     const onMouseMove = (event: MouseEvent) => {
       if (canvas.value && ctx.value)
-        mouseMove(canvas.value, ctx.value, state, event, mouseEvent);
+        mouseMove(canvas.value, ctx.value, state, event);
     };
     const onMouseUp = (event: MouseEvent) => {
       mouseUp(state, event);
@@ -83,7 +80,7 @@ export default defineComponent({
 
     const onKeyUp = (event: KeyboardEvent) => {
       if (canvas.value && ctx.value)
-        KeyboardEventClass.onKeyUp(canvas.value, ctx.value, event, mouseEvent);
+        KeyboardEventClass.onKeyUp(canvas.value, ctx.value, event);
     };
     onMounted(() => {
       if (canvas.value) {

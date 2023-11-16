@@ -1,19 +1,6 @@
-import { Shape } from "./shape/shape";
-import { History } from "./history/history";
-import { MouseEventClass } from "./mouseEvent/mouseEvent";
+import { drawShape } from "./utils/drawShape";
+import { State } from "./utils/State";
 
-export interface State {
-  shapes: Shape[];
-  mouseX: number;
-  mouseY: number;
-  oriX: number;
-  oriY: number;
-  ShapeIndex: number;
-  isDragging: boolean;
-  clickColor: string;
-  notClickColor: string;
-  history: History;
-}
 export class keyboardEventClass {
   state: State;
   constructor(state: State) {
@@ -22,8 +9,7 @@ export class keyboardEventClass {
   onKeyUp(
     canvas: HTMLCanvasElement,
     ctx: CanvasRenderingContext2D,
-    event: KeyboardEvent,
-    mouseEvent: MouseEventClass
+    event: KeyboardEvent
   ): void {
     if (event.key === "Delete" && canvas && ctx) {
       const deleteShapes = this.state.shapes.filter((shape) => shape.isClick);
@@ -31,13 +17,13 @@ export class keyboardEventClass {
         this.state.history.pushHistory({ Delete: { shape } });
       }
       this.state.shapes = this.state.shapes.filter((shape) => !shape.isClick);
-      mouseEvent.drawShape(canvas, ctx);
+      drawShape(canvas, ctx, this.state);
     } else if (event.ctrlKey && event.key === "z") {
       this.state.history.undo(this.state.shapes);
-      if (canvas && ctx) mouseEvent.drawShape(canvas, ctx);
+      if (canvas && ctx) drawShape(canvas, ctx, this.state);
     } else if (event.ctrlKey && event.shiftKey && event.key === "Z") {
       this.state.history.redo(this.state.shapes);
-      if (canvas && ctx) mouseEvent.drawShape(canvas, ctx);
+      if (canvas && ctx) drawShape(canvas, ctx, this.state);
     }
   }
 }

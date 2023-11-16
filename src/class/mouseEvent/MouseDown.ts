@@ -1,4 +1,4 @@
-import { State } from "./mouseEvent";
+import { State } from "../utils/State";
 
 export const mouseDown = (
   canvas: HTMLCanvasElement,

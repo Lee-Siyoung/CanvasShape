@@ -1,11 +1,11 @@
-import { MouseEventClass, State } from "./mouseEvent";
+import { State } from "../utils/State";
+import { drawShape } from "../utils/drawShape";
 
 export const mouseMove = (
   canvas: HTMLCanvasElement,
   ctx: CanvasRenderingContext2D,
   state: State,
-  event: MouseEvent,
-  mouseEvent: MouseEventClass
+  event: MouseEvent
 ) => {
   if (!state.isDragging) return;
   else {
@@ -15,7 +15,7 @@ export const mouseMove = (
       const moveY = event.clientY - canvas.getBoundingClientRect().top;
       state.shapes[state.ShapeIndex].x += moveX - state.mouseX;
       state.shapes[state.ShapeIndex].y += moveY - state.mouseY;
-      mouseEvent.drawShape(canvas, ctx);
+      drawShape(canvas, ctx, state);
       state.mouseX = moveX;
       state.mouseY = moveY;
     }

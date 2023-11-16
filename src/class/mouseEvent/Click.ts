@@ -1,10 +1,10 @@
-import { MouseEventClass, State } from "./mouseEvent";
+import { State } from "../utils/State";
+import { drawShape } from "../utils/drawShape";
 export const click = (
   canvas: HTMLCanvasElement,
   ctx: CanvasRenderingContext2D,
   state: State,
-  event: MouseEvent,
-  mouseEvent: MouseEventClass
+  event: MouseEvent
 ) => {
   if (canvas) {
     event.preventDefault();
@@ -23,6 +23,6 @@ export const click = (
         }
       }
     }
-    mouseEvent.drawShape(canvas, ctx);
+    drawShape(canvas, ctx, state);
   }
 };

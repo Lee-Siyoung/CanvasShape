@@ -1,4 +1,4 @@
-import { State } from "./mouseEvent";
+import { State } from "../utils/State";
 
 export const mouseUp = (state: State, event: MouseEvent) => {
   if (!state.isDragging) {
