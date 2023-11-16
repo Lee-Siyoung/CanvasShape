@@ -18,6 +18,7 @@ import { History, IHistory } from "./class/history/history";
 import ShapeButton from "./components/ShapeButton.vue";
 import RedoUndo from "./components/RedoUndo.vue";
 import { MouseEventClass } from "./class/mouseEvent";
+import { keyboardEventClass } from "./class/keyboardEvent";
 export default defineComponent({
   components: { ShapeButton, RedoUndo },
   setup() {
@@ -37,6 +38,7 @@ export default defineComponent({
       history: new History([] as IHistory[], -1),
     });
     const mouseEvent = new MouseEventClass(state);
+    const KeyboardEventClass = new keyboardEventClass(state);
     const redo = () => {
       state.history.redo(state.shapes);
       if (canvas.value && ctx.value)
@@ -76,18 +78,8 @@ export default defineComponent({
     };
 
     const onKeyUp = (event: KeyboardEvent) => {
-      if (event.key === "Delete" && canvas.value && ctx.value) {
-        const deleteShapes = state.shapes.filter((shape) => shape.isClick);
-        for (const shape of deleteShapes) {
-          state.history.pushHistory({ Delete: { shape } });
-        }
-        state.shapes = state.shapes.filter((shape) => !shape.isClick);
-        mouseEvent.drawShape(canvas.value, ctx.value);
-      } else if (event.ctrlKey && event.key === "z") {
-        undo();
-      } else if (event.ctrlKey && event.shiftKey && event.key === "Z") {
-        redo();
-      }
+      if (canvas.value && ctx.value)
+        KeyboardEventClass.onKeyUp(canvas.value, ctx.value, event, mouseEvent);
     };
     onMounted(() => {
       if (canvas.value) {

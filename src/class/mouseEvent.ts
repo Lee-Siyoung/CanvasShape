@@ -1,6 +1,6 @@
 import { History } from "./history/history";
 import { Shape } from "./shape/shape";
-export type State = {
+export interface State {
   shapes: Shape[];
   mouseX: number;
   mouseY: number;
@@ -11,7 +11,7 @@ export type State = {
   clickColor: string;
   notClickColor: string;
   history: History;
-};
+}
 export class MouseEventClass {
   state: State;
   constructor(state: State) {
