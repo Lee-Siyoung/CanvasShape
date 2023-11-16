@@ -17,8 +17,12 @@ import { newShape } from "./class/newShape";
 import { History, IHistory } from "./class/history/history";
 import ShapeButton from "./components/ShapeButton.vue";
 import RedoUndo from "./components/RedoUndo.vue";
-import { MouseEventClass } from "./class/mouseEvent";
+import { MouseEventClass } from "./class/mouseEvent/mouseEvent";
 import { keyboardEventClass } from "./class/keyboardEvent";
+import { click } from "./class/mouseEvent/Click";
+import { mouseDown } from "./class/mouseEvent/MouseDown";
+import { mouseMove } from "./class/mouseEvent/MouseMove";
+import { mouseUp } from "./class/mouseEvent/MouseUp";
 export default defineComponent({
   components: { ShapeButton, RedoUndo },
   setup() {
@@ -64,17 +68,17 @@ export default defineComponent({
     };
     const onClick = (event: MouseEvent) => {
       if (canvas.value && ctx.value)
-        mouseEvent.onClick(canvas.value, ctx.value, event);
+        click(canvas.value, ctx.value, state, event, mouseEvent);
     };
     const onMouseDown = (event: MouseEvent) => {
-      if (canvas.value) mouseEvent.onMouseDown(canvas.value, event);
+      if (canvas.value) mouseDown(canvas.value, state, event);
     };
     const onMouseMove = (event: MouseEvent) => {
       if (canvas.value && ctx.value)
-        mouseEvent.onMouseMove(canvas.value, ctx.value, event);
+        mouseMove(canvas.value, ctx.value, state, event, mouseEvent);
     };
     const onMouseUp = (event: MouseEvent) => {
-      mouseEvent.onMouseUp(event);
+      mouseUp(state, event);
     };
 
     const onKeyUp = (event: KeyboardEvent) => {
@@ -127,4 +131,4 @@ canvas {
   border: 1px solid black;
 }
 </style>
-./class/history/history ./class/shape/shape
+./class/mouseEvent/mouseEvent

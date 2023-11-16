@@ -1,6 +1,6 @@
 import { Shape } from "./shape/shape";
 import { History } from "./history/history";
-import { MouseEventClass } from "./mouseEvent";
+import { MouseEventClass } from "./mouseEvent/mouseEvent";
 
 export interface State {
   shapes: Shape[];
