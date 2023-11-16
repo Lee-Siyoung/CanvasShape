@@ -1,4 +1,4 @@
-import { Shape } from "../shape";
+import { Shape } from "../shape/shape";
 import { redoCreate } from "./redo/Create";
 import { redoDelete } from "./redo/Delete";
 import { redoMove } from "./redo/Move";

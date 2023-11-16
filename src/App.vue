@@ -12,7 +12,7 @@ import {
   ref,
   onBeforeUnmount,
 } from "vue";
-import { Shape } from "./class/shape";
+import { Shape } from "./class/shape/shape";
 import { newShape } from "./class/newShape";
 import { History, IHistory } from "./class/history/history";
 import ShapeButton from "./components/ShapeButton.vue";
@@ -135,4 +135,4 @@ canvas {
   border: 1px solid black;
 }
 </style>
-./class/history/history
+./class/history/history ./class/shape/shape

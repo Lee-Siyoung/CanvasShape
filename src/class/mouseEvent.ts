@@ -1,5 +1,5 @@
 import { History } from "./history/history";
-import { Shape } from "./shape";
+import { Shape } from "./shape/shape";
 export type State = {
   shapes: Shape[];
   mouseX: number;

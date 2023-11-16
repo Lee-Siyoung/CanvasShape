@@ -1,4 +1,4 @@
-import { Shape } from "@/class/shape";
+import { Shape } from "@/class/shape/shape";
 import { IHistory } from "../history";
 
 export const redoMove = (shape: Shape[], history: IHistory) => {
