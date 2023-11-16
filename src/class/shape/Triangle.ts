@@ -1,4 +1,4 @@
-import { Shape } from "./shape";
+import { Shape } from "./Shape";
 
 export class Triangle extends Shape {
   width: number;

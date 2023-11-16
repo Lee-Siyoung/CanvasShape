@@ -1,5 +1,5 @@
 import { State } from "../utils/State";
-import { drawShape } from "../utils/drawShape";
+import { drawShape } from "../utils/DrawShape";
 
 export const mouseMove = (
   canvas: HTMLCanvasElement,

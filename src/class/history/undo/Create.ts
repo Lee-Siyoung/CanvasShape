@@ -1,4 +1,4 @@
-import { Shape } from "@/class/shape/shape";
+import { Shape } from "@/class/shape/Shape";
 
 export const undoCreate = (shape: Shape[]) => {
   shape.pop();

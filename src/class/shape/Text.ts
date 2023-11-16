@@ -1,4 +1,4 @@
-import { Shape } from "./shape";
+import { Shape } from "./Shape";
 
 export class Text extends Shape {
   content: string;

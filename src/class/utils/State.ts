@@ -1,5 +1,5 @@
-import { Shape } from "../shape/shape";
-import { History } from "../history/history";
+import { Shape } from "../shape/Shape";
+import { History } from "../history/History";
 
 export interface State {
   shapes: Shape[];

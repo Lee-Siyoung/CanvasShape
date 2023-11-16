@@ -1,5 +1,5 @@
-import { Shape } from "@/class/shape/shape";
-import { IHistory } from "../history";
+import { Shape } from "@/class/shape/Shape";
+import { IHistory } from "../History";
 
 export const redoMove = (shape: Shape[], history: IHistory) => {
   const moveHistory = history.Move;
