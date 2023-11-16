@@ -32,13 +32,13 @@ export class History {
     this.historyId = historyId;
   }
 
-  pushHistory(history: IHistory) {
+  pushHistory(history: IHistory): void {
     this.history = this.history.slice(0, this.historyId + 1);
     this.history.push(history);
     this.historyId++;
   }
 
-  undo(shape: Shape[]) {
+  undo(shape: Shape[]): void {
     if (this.historyId > 0) {
       const historyId = this.history[this.historyId];
       this.historyId--;
@@ -52,7 +52,7 @@ export class History {
     }
   }
 
-  redo(shape: Shape[]) {
+  redo(shape: Shape[]): void {
     if (this.historyId < this.history.length - 1) {
       this.historyId++;
       const historyId = this.history[this.historyId];
