@@ -19,6 +19,7 @@ export const newShape = (
       Math.random() * (canvas.width - width),
       Math.random() * (canvas.height - height),
       false,
+      "#000000",
       width,
       height
     );
@@ -31,6 +32,7 @@ export const newShape = (
       Math.random() * (canvas.width - width),
       Math.random() * (canvas.height - height),
       false,
+      "#000000",
       width,
       height
     );
@@ -42,6 +44,7 @@ export const newShape = (
       Math.random() * (canvas.width - radius),
       Math.random() * (canvas.height - radius),
       false,
+      "#000000",
       radius
     );
     return circle;
@@ -51,6 +54,7 @@ export const newShape = (
       Math.random() * canvas.width,
       Math.random() * canvas.height,
       false,
+      "#000000",
       textContent || "example",
       fontSize || 16,
       fontFamily || "Arial"

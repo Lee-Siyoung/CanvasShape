@@ -11,5 +11,6 @@ export interface State {
   isDragging: boolean;
   clickColor: string;
   notClickColor: string;
+  shapeId: number;
   history: History;
 }

@@ -9,16 +9,20 @@ export class Rectangle extends Shape {
     x: number,
     y: number,
     isClick: boolean,
+    color: string,
     width: number,
     height: number
   ) {
-    super(id, x, y, isClick);
+    super(id, x, y, isClick, color);
     this.width = width;
     this.height = height;
   }
 
   draw(ctx: CanvasRenderingContext2D): void {
+    //ctx.strokeStyle = "#ffffff";
+    //ctx.fillStyle = this.color;
     ctx.strokeRect(this.x, this.y, this.width, this.height);
+    ctx.stroke();
   }
   isPointInside(x: number, y: number): boolean {
     const shape_left = this.x;
@@ -35,6 +39,7 @@ export class Rectangle extends Shape {
       this.x,
       this.y,
       this.isClick,
+      this.color,
       this.width,
       this.height
     );

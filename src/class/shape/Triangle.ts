@@ -9,10 +9,11 @@ export class Triangle extends Shape {
     x: number,
     y: number,
     isClick: boolean,
+    color: string,
     width: number,
     height: number
   ) {
-    super(id, x, y, isClick);
+    super(id, x, y, isClick, color);
     this.width = width;
     this.height = height;
   }
@@ -23,6 +24,9 @@ export class Triangle extends Shape {
     ctx.lineTo(this.x - this.width, this.y + this.height);
     ctx.lineTo(this.x + this.width, this.y + this.height);
     ctx.closePath();
+    ctx.strokeStyle = "#ffffff";
+    ctx.fillStyle = this.color;
+    ctx.fill();
     ctx.stroke();
   }
   isPointInside(x: number, y: number): boolean {
@@ -57,6 +61,7 @@ export class Triangle extends Shape {
       this.x,
       this.y,
       this.isClick,
+      this.color,
       this.width,
       this.height
     );

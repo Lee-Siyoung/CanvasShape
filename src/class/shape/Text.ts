@@ -10,11 +10,12 @@ export class Text extends Shape {
     x: number,
     y: number,
     isClick: boolean,
+    color: string,
     content: string,
     fontSize = 16,
     fontFamily = "Arial"
   ) {
-    super(id, x, y, isClick);
+    super(id, x, y, isClick, color);
     this.content = content;
     this.fontSize = fontSize;
     this.fontFamily = fontFamily;
@@ -47,6 +48,7 @@ export class Text extends Shape {
       this.x,
       this.y,
       this.isClick,
+      this.color,
       this.content,
       this.fontSize,
       this.fontFamily
