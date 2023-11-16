@@ -1,7 +1,7 @@
-import { Rectangle } from "./shape/Rectangle";
-import { Triangle } from "./shape/Triangle";
-import { Circle } from "./shape/Circle";
-import { Text } from "./shape/Text";
+import { Rectangle } from "./Rectangle";
+import { Triangle } from "./Triangle";
+import { Circle } from "./Circle";
+import { Text } from "./Text";
 export const newShape = (
   id: number,
   canvas: HTMLCanvasElement,
