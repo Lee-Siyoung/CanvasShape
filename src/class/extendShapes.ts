@@ -17,7 +17,7 @@ export class Rectangle extends Shape {
     this.height = height;
   }
 
-  draw(ctx: CanvasRenderingContext2D): void {
+  draw(ctx: CanvasRenderingContext2D) {
     ctx.strokeRect(this.x, this.y, this.width, this.height);
   }
   isPointInside(x: number, y: number): boolean {
@@ -58,7 +58,7 @@ export class Triangle extends Shape {
     this.height = height;
   }
 
-  draw(ctx: CanvasRenderingContext2D): void {
+  draw(ctx: CanvasRenderingContext2D) {
     ctx.beginPath();
     ctx.moveTo(this.x, this.y);
     ctx.lineTo(this.x - this.width, this.y + this.height);
@@ -118,7 +118,7 @@ export class Circle extends Shape {
     this.radius = radius;
   }
 
-  draw(ctx: CanvasRenderingContext2D): void {
+  draw(ctx: CanvasRenderingContext2D) {
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
     ctx.stroke();
@@ -152,7 +152,7 @@ export class Text extends Shape {
     this.fontFamily = fontFamily;
   }
 
-  draw(ctx: CanvasRenderingContext2D): void {
+  draw(ctx: CanvasRenderingContext2D) {
     ctx.font = `${this.fontSize}px ${this.fontFamily}`;
     ctx.fillText(this.content, this.x, this.y);
   }
