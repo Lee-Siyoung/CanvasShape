@@ -14,7 +14,7 @@ import {
 } from "vue";
 import { Shape } from "./class/shape";
 import { newShape } from "./class/newShape";
-import { History, IHistory } from "./class/history";
+import { History, IHistory } from "./class/history/history";
 import ShapeButton from "./components/ShapeButton.vue";
 import RedoUndo from "./components/RedoUndo.vue";
 import { MouseEventClass } from "./class/mouseEvent";
@@ -135,3 +135,4 @@ canvas {
   border: 1px solid black;
 }
 </style>
+./class/history/history

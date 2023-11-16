@@ -1,4 +1,10 @@
-import { Shape } from "./shape";
+import { Shape } from "../shape";
+import { redoCreate } from "./redo/Create";
+import { redoDelete } from "./redo/Delete";
+import { redoMove } from "./redo/Move";
+import { undoCreate } from "./undo/Create";
+import { undoDelete } from "./undo/Delete";
+import { undoMove } from "./undo/Move";
 interface Create {
   shape: Shape;
 }
@@ -27,47 +33,36 @@ export class History {
     this.historyId = historyId;
   }
 
-  pushHistory(history: IHistory) {
+  pushHistory(history: IHistory): void {
     this.history = this.history.slice(0, this.historyId + 1);
     this.history.push(history);
     this.historyId++;
   }
 
-  undo(shape: Shape[]) {
+  undo(shape: Shape[]): void {
     if (this.historyId > 0) {
       const historyId = this.history[this.historyId];
       this.historyId--;
       if (historyId.Create) {
-        shape.pop();
+        undoCreate(shape);
       } else if (historyId.Move) {
-        const moveHistory = historyId.Move;
-        const moveShape = shape.find((s) => s.id === moveHistory.shapeId);
-        if (moveShape) {
-          moveShape.x = historyId.Move.oldX;
-          moveShape.y = historyId.Move.oldY;
-        }
+        undoMove(shape, historyId);
       } else if (historyId.Delete) {
-        shape.push(historyId.Delete.shape);
+        undoDelete(shape, historyId);
       }
     }
   }
 
-  redo(shape: Shape[]) {
+  redo(shape: Shape[]): void {
     if (this.historyId < this.history.length - 1) {
       this.historyId++;
       const historyId = this.history[this.historyId];
       if (historyId.Create) {
-        shape.push(historyId.Create.shape);
+        redoCreate(shape, historyId);
       } else if (historyId.Move) {
-        const moveHistory = historyId.Move;
-        const moveShape = shape.find((s) => s.id === moveHistory.shapeId);
-        if (moveShape) {
-          moveShape.x = historyId.Move.newX;
-          moveShape.y = historyId.Move.newY;
-        }
+        redoMove(shape, historyId);
       } else if (historyId.Delete) {
-        const deleteHistory = historyId.Delete;
-        shape = shape.filter((shape) => shape.id !== deleteHistory.shape.id);
+        redoDelete(shape, historyId);
       }
     }
   }
