@@ -127,4 +127,3 @@ canvas {
   border: 1px solid black;
 }
 </style>
-./class/history/History
