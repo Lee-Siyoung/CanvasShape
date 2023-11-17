@@ -49,6 +49,12 @@ export default defineComponent({
       history: new History([] as IHistory[], -1),
     });
     const changeColor = (color: string) => {
+      state.shapes.forEach((shape) => {
+        if (shape.isClick) {
+          shape.color = color;
+        }
+      });
+      if (canvas.value && ctx.value) drawShape(canvas.value, ctx.value, state);
       console.log(color);
     };
 

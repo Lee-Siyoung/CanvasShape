@@ -18,7 +18,8 @@ export class Circle extends Shape {
   draw(ctx: CanvasRenderingContext2D): void {
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-    ctx.stroke();
+    ctx.fillStyle = this.color;
+    ctx.fill();
   }
   isPointInside(x: number, y: number): boolean {
     const distance = Math.sqrt((x - this.x) ** 2 + (y - this.y) ** 2);

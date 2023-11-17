@@ -24,7 +24,8 @@ export class Triangle extends Shape {
     ctx.lineTo(this.x - this.width, this.y + this.height);
     ctx.lineTo(this.x + this.width, this.y + this.height);
     ctx.closePath();
-    ctx.stroke();
+    ctx.fillStyle = this.color;
+    ctx.fill();
   }
   isPointInside(x: number, y: number): boolean {
     const aPoint = { x: this.x, y: this.y };
