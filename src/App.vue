@@ -51,19 +51,28 @@ export default defineComponent({
     const changeColor = (color: string) => {
       state.shapes.forEach((shape) => {
         if (shape.isClick) {
+          const oldColor = shape.color;
           shape.color = color;
+          state.history.pushHistory({
+            Color: {
+              shapeId: shape.id,
+              oldColor: oldColor,
+              newColor: color,
+            },
+          });
         }
       });
       if (canvas.value && ctx.value) drawShape(canvas.value, ctx.value, state);
-      console.log(color);
     };
 
     const redo = () => {
       state.history.redo(state.shapes);
+      console.log(state.history);
       if (canvas.value && ctx.value) drawShape(canvas.value, ctx.value, state);
     };
     const undo = () => {
       state.history.undo(state.shapes);
+      console.log(state.history);
       if (canvas.value && ctx.value) drawShape(canvas.value, ctx.value, state);
     };
 
@@ -87,7 +96,6 @@ export default defineComponent({
         canvas.value.contains(event.target as Node)
       )
         click(canvas.value, ctx.value, state, event);
-      console.log(state.shapes);
     };
     const onMouseDown = (event: MouseEvent) => {
       if (canvas.value && canvas.value.contains(event.target as Node))

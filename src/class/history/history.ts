@@ -2,9 +2,11 @@ import { Shape } from "../shape/Shape";
 import { redoCreate } from "./redo/Create";
 import { redoDelete } from "./redo/Delete";
 import { redoMove } from "./redo/Move";
+import { redoColor } from "./redo/Color";
 import { undoCreate } from "./undo/Create";
 import { undoDelete } from "./undo/Delete";
 import { undoMove } from "./undo/Move";
+import { undoColor } from "./undo/Color";
 interface Create {
   shape: Shape;
 }
@@ -18,10 +20,16 @@ interface Move {
 interface Delete {
   shape: Shape;
 }
+interface Color {
+  shapeId: number;
+  oldColor: string;
+  newColor: string;
+}
 export interface IHistory {
   Create?: Create;
   Move?: Move;
   Delete?: Delete;
+  Color?: Color;
 }
 
 export class History {
@@ -49,6 +57,8 @@ export class History {
         undoMove(shape, historyId);
       } else if (historyId.Delete) {
         undoDelete(shape, historyId);
+      } else if (historyId.Color) {
+        undoColor(shape, historyId);
       }
     }
   }
@@ -63,6 +73,8 @@ export class History {
         redoMove(shape, historyId);
       } else if (historyId.Delete) {
         redoDelete(shape, historyId);
+      } else if (historyId.Color) {
+        redoColor(shape, historyId);
       }
     }
   }
