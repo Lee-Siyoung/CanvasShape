@@ -26,6 +26,11 @@ export class Triangle extends Shape {
     ctx.closePath();
     ctx.fillStyle = this.color;
     ctx.fill();
+    if (this.isClick) {
+      ctx.strokeStyle = "#778899";
+      ctx.lineWidth = 3;
+      ctx.stroke();
+    }
   }
   isPointInside(x: number, y: number): boolean {
     const aPoint = { x: this.x, y: this.y };

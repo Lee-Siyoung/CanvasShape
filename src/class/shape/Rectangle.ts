@@ -21,6 +21,11 @@ export class Rectangle extends Shape {
   draw(ctx: CanvasRenderingContext2D): void {
     ctx.fillStyle = this.color;
     ctx.fillRect(this.x, this.y, this.width, this.height);
+    if (this.isClick) {
+      ctx.strokeStyle = "#778899";
+      ctx.lineWidth = 3;
+      ctx.strokeRect(this.x, this.y, this.width, this.height);
+    }
   }
   isPointInside(x: number, y: number): boolean {
     const shape_left = this.x;

@@ -43,8 +43,6 @@ export default defineComponent({
       oriY: 0,
       ShapeIndex: 0,
       isDragging: false,
-      clickColor: "red",
-      notClickColor: "black",
       shapeId: 0,
       history: new History([] as IHistory[], -1),
     });
@@ -96,6 +94,7 @@ export default defineComponent({
         canvas.value.contains(event.target as Node)
       )
         click(canvas.value, ctx.value, state, event);
+      console.log(state.shapes);
     };
     const onMouseDown = (event: MouseEvent) => {
       if (canvas.value && canvas.value.contains(event.target as Node))

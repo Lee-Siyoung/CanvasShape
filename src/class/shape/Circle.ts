@@ -20,6 +20,11 @@ export class Circle extends Shape {
     ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
     ctx.fillStyle = this.color;
     ctx.fill();
+    if (this.isClick) {
+      ctx.strokeStyle = "#778899";
+      ctx.lineWidth = 3;
+      ctx.stroke();
+    }
   }
   isPointInside(x: number, y: number): boolean {
     const distance = Math.sqrt((x - this.x) ** 2 + (y - this.y) ** 2);

@@ -9,8 +9,6 @@ export interface State {
   oriY: number;
   ShapeIndex: number;
   isDragging: boolean;
-  clickColor: string;
-  notClickColor: string;
   shapeId: number;
   history: History;
 }
