@@ -23,17 +23,20 @@ export class Text extends Shape {
 
   draw(ctx: CanvasRenderingContext2D) {
     ctx.font = `${this.fontSize}px ${this.fontFamily}`;
-    const textMetrics = ctx.measureText(this.content);
-    const textWidth = textMetrics.width;
-    const textHeight = this.fontSize;
     ctx.font = `${this.fontSize}px ${this.fontFamily}`;
     ctx.fillStyle = this.color;
     ctx.fillText(this.content, this.x, this.y);
     if (this.isClick) {
-      ctx.strokeStyle = "#778899";
-      ctx.lineWidth = 3;
-      ctx.strokeRect(this.x - 2, this.y - 14, textWidth + 4, textHeight + 4);
+      this.drawHandle(ctx);
     }
+  }
+  drawHandle(ctx: CanvasRenderingContext2D): void {
+    const textMetrics = ctx.measureText(this.content);
+    const textWidth = textMetrics.width;
+    const textHeight = this.fontSize;
+    ctx.strokeStyle = "#778899";
+    ctx.lineWidth = 3;
+    ctx.strokeRect(this.x - 2, this.y - 14, textWidth + 4, textHeight + 4);
   }
   isPointInside(x: number, y: number): boolean {
     const ctx = document.createElement("canvas").getContext("2d");

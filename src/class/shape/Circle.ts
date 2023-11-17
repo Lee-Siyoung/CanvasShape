@@ -21,10 +21,59 @@ export class Circle extends Shape {
     ctx.fillStyle = this.color;
     ctx.fill();
     if (this.isClick) {
-      ctx.strokeStyle = "#778899";
-      ctx.lineWidth = 3;
-      ctx.stroke();
+      this.drawHandle(ctx);
     }
+  }
+  drawHandle(ctx: CanvasRenderingContext2D): void {
+    const width = this.radius * 2;
+    const height = this.radius * 2;
+    const selectionHandles = [];
+
+    // top left, middle, right
+    selectionHandles.push({
+      x: this.x - 2 - this.radius,
+      y: this.y - 4 - this.radius,
+    });
+    selectionHandles.push({
+      x: this.x + width / 2 - this.radius,
+      y: this.y - 4 - this.radius,
+    });
+    selectionHandles.push({
+      x: this.x + width - 4 - this.radius,
+      y: this.y - 4 - this.radius,
+    });
+
+    // middle left
+    selectionHandles.push({
+      x: this.x - 4 - this.radius,
+      y: this.y + height / 2 - 4 - this.radius,
+    });
+
+    // middle right
+    selectionHandles.push({
+      x: this.x + width - 4 - this.radius,
+      y: this.y + height / 2 - 4 - this.radius,
+    });
+
+    // bottom left, middle, right
+    selectionHandles.push({
+      x: this.x - 4 - this.radius,
+      y: this.y + height - 4 - this.radius,
+    });
+    selectionHandles.push({
+      x: this.x + width / 2 - 4 - this.radius,
+      y: this.y + height - 4 - this.radius,
+    });
+    selectionHandles.push({
+      x: this.x + width - 4 - this.radius,
+      y: this.y + height - 4 - this.radius,
+    });
+    ctx.strokeStyle = "#778899";
+    ctx.lineWidth = 3;
+    selectionHandles.forEach((handle) => {
+      ctx.strokeRect(handle.x, handle.y, 8, 8);
+    });
+    ctx.strokeRect(this.x - width / 2, this.y - height / 2, width, height);
   }
   isPointInside(x: number, y: number): boolean {
     const distance = Math.sqrt((x - this.x) ** 2 + (y - this.y) ** 2);

@@ -20,6 +20,7 @@ export abstract class Shape {
   }
 
   abstract draw(ctx: CanvasRenderingContext2D): void;
+  abstract drawHandle(ctx: CanvasRenderingContext2D): void;
   abstract isPointInside(x: number, y: number): boolean;
   abstract clone(): Shape;
   selectClick() {
