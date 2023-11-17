@@ -84,7 +84,8 @@ export default defineComponent({
       console.log(state.shapes);
     };
     const onMouseDown = (event: MouseEvent) => {
-      if (canvas.value) mouseDown(canvas.value, state, event);
+      if (canvas.value && canvas.value.contains(event.target as Node))
+        mouseDown(canvas.value, state, event);
     };
     const onMouseMove = (event: MouseEvent) => {
       if (canvas.value && ctx.value)
