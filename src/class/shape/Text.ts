@@ -34,8 +34,50 @@ export class Text extends Shape {
     const textMetrics = ctx.measureText(this.content);
     const textWidth = textMetrics.width;
     const textHeight = this.fontSize;
+    const selectionHandles = [];
+
+    // top left, middle, right
+    selectionHandles.push({ x: this.x - 6, y: this.y - 18 });
+    selectionHandles.push({
+      x: this.x + (textWidth + 4) / 2 - 5,
+      y: this.y - 18,
+    });
+    selectionHandles.push({
+      x: this.x + textWidth - 2,
+      y: this.y - 18,
+    });
+
+    // middle left
+    selectionHandles.push({
+      x: this.x - 6,
+      y: this.y + (textHeight + 4) / 2 - 18,
+    });
+
+    // middle right
+    selectionHandles.push({
+      x: this.x + textWidth - 2,
+      y: this.y + (textHeight + 4) / 2 - 18,
+    });
+
+    // bottom left, middle, right
+    selectionHandles.push({
+      x: this.x - 6,
+      y: this.y + textHeight - 14,
+    });
+    selectionHandles.push({
+      x: this.x + (textWidth + 4) / 2 - 6,
+      y: this.y + textHeight - 14,
+    });
+    selectionHandles.push({
+      x: this.x + textWidth - 2,
+      y: this.y + textHeight - 14,
+    });
+
     ctx.strokeStyle = "#778899";
     ctx.lineWidth = 3;
+    selectionHandles.forEach((handle) => {
+      ctx.strokeRect(handle.x, handle.y, 8, 8);
+    });
     ctx.strokeRect(this.x - 2, this.y - 14, textWidth + 4, textHeight + 4);
   }
   isPointInside(x: number, y: number): boolean {
