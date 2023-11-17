@@ -71,10 +71,15 @@ export default defineComponent({
           });
           state.shapes.push(IShape);
         }
+        drawShape(canvas.value, ctx.value, state);
       }
     };
     const onClick = (event: MouseEvent) => {
-      if (canvas.value && ctx.value)
+      if (
+        canvas.value &&
+        ctx.value &&
+        canvas.value.contains(event.target as Node)
+      )
         click(canvas.value, ctx.value, state, event);
       console.log(state.shapes);
     };

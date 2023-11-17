@@ -18,9 +18,6 @@ export class Circle extends Shape {
   draw(ctx: CanvasRenderingContext2D): void {
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-    ctx.strokeStyle = "#ffffff";
-    ctx.fillStyle = this.color;
-    ctx.fill();
     ctx.stroke();
   }
   isPointInside(x: number, y: number): boolean {
