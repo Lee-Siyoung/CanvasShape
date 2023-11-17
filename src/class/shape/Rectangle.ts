@@ -31,7 +31,7 @@ export class Rectangle extends Shape {
     // top left, middle, right
     selectionHandles.push({ x: this.x - 4, y: this.y - 4 });
     selectionHandles.push({
-      x: this.x + this.width / 2,
+      x: this.x + this.width / 2 - 2,
       y: this.y - 4,
     });
     selectionHandles.push({ x: this.x + this.width - 4, y: this.y - 4 });
