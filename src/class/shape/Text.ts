@@ -27,6 +27,7 @@ export class Text extends Shape {
     const textWidth = textMetrics.width;
     const textHeight = this.fontSize;
     ctx.font = `${this.fontSize}px ${this.fontFamily}`;
+    ctx.fillStyle = this.color;
     ctx.fillText(this.content, this.x, this.y);
     if (this.isClick) {
       ctx.strokeStyle = "#778899";
