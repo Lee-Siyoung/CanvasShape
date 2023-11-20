@@ -1,6 +1,8 @@
 import { State } from "../utils/State";
 import { drawShape } from "../utils/DrawShape";
 import { Rectangle } from "../shape/Rectangle";
+import { Triangle } from "../shape/Triangle";
+import { Circle } from "../shape/Circle";
 
 export const mouseMove = (
   canvas: HTMLCanvasElement,
@@ -29,53 +31,80 @@ export const mouseMove = (
       const moveY = event.clientY - canvas.getBoundingClientRect().top;
       const oldX = shape.x;
       const oldY = shape.y;
+      shape.isClick = true;
       if (shape instanceof Rectangle) {
-        shape.isClick = true;
         switch (state.resizeHandleIndex) {
           case 0:
             shape.x = moveX;
             shape.y = moveY;
             shape.width += oldX - moveX;
             shape.height += oldY - moveY;
-            drawShape(canvas, ctx, state);
             break;
           case 1:
             shape.y = moveY;
             shape.height += oldY - moveY;
-            drawShape(canvas, ctx, state);
             break;
           case 2:
             shape.y = moveY;
             shape.width = moveX - oldX;
             shape.height += oldY - moveY;
-            drawShape(canvas, ctx, state);
             break;
           case 3:
             shape.x = moveX;
             shape.width += oldX - moveX;
-            drawShape(canvas, ctx, state);
             break;
           case 4:
             shape.width = moveX - oldX;
-            drawShape(canvas, ctx, state);
             break;
           case 5:
             shape.x = moveX;
             shape.width += oldX - moveX;
             shape.height = moveY - oldY;
-            drawShape(canvas, ctx, state);
             break;
           case 6:
             shape.height = moveY - oldY;
-            drawShape(canvas, ctx, state);
             break;
           case 7:
             shape.width = moveX - oldX;
             shape.height = moveY - oldY;
-            drawShape(canvas, ctx, state);
+            break;
+        }
+      } else if (shape instanceof Triangle) {
+        switch (state.resizeHandleIndex) {
+          case 0:
+            break;
+          case 1:
+            break;
+          case 2:
+            break;
+          case 3:
+            break;
+        }
+      } else if (shape instanceof Circle) {
+        const dx = moveX - shape.x;
+        const dy = moveY - shape.y;
+        const newRadius = Math.sqrt(dx * dx + dy * dy);
+
+        switch (state.resizeHandleIndex) {
+          case 0:
+            shape.radius = newRadius;
+            break;
+          case 1:
+            break;
+          case 2:
+            break;
+          case 3:
+            shape.radius = newRadius;
+            break;
+        }
+      } else if (shape instanceof Text) {
+        switch (state.resizeHandleIndex) {
+          case 0:
             break;
         }
       }
+
+      drawShape(canvas, ctx, state);
     }
   }
 };

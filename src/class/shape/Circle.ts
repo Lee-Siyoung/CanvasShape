@@ -30,39 +30,18 @@ export class Circle extends Shape {
     const height = this.radius * 2;
     this.selectionHandles = [];
 
-    // top left, middle, right
+    // top left, right
     this.selectionHandles.push({
       x: this.x - 2 - this.radius,
       y: this.y - 4 - this.radius,
     });
     this.selectionHandles.push({
-      x: this.x + width / 2 - this.radius,
-      y: this.y - 4 - this.radius,
-    });
-    this.selectionHandles.push({
       x: this.x + width - 4 - this.radius,
       y: this.y - 4 - this.radius,
     });
-
-    // middle left
+    // bottom left, right
     this.selectionHandles.push({
       x: this.x - 4 - this.radius,
-      y: this.y + height / 2 - 4 - this.radius,
-    });
-
-    // middle right
-    this.selectionHandles.push({
-      x: this.x + width - 4 - this.radius,
-      y: this.y + height / 2 - 4 - this.radius,
-    });
-
-    // bottom left, middle, right
-    this.selectionHandles.push({
-      x: this.x - 4 - this.radius,
-      y: this.y + height - 4 - this.radius,
-    });
-    this.selectionHandles.push({
-      x: this.x + width / 2 - 4 - this.radius,
       y: this.y + height - 4 - this.radius,
     });
     this.selectionHandles.push({
