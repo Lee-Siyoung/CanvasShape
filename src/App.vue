@@ -30,6 +30,7 @@ import { mouseMove } from "./class/mouseEvent/MouseMove";
 import { mouseUp } from "./class/mouseEvent/MouseUp";
 import { drawShape } from "./class/utils/DrawShape";
 import { keyUp } from "./class/keyboardEvent/KeyUp";
+import { HandleState } from "./class/utils/HandleState";
 export default defineComponent({
   components: { ShapeButton, RedoUndo },
   setup() {
@@ -45,6 +46,7 @@ export default defineComponent({
       isDragging: false,
       shapeId: 0,
       history: new History([] as IHistory[], -1),
+      selectionHandles: [] as HandleState[],
     });
     const changeColor = (color: string) => {
       state.shapes.forEach((shape) => {
@@ -76,7 +78,13 @@ export default defineComponent({
 
     const checkShape = (Shape: string) => {
       if (canvas.value && ctx.value) {
-        const IShape = newShape(state.shapeId, canvas.value, ctx.value, Shape);
+        const IShape = newShape(
+          state.shapeId,
+          canvas.value,
+          ctx.value,
+          Shape,
+          state
+        );
         state.shapeId++;
         if (IShape) {
           state.history.pushHistory({
@@ -85,6 +93,7 @@ export default defineComponent({
           state.shapes.push(IShape);
         }
         drawShape(canvas.value, ctx.value, state);
+        console.log(IShape);
       }
     };
     const onClick = (event: MouseEvent) => {

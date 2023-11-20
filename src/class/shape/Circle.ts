@@ -1,3 +1,4 @@
+import { State } from "../utils/State";
 import { Shape } from "./Shape";
 
 export class Circle extends Shape {
@@ -9,9 +10,10 @@ export class Circle extends Shape {
     y: number,
     isClick: boolean,
     color: string,
+    state: State,
     radius: number
   ) {
-    super(id, x, y, isClick, color);
+    super(id, x, y, isClick, color, state);
     this.radius = radius;
   }
 
@@ -27,50 +29,50 @@ export class Circle extends Shape {
   drawHandle(ctx: CanvasRenderingContext2D): void {
     const width = this.radius * 2;
     const height = this.radius * 2;
-    const selectionHandles = [];
+    this.state.selectionHandles = [];
 
     // top left, middle, right
-    selectionHandles.push({
+    this.state.selectionHandles.push({
       x: this.x - 2 - this.radius,
       y: this.y - 4 - this.radius,
     });
-    selectionHandles.push({
+    this.state.selectionHandles.push({
       x: this.x + width / 2 - this.radius,
       y: this.y - 4 - this.radius,
     });
-    selectionHandles.push({
+    this.state.selectionHandles.push({
       x: this.x + width - 4 - this.radius,
       y: this.y - 4 - this.radius,
     });
 
     // middle left
-    selectionHandles.push({
+    this.state.selectionHandles.push({
       x: this.x - 4 - this.radius,
       y: this.y + height / 2 - 4 - this.radius,
     });
 
     // middle right
-    selectionHandles.push({
+    this.state.selectionHandles.push({
       x: this.x + width - 4 - this.radius,
       y: this.y + height / 2 - 4 - this.radius,
     });
 
     // bottom left, middle, right
-    selectionHandles.push({
+    this.state.selectionHandles.push({
       x: this.x - 4 - this.radius,
       y: this.y + height - 4 - this.radius,
     });
-    selectionHandles.push({
+    this.state.selectionHandles.push({
       x: this.x + width / 2 - 4 - this.radius,
       y: this.y + height - 4 - this.radius,
     });
-    selectionHandles.push({
+    this.state.selectionHandles.push({
       x: this.x + width - 4 - this.radius,
       y: this.y + height - 4 - this.radius,
     });
     ctx.strokeStyle = "#778899";
     ctx.lineWidth = 3;
-    selectionHandles.forEach((handle) => {
+    this.state.selectionHandles.forEach((handle) => {
       ctx.strokeRect(handle.x, handle.y, 8, 8);
     });
     ctx.strokeRect(this.x - width / 2, this.y - height / 2, width, height);
@@ -86,6 +88,7 @@ export class Circle extends Shape {
       this.y,
       this.isClick,
       this.color,
+      this.state,
       this.radius
     );
   }

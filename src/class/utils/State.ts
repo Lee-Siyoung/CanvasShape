@@ -1,5 +1,6 @@
 import { Shape } from "../shape/Shape";
 import { History } from "../history/History";
+import { HandleState } from "./HandleState";
 
 export interface State {
   shapes: Shape[];
@@ -11,4 +12,5 @@ export interface State {
   isDragging: boolean;
   shapeId: number;
   history: History;
+  selectionHandles: HandleState[];
 }
