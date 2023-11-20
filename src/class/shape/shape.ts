@@ -4,19 +4,22 @@ export abstract class Shape {
   y: number;
   isClick: boolean;
   color: string;
+  selectionHandles: { x: number; y: number }[];
 
   constructor(
     id: number,
     x: number,
     y: number,
     isClick = false,
-    color = "#000000"
+    color = "#000000",
+    selectionHandles = []
   ) {
     this.id = id;
     this.x = x;
     this.y = y;
     this.isClick = isClick;
     this.color = color;
+    this.selectionHandles = selectionHandles;
   }
 
   abstract draw(ctx: CanvasRenderingContext2D): void;

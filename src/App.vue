@@ -4,8 +4,8 @@
   <RedoUndo @clickUndo="undo" @clickRedo="redo" />
   <div class="colors">
     <span @click="changeColor('#000000')" style="--clr: #000000"></span>
-    <span @click="changeColor('#ff0000')" style="--clr: #ff0000"></span>
-    <span @click="changeColor('#0000ff')" style="--clr: #0000ff"></span>
+    <span @click="changeColor('#ff6347')" style="--clr: #ff6347"></span>
+    <span @click="changeColor('#408fff')" style="--clr: #408fff"></span>
     <span @click="changeColor('#90ee90')" style="--clr: #90ee90"></span>
     <span @click="changeColor('#ff9f43')" style="--clr: #ff9f43"></span>
   </div>
@@ -28,7 +28,6 @@ import { mouseMove } from "./class/mouseEvent/MouseMove";
 import { mouseUp } from "./class/mouseEvent/MouseUp";
 import { drawShape } from "./class/utils/DrawShape";
 import { keyUp } from "./class/keyboardEvent/KeyUp";
-import { HandleState } from "./class/utils/HandleState";
 import { Shape } from "./class/shape/Shape";
 import { History, IHistory } from "./class/history/History";
 import { newShape } from "./class/shape/newShape";
@@ -47,7 +46,8 @@ export default defineComponent({
       isDragging: false,
       shapeId: 0,
       history: new History([] as IHistory[], -1),
-      selectionHandles: [] as HandleState[],
+      isResizing: false,
+      resizeHandleIndex: -1,
     });
     const changeColor = (color: string) => {
       state.shapes.forEach((shape) => {
@@ -79,13 +79,7 @@ export default defineComponent({
 
     const checkShape = (Shape: string) => {
       if (canvas.value && ctx.value) {
-        const IShape = newShape(
-          state.shapeId,
-          canvas.value,
-          ctx.value,
-          Shape,
-          state
-        );
+        const IShape = newShape(state.shapeId, canvas.value, ctx.value, Shape);
         state.shapeId++;
         if (IShape) {
           state.history.pushHistory({

@@ -4,22 +4,21 @@ export class Text extends Shape {
   content: string;
   fontSize: number;
   fontFamily: string;
-  selectionHandles: { x: number; y: number }[];
   constructor(
     id: number,
     x: number,
     y: number,
     isClick: boolean,
     color: string,
+    selectionHandles: { x: number; y: number }[],
     content: string,
     fontSize = 16,
     fontFamily = "Arial"
   ) {
-    super(id, x, y, isClick, color);
+    super(id, x, y, isClick, color, (selectionHandles = []));
     this.content = content;
     this.fontSize = fontSize;
     this.fontFamily = fontFamily;
-    this.selectionHandles = [];
   }
 
   draw(ctx: CanvasRenderingContext2D) {
@@ -105,6 +104,7 @@ export class Text extends Shape {
       this.y,
       this.isClick,
       this.color,
+      this.selectionHandles,
       this.content,
       this.fontSize,
       this.fontFamily

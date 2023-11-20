@@ -9,6 +9,7 @@ export const mouseDown = (
     event.preventDefault();
     state.mouseX = event.clientX - canvas.getBoundingClientRect().left;
     state.mouseY = event.clientY - canvas.getBoundingClientRect().top;
+    state.isResizing = false;
     let index = 0;
     if (event.ctrlKey) {
       for (const shape of state.shapes) {
@@ -33,6 +34,29 @@ export const mouseDown = (
           shape.isClick = false;
         }
         index++;
+      }
+    }
+    let handleIndex = -1;
+    if (state.shapes[state.ShapeIndex]) {
+      for (
+        let i = 0;
+        i < state.shapes[state.ShapeIndex].selectionHandles.length;
+        i++
+      ) {
+        const handle = state.shapes[state.ShapeIndex].selectionHandles[i];
+        if (
+          state.mouseX >= handle.x &&
+          state.mouseX <= handle.x + 8 &&
+          state.mouseY >= handle.y &&
+          state.mouseY <= handle.y + 8
+        ) {
+          state.isDragging = false;
+          handleIndex = i;
+          state.isResizing = true;
+          state.resizeHandleIndex = handleIndex;
+          console.log(handle, state.resizeHandleIndex);
+          break;
+        }
       }
     }
   }

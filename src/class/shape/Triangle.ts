@@ -3,20 +3,19 @@ import { Shape } from "./Shape";
 export class Triangle extends Shape {
   width: number;
   height: number;
-  selectionHandles: { x: number; y: number }[];
   constructor(
     id: number,
     x: number,
     y: number,
     isClick: boolean,
     color: string,
+    selectionHandles: { x: number; y: number }[],
     width: number,
     height: number
   ) {
-    super(id, x, y, isClick, color);
+    super(id, x, y, isClick, color, (selectionHandles = []));
     this.width = width;
     this.height = height;
-    this.selectionHandles = [];
   }
 
   draw(ctx: CanvasRenderingContext2D): void {
@@ -114,6 +113,7 @@ export class Triangle extends Shape {
       this.y,
       this.isClick,
       this.color,
+      this.selectionHandles,
       this.width,
       this.height
     );

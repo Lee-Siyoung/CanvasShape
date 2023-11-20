@@ -2,16 +2,16 @@ import { Shape } from "./Shape";
 
 export class Circle extends Shape {
   radius: number;
-  selectionHandles: { x: number; y: number }[];
   constructor(
     id: number,
     x: number,
     y: number,
     isClick: boolean,
     color: string,
+    selectionHandles: { x: number; y: number }[],
     radius: number
   ) {
-    super(id, x, y, isClick, color);
+    super(id, x, y, isClick, color, (selectionHandles = []));
     this.radius = radius;
     this.selectionHandles = [];
   }
@@ -87,6 +87,7 @@ export class Circle extends Shape {
       this.y,
       this.isClick,
       this.color,
+      this.selectionHandles,
       this.radius
     );
   }

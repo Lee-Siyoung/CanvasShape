@@ -2,13 +2,11 @@ import { Rectangle } from "./Rectangle";
 import { Triangle } from "./Triangle";
 import { Circle } from "./Circle";
 import { Text } from "./Text";
-import { State } from "../utils/State";
 export const newShape = (
   id: number,
   canvas: HTMLCanvasElement,
   ctx: CanvasRenderingContext2D,
   shape: string,
-  state: State,
   textContent?: string,
   fontSize?: number,
   fontFamily?: string
@@ -22,6 +20,7 @@ export const newShape = (
       Math.random() * (canvas.height - height),
       false,
       "#000000",
+      [],
       width,
       height
     );
@@ -35,6 +34,7 @@ export const newShape = (
       Math.random() * (canvas.height - height),
       false,
       "#000000",
+      [],
       width,
       height
     );
@@ -47,6 +47,7 @@ export const newShape = (
       Math.random() * (canvas.height - radius),
       false,
       "#000000",
+      [],
       radius
     );
     return circle;
@@ -57,6 +58,7 @@ export const newShape = (
       Math.random() * canvas.height,
       false,
       "#000000",
+      [],
       textContent || "example",
       fontSize || 16,
       fontFamily || "Arial"
