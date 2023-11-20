@@ -7,8 +7,7 @@ export const mouseMove = (
   state: State,
   event: MouseEvent
 ) => {
-  if (!state.isDragging) return;
-  else {
+  if (state.isDragging) {
     event.preventDefault();
     if (canvas) {
       const moveX = event.clientX - canvas.getBoundingClientRect().left;
@@ -18,6 +17,11 @@ export const mouseMove = (
       drawShape(canvas, ctx, state);
       state.mouseX = moveX;
       state.mouseY = moveY;
+    }
+  } else if (state.isResizing) {
+    event.preventDefault();
+    if (canvas) {
+      console.log("a");
     }
   }
 };

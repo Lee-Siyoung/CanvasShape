@@ -9,7 +9,6 @@ export const mouseDown = (
     event.preventDefault();
     state.mouseX = event.clientX - canvas.getBoundingClientRect().left;
     state.mouseY = event.clientY - canvas.getBoundingClientRect().top;
-    state.isResizing = false;
     let index = 0;
     if (event.ctrlKey) {
       for (const shape of state.shapes) {
@@ -18,6 +17,7 @@ export const mouseDown = (
           state.oriX = state.shapes[state.ShapeIndex].x;
           state.oriY = state.shapes[state.ShapeIndex].y;
           state.isDragging = true;
+          state.isResizing = false;
           shape.selectClick();
         }
         index++;
@@ -29,6 +29,7 @@ export const mouseDown = (
           state.oriX = state.shapes[state.ShapeIndex].x;
           state.oriY = state.shapes[state.ShapeIndex].y;
           state.isDragging = true;
+          state.isResizing = false;
           shape.selectClick();
         } else {
           shape.isClick = false;
@@ -54,10 +55,13 @@ export const mouseDown = (
           handleIndex = i;
           state.isResizing = true;
           state.resizeHandleIndex = handleIndex;
+          state.resizeX = state.mouseX;
+          state.resizeY = state.mouseY;
           console.log(handle, state.resizeHandleIndex);
           break;
         }
       }
     }
+    console.log(state.isResizing);
   }
 };

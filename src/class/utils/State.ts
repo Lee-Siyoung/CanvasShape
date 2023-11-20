@@ -13,4 +13,6 @@ export interface State {
   history: History;
   isResizing: boolean;
   resizeHandleIndex: number;
+  resizeX: number;
+  resizeY: number;
 }

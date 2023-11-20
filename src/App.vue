@@ -48,6 +48,8 @@ export default defineComponent({
       history: new History([] as IHistory[], -1),
       isResizing: false,
       resizeHandleIndex: -1,
+      resizeX: 0,
+      resizeY: 0,
     });
     const changeColor = (color: string) => {
       state.shapes.forEach((shape) => {
