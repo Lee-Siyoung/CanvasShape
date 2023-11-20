@@ -62,6 +62,5 @@ export const mouseDown = (
         }
       }
     }
-    console.log(state.isResizing);
   }
 };

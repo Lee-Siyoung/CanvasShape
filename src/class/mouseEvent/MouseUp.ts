@@ -4,9 +4,11 @@ export const mouseUp = (state: State, event: MouseEvent) => {
   if (!state.isDragging && !state.isResizing) {
     return;
   }
+
+  const moveShape = state.shapes[state.ShapeIndex];
+  moveShape.isClick = true;
   if (state.isDragging) {
     event.preventDefault();
-    const moveShape = state.shapes[state.ShapeIndex];
     if (state.oriX !== moveShape.x && state.oriY !== moveShape.y) {
       state.history.pushHistory({
         Move: {
@@ -25,6 +27,8 @@ export const mouseUp = (state: State, event: MouseEvent) => {
       }
     }
   } else if (state.isResizing) {
+    moveShape.isClick = true;
     state.isResizing = false;
+    state.resizeHandleIndex = -1;
   }
 };
