@@ -19,9 +19,7 @@ import {
   ref,
   onBeforeUnmount,
 } from "vue";
-import { Shape } from "./class/shape/Shape";
-import { newShape } from "./class/shape/NewShape";
-import { History, IHistory } from "./class/history/History";
+
 import ShapeButton from "./components/ShapeButton.vue";
 import RedoUndo from "./components/RedoUndo.vue";
 import { click } from "./class/mouseEvent/Click";
@@ -31,6 +29,9 @@ import { mouseUp } from "./class/mouseEvent/MouseUp";
 import { drawShape } from "./class/utils/DrawShape";
 import { keyUp } from "./class/keyboardEvent/KeyUp";
 import { HandleState } from "./class/utils/HandleState";
+import { Shape } from "./class/shape/Shape";
+import { History, IHistory } from "./class/history/History";
+import { newShape } from "./class/shape/newShape";
 export default defineComponent({
   components: { ShapeButton, RedoUndo },
   setup() {

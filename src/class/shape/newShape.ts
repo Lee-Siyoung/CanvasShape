@@ -22,7 +22,6 @@ export const newShape = (
       Math.random() * (canvas.height - height),
       false,
       "#000000",
-      state,
       width,
       height
     );
@@ -36,7 +35,6 @@ export const newShape = (
       Math.random() * (canvas.height - height),
       false,
       "#000000",
-      state,
       width,
       height
     );
@@ -49,7 +47,6 @@ export const newShape = (
       Math.random() * (canvas.height - radius),
       false,
       "#000000",
-      state,
       radius
     );
     return circle;
@@ -60,7 +57,6 @@ export const newShape = (
       Math.random() * canvas.height,
       false,
       "#000000",
-      state,
       textContent || "example",
       fontSize || 16,
       fontFamily || "Arial"

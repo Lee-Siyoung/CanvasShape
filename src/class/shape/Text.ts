@@ -1,26 +1,25 @@
-import { State } from "../utils/State";
 import { Shape } from "./Shape";
 
 export class Text extends Shape {
   content: string;
   fontSize: number;
   fontFamily: string;
-
+  selectionHandles: { x: number; y: number }[];
   constructor(
     id: number,
     x: number,
     y: number,
     isClick: boolean,
     color: string,
-    state: State,
     content: string,
     fontSize = 16,
     fontFamily = "Arial"
   ) {
-    super(id, x, y, isClick, color, state);
+    super(id, x, y, isClick, color);
     this.content = content;
     this.fontSize = fontSize;
     this.fontFamily = fontFamily;
+    this.selectionHandles = [];
   }
 
   draw(ctx: CanvasRenderingContext2D) {
@@ -36,48 +35,48 @@ export class Text extends Shape {
     const textMetrics = ctx.measureText(this.content);
     const textWidth = textMetrics.width;
     const textHeight = this.fontSize;
-    this.state.selectionHandles = [];
+    this.selectionHandles = [];
 
     // top left, middle, right
-    this.state.selectionHandles.push({ x: this.x - 6, y: this.y - 18 });
-    this.state.selectionHandles.push({
+    this.selectionHandles.push({ x: this.x - 6, y: this.y - 18 });
+    this.selectionHandles.push({
       x: this.x + (textWidth + 4) / 2 - 5,
       y: this.y - 18,
     });
-    this.state.selectionHandles.push({
+    this.selectionHandles.push({
       x: this.x + textWidth - 2,
       y: this.y - 18,
     });
 
     // middle left
-    this.state.selectionHandles.push({
+    this.selectionHandles.push({
       x: this.x - 6,
       y: this.y + (textHeight + 4) / 2 - 18,
     });
 
     // middle right
-    this.state.selectionHandles.push({
+    this.selectionHandles.push({
       x: this.x + textWidth - 2,
       y: this.y + (textHeight + 4) / 2 - 18,
     });
 
     // bottom left, middle, right
-    this.state.selectionHandles.push({
+    this.selectionHandles.push({
       x: this.x - 6,
       y: this.y + textHeight - 14,
     });
-    this.state.selectionHandles.push({
+    this.selectionHandles.push({
       x: this.x + (textWidth + 4) / 2 - 6,
       y: this.y + textHeight - 14,
     });
-    this.state.selectionHandles.push({
+    this.selectionHandles.push({
       x: this.x + textWidth - 2,
       y: this.y + textHeight - 14,
     });
 
     ctx.strokeStyle = "#778899";
     ctx.lineWidth = 3;
-    this.state.selectionHandles.forEach((handle) => {
+    this.selectionHandles.forEach((handle) => {
       ctx.strokeRect(handle.x, handle.y, 8, 8);
     });
     ctx.strokeRect(this.x - 2, this.y - 14, textWidth + 4, textHeight + 4);
@@ -106,7 +105,6 @@ export class Text extends Shape {
       this.y,
       this.isClick,
       this.color,
-      this.state,
       this.content,
       this.fontSize,
       this.fontFamily

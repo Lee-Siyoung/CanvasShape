@@ -1,23 +1,22 @@
-import { State } from "../utils/State";
 import { Shape } from "./Shape";
 
 export class Rectangle extends Shape {
   width: number;
   height: number;
-
+  selectionHandles: { x: number; y: number }[];
   constructor(
     id: number,
     x: number,
     y: number,
     isClick: boolean,
     color: string,
-    state: State,
     width: number,
     height: number
   ) {
-    super(id, x, y, isClick, color, state);
+    super(id, x, y, isClick, color);
     this.width = width;
     this.height = height;
+    this.selectionHandles = [];
   }
 
   draw(ctx: CanvasRenderingContext2D): void {
@@ -28,48 +27,48 @@ export class Rectangle extends Shape {
     }
   }
   drawHandle(ctx: CanvasRenderingContext2D): void {
-    this.state.selectionHandles = [];
+    this.selectionHandles = [];
 
     // top left, middle, right
-    this.state.selectionHandles.push({ x: this.x - 4, y: this.y - 4 });
-    this.state.selectionHandles.push({
+    this.selectionHandles.push({ x: this.x - 4, y: this.y - 4 });
+    this.selectionHandles.push({
       x: this.x + this.width / 2 - 2,
       y: this.y - 4,
     });
-    this.state.selectionHandles.push({
+    this.selectionHandles.push({
       x: this.x + this.width - 4,
       y: this.y - 4,
     });
 
     // middle left
-    this.state.selectionHandles.push({
+    this.selectionHandles.push({
       x: this.x - 4,
       y: this.y + this.height / 2 - 4,
     });
 
     // middle right
-    this.state.selectionHandles.push({
+    this.selectionHandles.push({
       x: this.x + this.width - 4,
       y: this.y + this.height / 2 - 4,
     });
 
     // bottom left, middle, right
-    this.state.selectionHandles.push({
+    this.selectionHandles.push({
       x: this.x - 4,
       y: this.y + this.height - 4,
     });
-    this.state.selectionHandles.push({
+    this.selectionHandles.push({
       x: this.x + this.width / 2 - 4,
       y: this.y + this.height - 4,
     });
-    this.state.selectionHandles.push({
+    this.selectionHandles.push({
       x: this.x + this.width - 4,
       y: this.y + this.height - 4,
     });
 
     ctx.strokeStyle = "#778899";
     ctx.lineWidth = 3;
-    this.state.selectionHandles.forEach((handle) => {
+    this.selectionHandles.forEach((handle) => {
       ctx.strokeRect(handle.x, handle.y, 8, 8);
     });
     ctx.strokeRect(this.x, this.y, this.width, this.height);
@@ -90,7 +89,6 @@ export class Rectangle extends Shape {
       this.y,
       this.isClick,
       this.color,
-      this.state,
       this.width,
       this.height
     );
