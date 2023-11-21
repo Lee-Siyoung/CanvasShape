@@ -1,6 +1,13 @@
+import { Rectangle } from "../shape/Rectangle";
+import { drawShape } from "../utils/DrawShape";
 import { State } from "../utils/State";
 
-export const mouseUp = (state: State, event: MouseEvent) => {
+export const mouseUp = (
+  canvas: HTMLCanvasElement,
+  ctx: CanvasRenderingContext2D,
+  state: State,
+  event: MouseEvent
+) => {
   if (!state.isDragging && !state.isResizing) {
     return;
   }
@@ -27,6 +34,19 @@ export const mouseUp = (state: State, event: MouseEvent) => {
       }
     }
   } else if (state.isResizing) {
+    for (const shape of state.shapes) {
+      if (shape instanceof Rectangle) {
+        if (shape.width < 0) {
+          shape.width = Math.abs(shape.width);
+          shape.x = shape.x - shape.width;
+        }
+        if (shape.height < 0) {
+          shape.height = Math.abs(shape.height);
+          shape.y = shape.y - shape.height;
+        }
+      }
+    }
+    drawShape(canvas, ctx, state);
     moveShape.isClick = true;
     state.isResizing = false;
     state.resizeHandleIndex = -1;

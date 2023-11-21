@@ -23,7 +23,6 @@ export class Text extends Shape {
 
   draw(ctx: CanvasRenderingContext2D) {
     ctx.font = `${this.fontSize}px ${this.fontFamily}`;
-    ctx.font = `${this.fontSize}px ${this.fontFamily}`;
     ctx.fillStyle = this.color;
     ctx.fillText(this.content, this.x, this.y);
     if (this.isClick) {
@@ -36,43 +35,12 @@ export class Text extends Shape {
     const textHeight = this.fontSize;
     this.selectionHandles = [];
 
-    // top left, middle, right
-    this.selectionHandles.push({ x: this.x - 6, y: this.y - 18 });
-    this.selectionHandles.push({
-      x: this.x + (textWidth + 4) / 2 - 5,
-      y: this.y - 18,
-    });
-    this.selectionHandles.push({
-      x: this.x + textWidth - 2,
-      y: this.y - 18,
-    });
-
-    // middle left
-    this.selectionHandles.push({
-      x: this.x - 6,
-      y: this.y + (textHeight + 4) / 2 - 18,
-    });
-
-    // middle right
-    this.selectionHandles.push({
-      x: this.x + textWidth - 2,
-      y: this.y + (textHeight + 4) / 2 - 18,
-    });
-
-    // bottom left, middle, right
-    this.selectionHandles.push({
-      x: this.x - 6,
-      y: this.y + textHeight - 14,
-    });
-    this.selectionHandles.push({
-      x: this.x + (textWidth + 4) / 2 - 6,
-      y: this.y + textHeight - 14,
-    });
-    this.selectionHandles.push({
-      x: this.x + textWidth - 2,
-      y: this.y + textHeight - 14,
-    });
-
+    this.selectionHandles = [
+      { x: this.x - 6, y: this.y - 18 }, // top left
+      { x: this.x + textWidth - 2, y: this.y - 18 }, // top right
+      { x: this.x - 6, y: this.y + textHeight - 14 }, // bottom left
+      { x: this.x + textWidth - 2, y: this.y + textHeight - 14 }, // bottom right
+    ];
     ctx.strokeStyle = "#778899";
     ctx.lineWidth = 3;
     this.selectionHandles.forEach((handle) => {

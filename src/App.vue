@@ -111,7 +111,8 @@ export default defineComponent({
         mouseMove(canvas.value, ctx.value, state, event);
     };
     const onMouseUp = (event: MouseEvent) => {
-      mouseUp(state, event);
+      if (canvas.value && ctx.value)
+        mouseUp(canvas.value, ctx.value, state, event);
     };
 
     const onKeyUp = (event: KeyboardEvent) => {

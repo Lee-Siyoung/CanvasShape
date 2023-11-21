@@ -3,7 +3,7 @@ import { drawShape } from "../utils/DrawShape";
 import { Rectangle } from "../shape/Rectangle";
 import { Triangle } from "../shape/Triangle";
 import { Circle } from "../shape/Circle";
-
+import { Text } from "../shape/Text";
 export const mouseMove = (
   canvas: HTMLCanvasElement,
   ctx: CanvasRenderingContext2D,
@@ -35,10 +35,10 @@ export const mouseMove = (
       if (shape instanceof Rectangle) {
         switch (state.resizeHandleIndex) {
           case 0:
-            shape.x = moveX;
-            shape.y = moveY;
             shape.width += oldX - moveX;
             shape.height += oldY - moveY;
+            shape.x = moveX;
+            shape.y = moveY;
             break;
           case 1:
             shape.y = moveY;
@@ -69,6 +69,20 @@ export const mouseMove = (
             shape.height = moveY - oldY;
             break;
         }
+        console.log(shape.width);
+        console.log(shape.height);
+        /* if (shape.width < 0) {
+          shape.width = Math.abs(shape.width);
+          shape.x = shape.x - shape.width;
+        }
+        if (shape.height < 0) {
+          shape.height = Math.abs(shape.height);
+          shape.y = shape.y - shape.height;
+        } */
+        /* if (shape.width < 0 || shape.height) {
+          shape.width = Math.abs(shape.width);
+          shape.height = Math.abs(shape.height);
+        } */
       } else if (shape instanceof Triangle) {
         switch (state.resizeHandleIndex) {
           case 0:
@@ -140,10 +154,17 @@ export const mouseMove = (
       } else if (shape instanceof Text) {
         switch (state.resizeHandleIndex) {
           case 0:
+            shape.fontSize = Math.max(10, moveY - shape.y);
+            shape.x = moveX;
+            break;
+          case 1:
+            break;
+          case 2:
+            break;
+          case 3:
             break;
         }
       }
-
       drawShape(canvas, ctx, state);
     }
   }
