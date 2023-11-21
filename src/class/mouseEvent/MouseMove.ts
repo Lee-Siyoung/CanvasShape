@@ -72,12 +72,38 @@ export const mouseMove = (
       } else if (shape instanceof Triangle) {
         switch (state.resizeHandleIndex) {
           case 0:
+            shape.width += oldX - moveX;
+            shape.height += oldY - moveY;
+            shape.x = moveX;
+            shape.y = moveY;
             break;
           case 1:
+            shape.height += oldY - moveY;
+            shape.y = moveY;
             break;
           case 2:
+            shape.width = moveX - oldX;
+            shape.height += oldY - moveY;
+            shape.y = moveY;
             break;
           case 3:
+            shape.width += oldX - moveX;
+            shape.x = moveX;
+            break;
+          case 4:
+            shape.width = moveX - oldX;
+            break;
+          case 5:
+            shape.width += oldX - moveX;
+            shape.height = moveY - oldY;
+            shape.x = moveX;
+            break;
+          case 6:
+            shape.height = moveY - oldY;
+            break;
+          case 7:
+            shape.width = moveX - oldX;
+            shape.height = moveY - oldY;
             break;
         }
       } else if (shape instanceof Circle) {
@@ -87,12 +113,8 @@ export const mouseMove = (
 
         switch (state.resizeHandleIndex) {
           case 0:
-            shape.radius = newRadius;
-            break;
           case 1:
-            break;
           case 2:
-            break;
           case 3:
             shape.radius = newRadius;
             break;

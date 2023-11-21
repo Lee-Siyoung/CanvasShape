@@ -20,8 +20,8 @@ export class Triangle extends Shape {
 
   draw(ctx: CanvasRenderingContext2D): void {
     ctx.beginPath();
-    ctx.moveTo(this.x, this.y);
-    ctx.lineTo(this.x - this.width, this.y + this.height);
+    ctx.moveTo(this.x + this.width / 2, this.y);
+    ctx.lineTo(this.x, this.y + this.height);
     ctx.lineTo(this.x + this.width, this.y + this.height);
     ctx.closePath();
     ctx.fillStyle = this.color;
@@ -35,11 +35,11 @@ export class Triangle extends Shape {
 
     // top left, middle, right
     this.selectionHandles.push({
-      x: this.x - this.width - 4,
+      x: this.x - 4,
       y: this.y - 4,
     });
     this.selectionHandles.push({
-      x: this.x - 4,
+      x: this.x + this.width / 2 - 4,
       y: this.y - 4,
     });
     this.selectionHandles.push({
@@ -49,7 +49,7 @@ export class Triangle extends Shape {
 
     // middle left
     this.selectionHandles.push({
-      x: this.x - this.width - 4,
+      x: this.x - 4,
       y: this.y + this.height / 2 - 4,
     });
 
@@ -61,11 +61,11 @@ export class Triangle extends Shape {
 
     // bottom left, middle, right
     this.selectionHandles.push({
-      x: this.x - this.width - 4,
+      x: this.x - 4,
       y: this.y + this.height - 4,
     });
     this.selectionHandles.push({
-      x: this.x - 4,
+      x: this.x + this.width / 2 - 4,
       y: this.y + this.height - 4,
     });
     this.selectionHandles.push({
@@ -78,11 +78,11 @@ export class Triangle extends Shape {
     this.selectionHandles.forEach((handle) => {
       ctx.strokeRect(handle.x, handle.y, 8, 8);
     });
-    ctx.strokeRect(this.x - this.width, this.y, this.width * 2, this.height);
+    ctx.strokeRect(this.x, this.y, this.width, this.height);
   }
   isPointInside(x: number, y: number): boolean {
-    const aPoint = { x: this.x, y: this.y };
-    const bPoint = { x: this.x - this.width, y: this.y + this.height };
+    const aPoint = { x: this.x + this.width / 2, y: this.y };
+    const bPoint = { x: this.x, y: this.y + this.height };
     const cPoint = { x: this.x + this.width, y: this.y + this.height };
 
     const areaOrig =
