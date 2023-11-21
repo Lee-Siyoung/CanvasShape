@@ -107,16 +107,34 @@ export const mouseMove = (
             break;
         }
       } else if (shape instanceof Circle) {
-        const dx = moveX - shape.x;
-        const dy = moveY - shape.y;
-        const newRadius = Math.sqrt(dx * dx + dy * dy);
-
+        let oppositeX, oppositeY;
         switch (state.resizeHandleIndex) {
           case 0:
+            oppositeX = shape.x + 2 * shape.radius;
+            oppositeY = shape.y + 2 * shape.radius;
+            shape.radius = Math.abs(moveX - oppositeX) / 2;
+            shape.x = oppositeX - 2 * shape.radius;
+            shape.y = oppositeY - 2 * shape.radius;
+            break;
           case 1:
+            oppositeX = shape.x;
+            oppositeY = shape.y + 2 * shape.radius;
+            shape.radius = Math.abs(moveX - oppositeX) / 2;
+            shape.y = oppositeY - 2 * shape.radius;
+            break;
           case 2:
+            oppositeX = shape.x + 2 * shape.radius;
+            oppositeY = shape.y;
+            shape.radius = Math.abs(moveY - oppositeY) / 2;
+            shape.x = oppositeX - 2 * shape.radius;
+            break;
           case 3:
-            shape.radius = newRadius;
+            oppositeX = shape.x;
+            oppositeY = shape.y;
+            shape.radius = Math.max(
+              Math.abs(moveX - oppositeX) / 2,
+              Math.abs(moveY - oppositeY) / 2
+            );
             break;
         }
       } else if (shape instanceof Text) {
