@@ -58,7 +58,6 @@ export const mouseDown = (
           state.resizeX = state.mouseX;
           state.resizeY = state.mouseY;
           console.log(handle, state.resizeHandleIndex);
-          console.log(state.resizeX);
           break;
         }
       }

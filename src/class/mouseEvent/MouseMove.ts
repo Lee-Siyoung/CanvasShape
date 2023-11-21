@@ -4,12 +4,38 @@ import { Rectangle } from "../shape/Rectangle";
 import { Triangle } from "../shape/Triangle";
 import { Circle } from "../shape/Circle";
 import { Text } from "../shape/Text";
+import { setCursorHandle } from "../utils/CursorHandle";
 export const mouseMove = (
   canvas: HTMLCanvasElement,
   ctx: CanvasRenderingContext2D,
   state: State,
   event: MouseEvent
 ) => {
+  const moveX = event.clientX - canvas.getBoundingClientRect().left;
+  const moveY = event.clientY - canvas.getBoundingClientRect().top;
+
+  let cursorChanged = false;
+  for (const shape of state.shapes) {
+    if (shape.isClick) {
+      for (let i = 0; i < shape.selectionHandles.length; i++) {
+        const handle = shape.selectionHandles[i];
+        if (
+          moveX >= handle.x &&
+          moveX <= handle.x + 8 &&
+          moveY >= handle.y &&
+          moveY <= handle.y + 8
+        ) {
+          setCursorHandle(canvas, i);
+          cursorChanged = true;
+          break;
+        }
+      }
+      if (cursorChanged) break;
+    }
+  }
+  if (!cursorChanged) {
+    canvas.style.cursor = "default";
+  }
   if (state.isDragging) {
     event.preventDefault();
     if (canvas) {
@@ -29,6 +55,7 @@ export const mouseMove = (
       const shape = state.shapes[state.ShapeIndex];
       const moveX = event.clientX - canvas.getBoundingClientRect().left;
       const moveY = event.clientY - canvas.getBoundingClientRect().top;
+
       const oldX = shape.x;
       const oldY = shape.y;
       shape.isClick = true;
@@ -69,20 +96,6 @@ export const mouseMove = (
             shape.height = moveY - oldY;
             break;
         }
-        console.log(shape.width);
-        console.log(shape.height);
-        /* if (shape.width < 0) {
-          shape.width = Math.abs(shape.width);
-          shape.x = shape.x - shape.width;
-        }
-        if (shape.height < 0) {
-          shape.height = Math.abs(shape.height);
-          shape.y = shape.y - shape.height;
-        } */
-        /* if (shape.width < 0 || shape.height) {
-          shape.width = Math.abs(shape.width);
-          shape.height = Math.abs(shape.height);
-        } */
       } else if (shape instanceof Triangle) {
         switch (state.resizeHandleIndex) {
           case 0:

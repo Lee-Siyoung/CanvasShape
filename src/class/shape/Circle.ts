@@ -34,24 +34,41 @@ export class Circle extends Shape {
   drawHandle(ctx: CanvasRenderingContext2D): void {
     this.selectionHandles = [];
 
-    // top left, right
-    this.selectionHandles.push({
-      x: this.x - 4,
-      y: this.y - 4,
-    });
-    this.selectionHandles.push({
-      x: this.x + this.radius * 2 - 4,
-      y: this.y - 4,
-    });
-    // bottom left, right
-    this.selectionHandles.push({
-      x: this.x - 4,
-      y: this.y + this.radius * 2 - 4,
-    });
-    this.selectionHandles.push({
-      x: this.x + this.radius * 2 - 4,
-      y: this.y + this.radius * 2 - 4,
-    });
+    this.selectionHandles = [
+      {
+        x: this.x - 4,
+        y: this.y - 4,
+      }, // top left
+      {
+        x: this.x - 4,
+        y: this.y - 4,
+      },
+      {
+        x: this.x + this.radius * 2 - 4,
+        y: this.y - 4,
+      }, // top right
+      {
+        x: this.x - 4,
+        y: this.y - 4,
+      },
+      {
+        x: this.x - 4,
+        y: this.y - 4,
+      },
+      {
+        x: this.x - 4,
+        y: this.y + this.radius * 2 - 4,
+      }, // bottom left
+      {
+        x: this.x - 4,
+        y: this.y - 4,
+      },
+      {
+        x: this.x + this.radius * 2 - 4,
+        y: this.y + this.radius * 2 - 4,
+      }, // bottom right
+    ];
+
     ctx.strokeStyle = "#778899";
     ctx.lineWidth = 3;
     this.selectionHandles.forEach((handle) => {
