@@ -5,6 +5,7 @@ import { Triangle } from "../shape/Triangle";
 import { Circle } from "../shape/Circle";
 //import { Text } from "../shape/Text";
 import { setCursorHandle } from "../utils/CursorHandle";
+import { resizeRectangle } from "../resize/ResizeRectangle";
 export const mouseMove = (
   canvas: HTMLCanvasElement,
   ctx: CanvasRenderingContext2D,
@@ -53,129 +54,15 @@ export const mouseMove = (
     event.preventDefault();
     if (canvas) {
       const shape = state.shapes[state.ShapeIndex];
-      const moveX = event.clientX - canvas.getBoundingClientRect().left;
-      const moveY = event.clientY - canvas.getBoundingClientRect().top;
-      const oldX = shape.x;
-      const oldY = shape.y;
       shape.isClick = true;
       if (shape instanceof Rectangle) {
-        switch (state.resizeHandleIndex) {
-          case 0:
-            shape.width += oldX - moveX;
-            shape.height += oldY - moveY;
-            shape.x = moveX;
-            shape.y = moveY;
-            break;
-          case 1:
-            shape.y = moveY;
-            shape.height += oldY - moveY;
-            break;
-          case 2:
-            shape.y = moveY;
-            shape.width = moveX - oldX;
-            shape.height += oldY - moveY;
-            break;
-          case 3:
-            shape.x = moveX;
-            shape.width += oldX - moveX;
-            break;
-          case 4:
-            shape.width = moveX - oldX;
-            break;
-          case 5:
-            shape.x = moveX;
-            shape.width += oldX - moveX;
-            shape.height = moveY - oldY;
-            break;
-          case 6:
-            shape.height = moveY - oldY;
-            break;
-          case 7:
-            shape.width = moveX - oldX;
-            shape.height = moveY - oldY;
-            break;
-        }
+        resizeRectangle(canvas, event, state, shape);
       } else if (shape instanceof Triangle) {
-        switch (state.resizeHandleIndex) {
-          case 0:
-            shape.width += oldX - moveX;
-            shape.height += oldY - moveY;
-            shape.x = moveX;
-            shape.y = moveY;
-            break;
-          case 1:
-            shape.height += oldY - moveY;
-            shape.y = moveY;
-            break;
-          case 2:
-            shape.width = moveX - oldX;
-            shape.height += oldY - moveY;
-            shape.y = moveY;
-            break;
-          case 3:
-            shape.width += oldX - moveX;
-            shape.x = moveX;
-            break;
-          case 4:
-            shape.width = moveX - oldX;
-            break;
-          case 5:
-            shape.width += oldX - moveX;
-            shape.height = moveY - oldY;
-            shape.x = moveX;
-            break;
-          case 6:
-            shape.height = moveY - oldY;
-            break;
-          case 7:
-            shape.width = moveX - oldX;
-            shape.height = moveY - oldY;
-            break;
-        }
+        resizeRectangle(canvas, event, state, shape);
       } else if (shape instanceof Circle) {
-        let oppositeX, oppositeY;
-        switch (state.resizeHandleIndex) {
-          case 0:
-            oppositeX = shape.x + shape.width;
-            oppositeY = shape.y + shape.width;
-            shape.width = Math.abs(moveX - oppositeX);
-            shape.x = oppositeX - shape.width;
-            shape.y = oppositeY - shape.width;
-            break;
-          case 2:
-            oppositeX = shape.x;
-            oppositeY = shape.y + shape.width;
-            shape.width = Math.abs(moveX - oppositeX);
-            shape.y = oppositeY - shape.width;
-            break;
-          case 5:
-            oppositeX = shape.x + shape.width;
-            oppositeY = shape.y;
-            shape.width = Math.abs(moveY - oppositeY);
-            shape.x = oppositeX - shape.width;
-            break;
-          case 7:
-            oppositeX = shape.x;
-            oppositeY = shape.y;
-            shape.width = Math.max(
-              Math.abs(moveX - oppositeX),
-              Math.abs(moveY - oppositeY)
-            );
-            break;
-        }
+        resizeRectangle(canvas, event, state, shape);
       } else if (shape instanceof Text) {
-        switch (state.resizeHandleIndex) {
-          case 0 /* 
-            shape.fontSize = Math.max(10, moveY - shape.y);
-            shape.x = moveX; */:
-            break;
-          case 1:
-            break;
-          case 2:
-            break;
-          case 3:
-            break;
-        }
+        resizeRectangle(canvas, event, state, shape);
       }
       setCursorHandle(canvas, state.resizeHandleIndex);
       drawShape(canvas, ctx, state);
