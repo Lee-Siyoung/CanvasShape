@@ -3,9 +3,12 @@ import { drawShape } from "../utils/DrawShape";
 import { Rectangle } from "../shape/Rectangle";
 import { Triangle } from "../shape/Triangle";
 import { Circle } from "../shape/Circle";
-//import { Text } from "../shape/Text";
+import { Text } from "../shape/Text";
 import { setCursorHandle } from "../utils/CursorHandle";
 import { resizeRectangle } from "../resize/ResizeRectangle";
+import { resizeTriangle } from "../resize/ResizeTriangle";
+import { resizeCircle } from "../resize/ResizeCircle";
+import { resizeText } from "../resize/ResizeText";
 export const mouseMove = (
   canvas: HTMLCanvasElement,
   ctx: CanvasRenderingContext2D,
@@ -14,10 +17,10 @@ export const mouseMove = (
 ) => {
   const moveX = event.clientX - canvas.getBoundingClientRect().left;
   const moveY = event.clientY - canvas.getBoundingClientRect().top;
-  let cursorChanged = false;
+  let isCursorChange = false;
   for (const shape of state.shapes) {
     if (shape.isPointInside(moveX, moveY)) {
-      cursorChanged = true;
+      isCursorChange = true;
       canvas.style.cursor = "pointer";
     }
     if (shape.isClick) {
@@ -30,14 +33,14 @@ export const mouseMove = (
           moveY <= handle.y + 8
         ) {
           setCursorHandle(canvas, i);
-          cursorChanged = true;
+          isCursorChange = true;
           break;
         }
       }
-      if (cursorChanged) break;
+      if (isCursorChange) break;
     }
   }
-  if (!cursorChanged) {
+  if (!isCursorChange) {
     canvas.style.cursor = "default";
   }
   if (state.isDragging) {
@@ -62,11 +65,11 @@ export const mouseMove = (
       if (shape instanceof Rectangle) {
         resizeRectangle(canvas, event, state, shape);
       } else if (shape instanceof Triangle) {
-        resizeRectangle(canvas, event, state, shape);
+        resizeTriangle(canvas, event, state, shape);
       } else if (shape instanceof Circle) {
-        resizeRectangle(canvas, event, state, shape);
+        resizeCircle(canvas, event, state, shape);
       } else if (shape instanceof Text) {
-        resizeRectangle(canvas, event, state, shape);
+        resizeText(canvas, event, state, shape);
       }
       setCursorHandle(canvas, state.resizeHandleIndex);
       drawShape(canvas, ctx, state);

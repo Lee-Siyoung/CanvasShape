@@ -1,7 +1,7 @@
 import { Circle } from "../shape/Circle";
 import { State } from "../utils/State";
 
-export const resizeRectangle = (
+export const resizeCircle = (
   canvas: HTMLCanvasElement,
   event: MouseEvent,
   state: State,

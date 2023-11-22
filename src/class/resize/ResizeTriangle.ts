@@ -1,7 +1,7 @@
 import { Triangle } from "../shape/Triangle";
 import { State } from "../utils/State";
 
-export const resizeRectangle = (
+export const resizeTriangle = (
   canvas: HTMLCanvasElement,
   event: MouseEvent,
   state: State,
