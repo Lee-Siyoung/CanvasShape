@@ -7,66 +7,73 @@ export const mouseDown = (
 ) => {
   if (canvas) {
     event.preventDefault();
-    state.mouseX = event.clientX - canvas.getBoundingClientRect().left;
-    state.mouseY = event.clientY - canvas.getBoundingClientRect().top;
-    let index = 0;
-    if (event.ctrlKey) {
-      for (const shape of state.shapes) {
-        if (shape.isPointInside(state.mouseX, state.mouseY)) {
-          state.ShapeIndex = index;
-          state.oriX = state.shapes[state.ShapeIndex].x;
-          state.oriY = state.shapes[state.ShapeIndex].y;
-          state.oriW = state.shapes[state.ShapeIndex].width;
-          state.oriH = state.shapes[state.ShapeIndex].height;
-          state.isDragging = true;
-          state.isResizing = false;
-          shape.selectClick();
-        }
-        index++;
-      }
-    } else {
-      for (const shape of state.shapes) {
-        if (shape.isPointInside(state.mouseX, state.mouseY)) {
-          state.ShapeIndex = index;
-          state.oriX = state.shapes[state.ShapeIndex].x;
-          state.oriY = state.shapes[state.ShapeIndex].y;
-          state.oriW = state.shapes[state.ShapeIndex].width;
-          state.oriH = state.shapes[state.ShapeIndex].height;
-          state.isDragging = true;
-          state.isResizing = false;
-          shape.selectClick();
-        } else {
-          shape.isClick = false;
-        }
-        index++;
-      }
-    }
-    let handleIndex = -1;
+    const mouseX = event.clientX - canvas.getBoundingClientRect().left;
+    const mouseY = event.clientY - canvas.getBoundingClientRect().top;
+
+    updateMousePosition(state, mouseX, mouseY);
+    updateShapeSelection(state, mouseX, mouseY, event.ctrlKey);
+
     if (state.shapes[state.ShapeIndex]) {
-      for (
-        let i = 0;
-        i < state.shapes[state.ShapeIndex].selectionHandles.length;
-        i++
-      ) {
-        const handle = state.shapes[state.ShapeIndex].selectionHandles[i];
-        if (
-          state.mouseX >= handle.x &&
-          state.mouseX <= handle.x + 8 &&
-          state.mouseY >= handle.y &&
-          state.mouseY <= handle.y + 8
-        ) {
-          state.isDragging = false;
-          handleIndex = i;
-          state.isResizing = true;
-          state.resizeHandleIndex = handleIndex;
-          state.oriX = state.shapes[state.ShapeIndex].x;
-          state.oriY = state.shapes[state.ShapeIndex].y;
-          state.oriW = state.shapes[state.ShapeIndex].width;
-          state.oriH = state.shapes[state.ShapeIndex].height;
-          console.log(handle, state.resizeHandleIndex);
-          break;
-        }
-      }
+      checkHandle(state, mouseX, mouseY);
     }
   }
+};
+
+const updateMousePosition = (state: State, mouseX: number, mouseY: number) => {
+  state.mouseX = mouseX;
+  state.mouseY = mouseY;
+};
+
+const updateShapeSelection = (
+  state: State,
+  mouseX: number,
+  mouseY: number,
+  ctrlKey: boolean
+) => {
+  let index = 0;
+  for (const shape of state.shapes) {
+    if (shape.isPointInside(mouseX, mouseY)) {
+      state.ShapeIndex = index;
+      setShapeState(state);
+      if (!ctrlKey) {
+        shape.selectClick();
+        state.isDragging = true;
+        state.isResizing = false;
+      }
+      break;
+    } else if (!ctrlKey) {
+      shape.isClick = false;
+    }
+    index++;
+  }
+};
+
+const checkHandle = (state: State, mouseX: number, mouseY: number) => {
+  for (
+    let i = 0;
+    i < state.shapes[state.ShapeIndex].selectionHandles.length;
+    i++
+  ) {
+    const handle = state.shapes[state.ShapeIndex].selectionHandles[i];
+    if (
+      mouseX >= handle.x &&
+      mouseX <= handle.x + 8 &&
+      mouseY >= handle.y &&
+      mouseY <= handle.y + 8
+    ) {
+      state.isDragging = false;
+      state.isResizing = true;
+      state.resizeHandleIndex = i;
+      setShapeState(state);
+      break;
+    }
+  }
+};
+
+const setShapeState = (state: State) => {
+  const shape = state.shapes[state.ShapeIndex];
+  state.oriX = shape.x;
+  state.oriY = shape.y;
+  state.oriW = shape.width;
+  state.oriH = shape.height;
 };

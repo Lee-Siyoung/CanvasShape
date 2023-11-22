@@ -14,9 +14,12 @@ export const mouseMove = (
 ) => {
   const moveX = event.clientX - canvas.getBoundingClientRect().left;
   const moveY = event.clientY - canvas.getBoundingClientRect().top;
-
   let cursorChanged = false;
   for (const shape of state.shapes) {
+    if (shape.isPointInside(moveX, moveY)) {
+      cursorChanged = true;
+      canvas.style.cursor = "pointer";
+    }
     if (shape.isClick) {
       for (let i = 0; i < shape.selectionHandles.length; i++) {
         const handle = shape.selectionHandles[i];
@@ -49,6 +52,7 @@ export const mouseMove = (
       drawShape(canvas, ctx, state);
       state.mouseX = moveX;
       state.mouseY = moveY;
+      canvas.style.cursor = "move";
     }
   } else if (state.isResizing) {
     event.preventDefault();
