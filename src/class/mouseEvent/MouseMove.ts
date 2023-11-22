@@ -163,11 +163,11 @@ export const mouseMove = (
             );
             break;
         }
-      } /*  else if (shape instanceof Text) {
+      } else if (shape instanceof Text) {
         switch (state.resizeHandleIndex) {
-          case 0:
+          case 0 /* 
             shape.fontSize = Math.max(10, moveY - shape.y);
-            shape.x = moveX;
+            shape.x = moveX; */:
             break;
           case 1:
             break;
@@ -176,7 +176,7 @@ export const mouseMove = (
           case 3:
             break;
         }
-      } */
+      }
       setCursorHandle(canvas, state.resizeHandleIndex);
       drawShape(canvas, ctx, state);
     }

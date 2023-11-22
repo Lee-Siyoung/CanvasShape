@@ -13,7 +13,6 @@ export const mouseUp = (
   }
 
   const shape = state.shapes[state.ShapeIndex];
-  shape.isClick = true;
   if (state.isDragging) {
     event.preventDefault();
     if (state.oriX !== shape.x && state.oriY !== shape.y) {
