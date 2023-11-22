@@ -8,6 +8,7 @@ export const drawShape = (
   if (canvas && ctx) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     for (const shape of state.shapes) {
+      ctx.globalAlpha = 0.9;
       shape.draw(ctx);
     }
   }
