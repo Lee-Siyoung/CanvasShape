@@ -8,6 +8,8 @@ export class Text extends Shape {
     id: number,
     x: number,
     y: number,
+    width: number,
+    height: number,
     isClick: boolean,
     color: string,
     selectionHandles: { x: number; y: number }[],
@@ -15,7 +17,7 @@ export class Text extends Shape {
     fontSize = 16,
     fontFamily = "Arial"
   ) {
-    super(id, x, y, isClick, color, (selectionHandles = []));
+    super(id, x, y, width, height, isClick, color, (selectionHandles = []));
     this.content = content;
     this.fontSize = fontSize;
     this.fontFamily = fontFamily;
@@ -70,6 +72,8 @@ export class Text extends Shape {
       this.id,
       this.x,
       this.y,
+      this.width,
+      this.height,
       this.isClick,
       this.color,
       this.selectionHandles,

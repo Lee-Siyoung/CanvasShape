@@ -16,6 +16,8 @@ export const mouseDown = (
           state.ShapeIndex = index;
           state.oriX = state.shapes[state.ShapeIndex].x;
           state.oriY = state.shapes[state.ShapeIndex].y;
+          state.oriW = state.shapes[state.ShapeIndex].width;
+          state.oriH = state.shapes[state.ShapeIndex].height;
           state.isDragging = true;
           state.isResizing = false;
           shape.selectClick();
@@ -28,6 +30,8 @@ export const mouseDown = (
           state.ShapeIndex = index;
           state.oriX = state.shapes[state.ShapeIndex].x;
           state.oriY = state.shapes[state.ShapeIndex].y;
+          state.oriW = state.shapes[state.ShapeIndex].width;
+          state.oriH = state.shapes[state.ShapeIndex].height;
           state.isDragging = true;
           state.isResizing = false;
           shape.selectClick();
@@ -55,8 +59,10 @@ export const mouseDown = (
           handleIndex = i;
           state.isResizing = true;
           state.resizeHandleIndex = handleIndex;
-          state.resizeX = state.mouseX;
-          state.resizeY = state.mouseY;
+          state.oriX = state.shapes[state.ShapeIndex].x;
+          state.oriY = state.shapes[state.ShapeIndex].y;
+          state.oriW = state.shapes[state.ShapeIndex].width;
+          state.oriH = state.shapes[state.ShapeIndex].height;
           console.log(handle, state.resizeHandleIndex);
           break;
         }

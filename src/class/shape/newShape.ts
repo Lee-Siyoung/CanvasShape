@@ -18,11 +18,11 @@ export const newShape = (
       id,
       Math.random() * (canvas.width - width),
       Math.random() * (canvas.height - height),
+      width,
+      height,
       false,
       "#000000",
-      [],
-      width,
-      height
+      []
     );
     return rectangle;
   } else if (shape == "triangle" && canvas && ctx) {
@@ -32,11 +32,11 @@ export const newShape = (
       id,
       Math.random() * (canvas.width - width),
       Math.random() * (canvas.height - height),
+      width,
+      height,
       false,
       "#000000",
-      [],
-      width,
-      height
+      []
     );
     return triangle;
   } else if (shape == "circle" && canvas && ctx) {
@@ -45,10 +45,11 @@ export const newShape = (
       id,
       Math.random() * (canvas.width - radius),
       Math.random() * (canvas.height - radius),
+      radius * 2,
+      radius * 2,
       false,
       "#000000",
-      [],
-      radius
+      []
     );
     return circle;
   } else if (shape == "text" && canvas && ctx) {
@@ -56,6 +57,8 @@ export const newShape = (
       id,
       Math.random() * canvas.width,
       Math.random() * canvas.height,
+      16,
+      16,
       false,
       "#000000",
       [],

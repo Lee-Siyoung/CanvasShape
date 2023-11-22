@@ -42,14 +42,14 @@ export default defineComponent({
       mouseY: 0,
       oriX: 0,
       oriY: 0,
+      oriW: 0,
+      oriH: 0,
       ShapeIndex: 0,
       isDragging: false,
       shapeId: 0,
       history: new History([] as IHistory[], -1),
       isResizing: false,
       resizeHandleIndex: -1,
-      resizeX: 0,
-      resizeY: 0,
     });
     const changeColor = (color: string) => {
       state.shapes.forEach((shape) => {
@@ -90,7 +90,6 @@ export default defineComponent({
           state.shapes.push(IShape);
         }
         drawShape(canvas.value, ctx.value, state);
-        console.log(IShape);
       }
     };
     const onClick = (event: MouseEvent) => {
@@ -100,7 +99,7 @@ export default defineComponent({
         canvas.value.contains(event.target as Node)
       )
         click(canvas.value, ctx.value, state, event);
-      console.log(state.shapes);
+      console.log(state.history);
     };
     const onMouseDown = (event: MouseEvent) => {
       if (canvas.value && canvas.value.contains(event.target as Node))

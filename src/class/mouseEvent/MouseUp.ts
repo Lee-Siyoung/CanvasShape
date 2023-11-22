@@ -12,28 +12,24 @@ export const mouseUp = (
     return;
   }
 
-  const moveShape = state.shapes[state.ShapeIndex];
-  moveShape.isClick = true;
+  const shape = state.shapes[state.ShapeIndex];
+  shape.isClick = true;
   if (state.isDragging) {
     event.preventDefault();
-    if (state.oriX !== moveShape.x && state.oriY !== moveShape.y) {
+    if (state.oriX !== shape.x && state.oriY !== shape.y) {
       state.history.pushHistory({
         Move: {
-          shapeId: moveShape.id,
+          shapeId: shape.id,
           oldX: state.oriX,
           oldY: state.oriY,
-          newX: moveShape.x,
-          newY: moveShape.y,
+          newX: shape.x,
+          newY: shape.y,
         },
       });
     }
     state.isDragging = false;
-    for (const shape of state.shapes) {
-      if (shape.isPointInside(state.mouseX, state.mouseY)) {
-        shape.selectClick();
-      }
-    }
   } else if (state.isResizing) {
+    event.preventDefault();
     for (const shape of state.shapes) {
       if (shape instanceof Rectangle) {
         if (shape.width < 0) {
@@ -46,9 +42,27 @@ export const mouseUp = (
         }
       }
     }
-    drawShape(canvas, ctx, state);
-    moveShape.isClick = true;
+    state.history.pushHistory({
+      Resize: {
+        shapeId: shape.id,
+        oldX: state.oriX,
+        oldY: state.oriY,
+        newX: shape.x,
+        newY: shape.y,
+        oldW: state.oriW,
+        oldH: state.oriH,
+        newW: shape.width,
+        newH: shape.height,
+      },
+    });
+    shape.isClick = true;
     state.isResizing = false;
     state.resizeHandleIndex = -1;
   }
+  for (const shape of state.shapes) {
+    if (shape.isPointInside(state.mouseX, state.mouseY)) {
+      shape.selectClick();
+    }
+  }
+  drawShape(canvas, ctx, state);
 };

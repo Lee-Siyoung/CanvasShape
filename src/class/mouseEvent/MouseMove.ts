@@ -3,7 +3,7 @@ import { drawShape } from "../utils/DrawShape";
 import { Rectangle } from "../shape/Rectangle";
 import { Triangle } from "../shape/Triangle";
 import { Circle } from "../shape/Circle";
-import { Text } from "../shape/Text";
+//import { Text } from "../shape/Text";
 import { setCursorHandle } from "../utils/CursorHandle";
 export const mouseMove = (
   canvas: HTMLCanvasElement,
@@ -55,7 +55,6 @@ export const mouseMove = (
       const shape = state.shapes[state.ShapeIndex];
       const moveX = event.clientX - canvas.getBoundingClientRect().left;
       const moveY = event.clientY - canvas.getBoundingClientRect().top;
-
       const oldX = shape.x;
       const oldY = shape.y;
       shape.isClick = true;
@@ -137,34 +136,34 @@ export const mouseMove = (
         let oppositeX, oppositeY;
         switch (state.resizeHandleIndex) {
           case 0:
-            oppositeX = shape.x + 2 * shape.radius;
-            oppositeY = shape.y + 2 * shape.radius;
-            shape.radius = Math.abs(moveX - oppositeX) / 2;
-            shape.x = oppositeX - 2 * shape.radius;
-            shape.y = oppositeY - 2 * shape.radius;
-            break;
-          case 1:
-            oppositeX = shape.x;
-            oppositeY = shape.y + 2 * shape.radius;
-            shape.radius = Math.abs(moveX - oppositeX) / 2;
-            shape.y = oppositeY - 2 * shape.radius;
+            oppositeX = shape.x + shape.width;
+            oppositeY = shape.y + shape.width;
+            shape.width = Math.abs(moveX - oppositeX);
+            shape.x = oppositeX - shape.width;
+            shape.y = oppositeY - shape.width;
             break;
           case 2:
-            oppositeX = shape.x + 2 * shape.radius;
-            oppositeY = shape.y;
-            shape.radius = Math.abs(moveY - oppositeY) / 2;
-            shape.x = oppositeX - 2 * shape.radius;
+            oppositeX = shape.x;
+            oppositeY = shape.y + shape.width;
+            shape.width = Math.abs(moveX - oppositeX);
+            shape.y = oppositeY - shape.width;
             break;
-          case 3:
+          case 5:
+            oppositeX = shape.x + shape.width;
+            oppositeY = shape.y;
+            shape.width = Math.abs(moveY - oppositeY);
+            shape.x = oppositeX - shape.width;
+            break;
+          case 7:
             oppositeX = shape.x;
             oppositeY = shape.y;
-            shape.radius = Math.max(
-              Math.abs(moveX - oppositeX) / 2,
-              Math.abs(moveY - oppositeY) / 2
+            shape.width = Math.max(
+              Math.abs(moveX - oppositeX),
+              Math.abs(moveY - oppositeY)
             );
             break;
         }
-      } else if (shape instanceof Text) {
+      } /*  else if (shape instanceof Text) {
         switch (state.resizeHandleIndex) {
           case 0:
             shape.fontSize = Math.max(10, moveY - shape.y);
@@ -177,7 +176,8 @@ export const mouseMove = (
           case 3:
             break;
         }
-      }
+      } */
+      setCursorHandle(canvas, state.resizeHandleIndex);
       drawShape(canvas, ctx, state);
     }
   }

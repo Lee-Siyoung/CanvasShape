@@ -7,12 +7,12 @@ export interface State {
   mouseY: number;
   oriX: number;
   oriY: number;
+  oriW: number;
+  oriH: number;
   ShapeIndex: number;
   isDragging: boolean;
   shapeId: number;
   history: History;
   isResizing: boolean;
   resizeHandleIndex: number;
-  resizeX: number;
-  resizeY: number;
 }

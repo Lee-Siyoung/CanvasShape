@@ -1,21 +1,18 @@
 import { Shape } from "./Shape";
 
 export class Rectangle extends Shape {
-  width: number;
-  height: number;
   constructor(
     id: number,
     x: number,
     y: number,
+    width: number,
+    height: number,
     isClick: boolean,
     color: string,
-    selectionHandles: { x: number; y: number }[],
-    width: number,
-    height: number
+    selectionHandles: { x: number; y: number }[]
   ) {
-    super(id, x, y, isClick, color, (selectionHandles = []));
-    this.width = width;
-    this.height = height;
+    super(id, x, y, width, height, isClick, color, (selectionHandles = []));
+    this.selectionHandles = selectionHandles;
   }
 
   draw(ctx: CanvasRenderingContext2D): void {
@@ -86,11 +83,11 @@ export class Rectangle extends Shape {
       this.id,
       this.x,
       this.y,
+      this.width,
+      this.height,
       this.isClick,
       this.color,
-      this.selectionHandles,
-      this.width,
-      this.height
+      this.selectionHandles
     );
   }
 }
