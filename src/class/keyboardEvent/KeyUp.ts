@@ -19,7 +19,7 @@ export const keyUp = (
     state.history.redo(state.shapes);
   } else if (
     ["ArrowDown", "ArrowUp", "ArrowLeft", "ArrowRight"].includes(event.key) &&
-    state.isMovingShape
+    state.isMovingArrow
   ) {
     const shape = state.shapes[state.ShapeIndex];
     if (shape) {
@@ -33,7 +33,7 @@ export const keyUp = (
         },
       });
     }
-    state.isMovingShape = false;
+    state.isMovingArrow = false;
   } else if (event.ctrlKey && event.key === "c") {
     const selectedShape = state.shapes.find((shape) => shape.isClick);
     state.copyShape = selectedShape ? selectedShape.clone() : null;

@@ -4,6 +4,7 @@ import { History } from "../history/History";
 export interface State {
   shapes: Shape[];
   copyShape: Shape | null;
+  history: History;
   mouseX: number;
   mouseY: number;
   oriX: number;
@@ -11,10 +12,9 @@ export interface State {
   oriW: number;
   oriH: number;
   ShapeIndex: number;
-  isDragging: boolean;
   shapeId: number;
-  history: History;
-  isResizing: boolean;
   resizeHandleIndex: number;
-  isMovingShape: boolean;
+  isDragging: boolean;
+  isResizing: boolean;
+  isMovingArrow: boolean;
 }

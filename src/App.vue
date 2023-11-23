@@ -40,6 +40,7 @@ export default defineComponent({
     const state = reactive({
       shapes: [] as Shape[],
       copyShape: null as Shape | null,
+      history: new History([] as IHistory[], -1),
       mouseX: 0,
       mouseY: 0,
       oriX: 0,
@@ -47,12 +48,11 @@ export default defineComponent({
       oriW: 0,
       oriH: 0,
       ShapeIndex: 0,
-      isDragging: false,
       shapeId: 0,
-      history: new History([] as IHistory[], -1),
-      isResizing: false,
       resizeHandleIndex: -1,
-      isMovingShape: false,
+      isDragging: false,
+      isResizing: false,
+      isMovingArrow: false,
     });
     const changeColor = (color: string) => {
       state.shapes.forEach((shape) => {

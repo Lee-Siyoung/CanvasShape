@@ -11,8 +11,8 @@ export const keyDown = (
   if (!shape) return;
 
   if (shape.isClick) {
-    if (!state.isMovingShape) {
-      state.isMovingShape = true;
+    if (!state.isMovingArrow) {
+      state.isMovingArrow = true;
       state.oriX = shape.x;
       state.oriY = shape.y;
     }
