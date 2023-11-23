@@ -10,19 +10,21 @@ export const keyDown = (
   const shape = state.shapes[state.ShapeIndex];
   if (!shape) return;
 
-  if (!state.isMovingShape) {
-    state.isMovingShape = true;
-    state.oriX = shape.x;
-    state.oriY = shape.y;
+  if (shape.isClick) {
+    if (!state.isMovingShape) {
+      state.isMovingShape = true;
+      state.oriX = shape.x;
+      state.oriY = shape.y;
+    }
+    if (event.key === "ArrowDown") {
+      shape.y += 10;
+    } else if (event.key === "ArrowUp") {
+      shape.y -= 10;
+    } else if (event.key === "ArrowLeft") {
+      shape.x -= 10;
+    } else if (event.key === "ArrowRight") {
+      shape.x += 10;
+    }
+    drawShape(canvas, ctx, state);
   }
-  if (event.key === "ArrowDown") {
-    shape.y += 10;
-  } else if (event.key === "ArrowUp") {
-    shape.y -= 10;
-  } else if (event.key === "ArrowLeft") {
-    shape.x -= 10;
-  } else if (event.key === "ArrowRight") {
-    shape.x += 10;
-  }
-  drawShape(canvas, ctx, state);
 };
