@@ -37,10 +37,13 @@ export const keyUp = (
   } else if (event.ctrlKey && event.key === "c") {
     const selectedShape = state.shapes.find((shape) => shape.isClick);
     state.copyShape = selectedShape ? selectedShape.clone() : null;
+    console.log("asd");
   } else if (event.ctrlKey && event.key === "v") {
     if (state.copyShape) {
       const newShape = state.copyShape.clone();
       newShape.id = state.shapeId++;
+      newShape.x += 10;
+      newShape.y += 10;
       state.shapes.push(newShape);
       state.history.pushHistory({ Create: { shape: newShape } });
     }

@@ -50,9 +50,11 @@ export default defineComponent({
       ShapeIndex: 0,
       shapeId: 0,
       resizeHandleIndex: -1,
+      rotateHandle: { x: 0, y: 0 },
       isDragging: false,
       isResizing: false,
       isMovingArrow: false,
+      isRotating: false,
     });
     const changeColor = (color: string) => {
       state.shapes.forEach((shape) => {

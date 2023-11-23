@@ -23,6 +23,7 @@ export const mouseMove = (
       isCursorChange = true;
       canvas.style.cursor = "pointer";
     }
+
     if (shape.isClick) {
       for (let i = 0; i < shape.selectionHandles.length; i++) {
         const handle = shape.selectionHandles[i];

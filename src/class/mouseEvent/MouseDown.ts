@@ -15,7 +15,8 @@ export const mouseDown = (
     updateShapeSelect(state, mouseX, mouseY, event.ctrlKey);
 
     if (state.shapes[state.ShapeIndex]) {
-      checkHandleSelect(state, mouseX, mouseY);
+      checkSelectHandle(state);
+      checkRotateHandle(state);
     }
   }
 };
@@ -52,7 +53,7 @@ const updateShapeSelect = (
   }
 };
 
-const checkHandleSelect = (state: State, mouseX: number, mouseY: number) => {
+const checkSelectHandle = (state: State) => {
   for (
     let i = 0;
     i < state.shapes[state.ShapeIndex].selectionHandles.length;
@@ -60,16 +61,32 @@ const checkHandleSelect = (state: State, mouseX: number, mouseY: number) => {
   ) {
     const handle = state.shapes[state.ShapeIndex].selectionHandles[i];
     if (
-      mouseX >= handle.x &&
-      mouseX <= handle.x + 8 &&
-      mouseY >= handle.y &&
-      mouseY <= handle.y + 8
+      state.mouseX >= handle.x &&
+      state.mouseX <= handle.x + 8 &&
+      state.mouseY >= handle.y &&
+      state.mouseY <= handle.y + 8
     ) {
       state.isDragging = false;
       state.isResizing = true;
       state.resizeHandleIndex = i;
       setShapeState(state);
       break;
+    }
+  }
+};
+const checkRotateHandle = (state: State) => {
+  if (state.shapes[state.ShapeIndex]) {
+    const shape = state.shapes[state.ShapeIndex];
+    const handleX = shape.x + shape.width / 2 - 4;
+    const handleY = shape.y - 38;
+    if (
+      state.mouseX >= handleX &&
+      state.mouseX <= handleX + 8 &&
+      state.mouseY >= handleY &&
+      state.mouseY <= handleY + 8
+    ) {
+      state.isRotating = true;
+      console.log("ok");
     }
   }
 };

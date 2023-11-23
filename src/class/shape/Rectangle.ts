@@ -20,6 +20,7 @@ export class Rectangle extends Shape {
     ctx.fillRect(this.x, this.y, this.width, this.height);
     if (this.isClick) {
       this.drawHandle(ctx);
+      this.drawRotate(ctx);
     }
   }
   drawHandle(ctx: CanvasRenderingContext2D): void {
@@ -28,7 +29,7 @@ export class Rectangle extends Shape {
     // top left, middle, right
     this.selectionHandles.push({ x: this.x - 4, y: this.y - 4 });
     this.selectionHandles.push({
-      x: this.x + this.width / 2 - 2,
+      x: this.x + this.width / 2 - 4,
       y: this.y - 4,
     });
     this.selectionHandles.push({
@@ -68,6 +69,13 @@ export class Rectangle extends Shape {
       ctx.strokeRect(handle.x, handle.y, 8, 8);
     });
     ctx.strokeRect(this.x, this.y, this.width, this.height);
+  }
+  drawRotate(ctx: CanvasRenderingContext2D): void {
+    ctx.beginPath();
+    ctx.moveTo(this.x + this.width / 2, this.y);
+    ctx.lineTo(this.x + this.width / 2, this.y - 30);
+    ctx.strokeRect(this.x + this.width / 2 - 4, this.y - 38, 8, 8);
+    ctx.stroke();
   }
   isPointInside(x: number, y: number): boolean {
     const shape_left = this.x;

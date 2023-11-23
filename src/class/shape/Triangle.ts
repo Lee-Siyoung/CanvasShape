@@ -25,6 +25,7 @@ export class Triangle extends Shape {
     ctx.fill();
     if (this.isClick) {
       this.drawHandle(ctx);
+      this.drawRotate(ctx);
     }
   }
   drawHandle(ctx: CanvasRenderingContext2D): void {
@@ -76,6 +77,13 @@ export class Triangle extends Shape {
       ctx.strokeRect(handle.x, handle.y, 8, 8);
     });
     ctx.strokeRect(this.x, this.y, this.width, this.height);
+  }
+  drawRotate(ctx: CanvasRenderingContext2D): void {
+    ctx.beginPath();
+    ctx.moveTo(this.x + this.width / 2, this.y);
+    ctx.lineTo(this.x + this.width / 2, this.y - 30);
+    ctx.strokeRect(this.x + this.width / 2 - 4, this.y - 38, 8, 8);
+    ctx.stroke();
   }
   isPointInside(x: number, y: number): boolean {
     const aPoint = { x: this.x + this.width / 2, y: this.y };
