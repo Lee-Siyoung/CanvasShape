@@ -15,4 +15,5 @@ export interface State {
   history: History;
   isResizing: boolean;
   resizeHandleIndex: number;
+  isMovingShape: boolean;
 }

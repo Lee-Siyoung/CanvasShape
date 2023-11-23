@@ -7,21 +7,22 @@ export const keyDown = (
   state: State,
   event: KeyboardEvent
 ) => {
-  if (event.key === "ArrowDown" && canvas && ctx) {
-    const shape = state.shapes[state.ShapeIndex];
-    shape.y += 10;
-    drawShape(canvas, ctx, state);
-  } else if (event.key === "ArrowUp" && canvas && ctx) {
-    const shape = state.shapes[state.ShapeIndex];
-    shape.y -= 10;
-    drawShape(canvas, ctx, state);
-  } else if (event.key === "ArrowLeft" && canvas && ctx) {
-    const shape = state.shapes[state.ShapeIndex];
-    shape.x -= 10;
-    drawShape(canvas, ctx, state);
-  } else if (event.key === "ArrowRight" && canvas && ctx) {
-    const shape = state.shapes[state.ShapeIndex];
-    shape.x += 10;
-    drawShape(canvas, ctx, state);
+  const shape = state.shapes[state.ShapeIndex];
+  if (!shape) return;
+
+  if (!state.isMovingShape) {
+    state.isMovingShape = true;
+    state.oriX = shape.x;
+    state.oriY = shape.y;
   }
+  if (event.key === "ArrowDown") {
+    shape.y += 10;
+  } else if (event.key === "ArrowUp") {
+    shape.y -= 10;
+  } else if (event.key === "ArrowLeft") {
+    shape.x -= 10;
+  } else if (event.key === "ArrowRight") {
+    shape.x += 10;
+  }
+  drawShape(canvas, ctx, state);
 };

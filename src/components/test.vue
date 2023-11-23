@@ -23,7 +23,6 @@
       max="100"
       @input="updateBrightness"
     />
-    <!-- Additional UI elements for RGB values can be added here -->
   </div>
 </template>
 
@@ -52,15 +51,14 @@ export default defineComponent({
     const colorGradient = ref<HTMLElement | null>(null);
 
     const handleMouseDown = (event: MouseEvent) => {
-      const rect = colorGradient.value!.getBoundingClientRect();
-      const x = event.clientX - rect.left;
-      const y = event.clientY - rect.top;
-      // Calculate color based on position
-      // This is a simplified version, real implementation needs more calculations
-      color.value.r = Math.round((x / rect.width) * 255);
-      color.value.g = Math.round((y / rect.height) * 255);
-      // Update HEX value
-      color.value.hex = rgbToHex(color.value.r, color.value.g, color.value.b);
+      if (colorGradient.value) {
+        const rect = colorGradient.value.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+        color.value.r = Math.round((x / rect.width) * 255);
+        color.value.g = Math.round((y / rect.height) * 255);
+        color.value.hex = rgbToHex(color.value.r, color.value.g, color.value.b);
+      }
     };
 
     const updateFromHex = () => {

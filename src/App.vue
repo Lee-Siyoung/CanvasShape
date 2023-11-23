@@ -51,6 +51,7 @@ export default defineComponent({
       history: new History([] as IHistory[], -1),
       isResizing: false,
       resizeHandleIndex: -1,
+      isMovingShape: false,
     });
     const changeColor = (color: string) => {
       state.shapes.forEach((shape) => {

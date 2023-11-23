@@ -13,12 +13,28 @@ export const keyUp = (
       state.history.pushHistory({ Delete: { shape } });
     }
     state.shapes = state.shapes.filter((shape) => !shape.isClick);
-    drawShape(canvas, ctx, state);
   } else if (event.ctrlKey && event.key === "z") {
     state.history.undo(state.shapes);
-    if (canvas && ctx) drawShape(canvas, ctx, state);
   } else if (event.ctrlKey && event.shiftKey && event.key === "Z") {
     state.history.redo(state.shapes);
-    if (canvas && ctx) drawShape(canvas, ctx, state);
   }
+  if (
+    ["ArrowDown", "ArrowUp", "ArrowLeft", "ArrowRight"].includes(event.key) &&
+    state.isMovingShape
+  ) {
+    const shape = state.shapes[state.ShapeIndex];
+    if (shape) {
+      state.history.pushHistory({
+        Move: {
+          shapeId: shape.id,
+          oldX: state.oriX,
+          oldY: state.oriY,
+          newX: shape.x,
+          newY: shape.y,
+        },
+      });
+    }
+    state.isMovingShape = false;
+  }
+  drawShape(canvas, ctx, state);
 };
