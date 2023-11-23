@@ -3,6 +3,7 @@ import { History } from "../history/History";
 
 export interface State {
   shapes: Shape[];
+  copyShape: Shape | null;
   mouseX: number;
   mouseY: number;
   oriX: number;

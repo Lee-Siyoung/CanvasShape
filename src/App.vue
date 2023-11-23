@@ -39,6 +39,7 @@ export default defineComponent({
     const ctx = ref<CanvasRenderingContext2D | null>(null);
     const state = reactive({
       shapes: [] as Shape[],
+      copyShape: null as Shape | null,
       mouseX: 0,
       mouseY: 0,
       oriX: 0,

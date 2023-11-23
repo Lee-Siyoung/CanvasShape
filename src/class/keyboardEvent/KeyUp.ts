@@ -7,9 +7,9 @@ export const keyUp = (
   state: State,
   event: KeyboardEvent
 ) => {
+  const clickShapes = state.shapes.filter((shape) => shape.isClick);
   if (event.key === "Delete" && canvas && ctx) {
-    const deleteShapes = state.shapes.filter((shape) => shape.isClick);
-    for (const shape of deleteShapes) {
+    for (const shape of clickShapes) {
       state.history.pushHistory({ Delete: { shape } });
     }
     state.shapes = state.shapes.filter((shape) => !shape.isClick);
@@ -35,9 +35,15 @@ export const keyUp = (
     }
     state.isMovingShape = false;
   } else if (event.ctrlKey && event.key === "c") {
-    console.log("asdas");
+    const selectedShape = state.shapes.find((shape) => shape.isClick);
+    state.copyShape = selectedShape ? selectedShape.clone() : null;
   } else if (event.ctrlKey && event.key === "v") {
-    console.log("asdas");
+    if (state.copyShape) {
+      const newShape = state.copyShape.clone();
+      newShape.id = state.shapeId++;
+      state.shapes.push(newShape);
+      state.history.pushHistory({ Create: { shape: newShape } });
+    }
   }
   drawShape(canvas, ctx, state);
 };
