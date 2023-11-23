@@ -21,7 +21,7 @@ export const mouseMove = (
   for (const shape of state.shapes) {
     if (shape.isPointInside(moveX, moveY)) {
       isCursorChange = true;
-      canvas.style.cursor = "pointer";
+      canvas.style.cursor = "grab";
     }
 
     if (shape.isClick) {
@@ -56,7 +56,7 @@ export const mouseMove = (
       drawShape(canvas, ctx, state);
       state.mouseX = moveX;
       state.mouseY = moveY;
-      canvas.style.cursor = "move";
+      canvas.style.cursor = "grabbing";
     }
   } else if (state.isResizing) {
     event.preventDefault();
