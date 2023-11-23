@@ -10,27 +10,25 @@ export const mouseDown = (
     const mouseX = event.clientX - canvas.getBoundingClientRect().left;
     const mouseY = event.clientY - canvas.getBoundingClientRect().top;
 
-    updateMousePosition(state, mouseX, mouseY);
-    updateShapeSelection(state, mouseX, mouseY, event.ctrlKey);
+    state.mouseX = mouseX;
+    state.mouseY = mouseY;
+    updateShapeSelect(state, mouseX, mouseY, event.ctrlKey);
 
     if (state.shapes[state.ShapeIndex]) {
-      checkHandle(state, mouseX, mouseY);
+      checkHandleSelect(state, mouseX, mouseY);
     }
   }
 };
 
-const updateMousePosition = (state: State, mouseX: number, mouseY: number) => {
-  state.mouseX = mouseX;
-  state.mouseY = mouseY;
-};
-
-const updateShapeSelection = (
+const updateShapeSelect = (
   state: State,
   mouseX: number,
   mouseY: number,
   ctrlKey: boolean
 ) => {
   let index = 0;
+  let isShapeClick = false;
+
   for (const shape of state.shapes) {
     if (shape.isPointInside(mouseX, mouseY)) {
       state.ShapeIndex = index;
@@ -39,16 +37,22 @@ const updateShapeSelection = (
         shape.selectClick();
         state.isDragging = true;
         state.isResizing = false;
+        isShapeClick = true;
       }
       break;
-    } else if (!ctrlKey) {
-      shape.isClick = false;
     }
     index++;
   }
+  if (!ctrlKey && isShapeClick) {
+    state.shapes.forEach((shape, index) => {
+      if (index !== state.ShapeIndex) {
+        shape.isClick = false;
+      }
+    });
+  }
 };
 
-const checkHandle = (state: State, mouseX: number, mouseY: number) => {
+const checkHandleSelect = (state: State, mouseX: number, mouseY: number) => {
   for (
     let i = 0;
     i < state.shapes[state.ShapeIndex].selectionHandles.length;
