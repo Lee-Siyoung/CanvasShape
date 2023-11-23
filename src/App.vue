@@ -28,6 +28,7 @@ import { mouseMove } from "./class/mouseEvent/MouseMove";
 import { mouseUp } from "./class/mouseEvent/MouseUp";
 import { drawShape } from "./class/utils/DrawShape";
 import { keyUp } from "./class/keyboardEvent/KeyUp";
+import { keyDown } from "./class/keyboardEvent/KeyDown";
 import { Shape } from "./class/shape/Shape";
 import { History, IHistory } from "./class/history/History";
 import { newShape } from "./class/shape/newShape";
@@ -113,11 +114,15 @@ export default defineComponent({
       if (canvas.value && ctx.value)
         mouseUp(canvas.value, ctx.value, state, event);
     };
-
     const onKeyUp = (event: KeyboardEvent) => {
       if (canvas.value && ctx.value)
         keyUp(canvas.value, ctx.value, state, event);
     };
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (canvas.value && ctx.value)
+        keyDown(canvas.value, ctx.value, state, event);
+    };
+
     onMounted(() => {
       if (canvas.value) {
         ctx.value = canvas.value?.getContext("2d");
@@ -128,6 +133,7 @@ export default defineComponent({
       window.addEventListener("mousemove", onMouseMove);
       window.addEventListener("click", onClick);
       window.addEventListener("keyup", onKeyUp);
+      window.addEventListener("keydown", onKeyDown);
     });
     onBeforeUnmount(() => {
       window.removeEventListener("mousedown", onMouseDown);
@@ -135,6 +141,7 @@ export default defineComponent({
       window.removeEventListener("mousemove", onMouseMove);
       window.removeEventListener("click", onClick);
       window.removeEventListener("keyup", onKeyUp);
+      window.removeEventListener("keydown", onKeyDown);
     });
 
     return {
@@ -189,3 +196,4 @@ canvas {
   border-radius: 20px;
 }
 </style>
+./class/keyboardEvent/KeyDown
