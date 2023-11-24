@@ -80,9 +80,15 @@ export class Triangle extends Shape {
   }
   drawRotate(ctx: CanvasRenderingContext2D): void {
     ctx.beginPath();
-    ctx.moveTo(this.x + this.width / 2, this.y);
-    ctx.lineTo(this.x + this.width / 2, this.y - 30);
-    ctx.strokeRect(this.x + this.width / 2 - 4, this.y - 38, 8, 8);
+    if (this.height < 0) {
+      ctx.moveTo(this.x + this.width / 2, this.y);
+      ctx.lineTo(this.x + this.width / 2, this.y + 30);
+      ctx.strokeRect(this.x + this.width / 2 - 4, this.y + 30, 8, 8);
+    } else {
+      ctx.moveTo(this.x + this.width / 2, this.y);
+      ctx.lineTo(this.x + this.width / 2, this.y - 30);
+      ctx.strokeRect(this.x + this.width / 2 - 4, this.y - 38, 8, 8);
+    }
     ctx.stroke();
   }
   isPointInside(x: number, y: number): boolean {
