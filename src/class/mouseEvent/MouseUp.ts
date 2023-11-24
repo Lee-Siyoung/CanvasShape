@@ -8,7 +8,7 @@ export const mouseUp = (
   state: State,
   event: MouseEvent
 ) => {
-  if (!state.isDragging && !state.isResizing) {
+  if (!state.isDragging && !state.isResizing && !state.isRotating) {
     return;
   }
 
@@ -57,6 +57,10 @@ export const mouseUp = (
     shape.isClick = true;
     state.isResizing = false;
     state.resizeHandleIndex = -1;
+  } else if (state.isRotating) {
+    event.preventDefault();
+    shape.isClick = true;
+    state.isRotating = false;
   }
   for (const shape of state.shapes) {
     if (shape.isPointInside(state.mouseX, state.mouseY)) {

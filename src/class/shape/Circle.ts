@@ -9,9 +9,20 @@ export class Circle extends Shape {
     height: number,
     isClick: boolean,
     color: string,
-    selectionHandles: { x: number; y: number }[]
+    selectionHandles: { x: number; y: number }[],
+    rotation: number
   ) {
-    super(id, x, y, width, height, isClick, color, (selectionHandles = []));
+    super(
+      id,
+      x,
+      y,
+      width,
+      height,
+      isClick,
+      color,
+      (selectionHandles = []),
+      rotation
+    );
     this.selectionHandles = selectionHandles;
   }
 
@@ -85,7 +96,8 @@ export class Circle extends Shape {
       this.height,
       this.isClick,
       this.color,
-      this.selectionHandles
+      this.selectionHandles,
+      this.rotation
     );
   }
 }

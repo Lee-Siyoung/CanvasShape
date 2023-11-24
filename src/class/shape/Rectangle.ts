@@ -9,23 +9,39 @@ export class Rectangle extends Shape {
     height: number,
     isClick: boolean,
     color: string,
-    selectionHandles: { x: number; y: number }[]
+    selectionHandles: { x: number; y: number }[],
+    rotation: number
   ) {
-    super(id, x, y, width, height, isClick, color, (selectionHandles = []));
+    super(
+      id,
+      x,
+      y,
+      width,
+      height,
+      isClick,
+      color,
+      (selectionHandles = []),
+      rotation
+    );
     this.selectionHandles = selectionHandles;
   }
 
   draw(ctx: CanvasRenderingContext2D): void {
     ctx.fillStyle = this.color;
+    ctx.save();
+    ctx.translate(this.x + this.width / 2, this.y + this.height / 2);
+    ctx.rotate((this.rotation * Math.PI) / 180);
+    ctx.translate(-(this.x + this.width / 2), -(this.y + this.height / 2));
     ctx.fillRect(this.x, this.y, this.width, this.height);
+
     if (this.isClick) {
       this.drawHandle(ctx);
       this.drawRotate(ctx);
     }
+    ctx.restore();
   }
   drawHandle(ctx: CanvasRenderingContext2D): void {
     this.selectionHandles = [];
-
     // top left, middle, right
     this.selectionHandles.push({ x: this.x - 4, y: this.y - 4 });
     this.selectionHandles.push({
@@ -101,7 +117,8 @@ export class Rectangle extends Shape {
       this.height,
       this.isClick,
       this.color,
-      this.selectionHandles
+      this.selectionHandles,
+      this.rotation
     );
   }
 }

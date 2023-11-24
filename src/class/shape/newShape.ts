@@ -22,7 +22,8 @@ export const newShape = (
       height,
       false,
       "#000000",
-      []
+      [],
+      0
     );
     return rectangle;
   } else if (shape == "triangle" && canvas && ctx) {
@@ -36,7 +37,8 @@ export const newShape = (
       height,
       false,
       "#000000",
-      []
+      [],
+      0
     );
     return triangle;
   } else if (shape == "circle" && canvas && ctx) {
@@ -49,7 +51,8 @@ export const newShape = (
       radius * 2,
       false,
       "#000000",
-      []
+      [],
+      0
     );
     return circle;
   } else if (shape == "text" && canvas && ctx) {
@@ -62,6 +65,7 @@ export const newShape = (
       false,
       "#000000",
       [],
+      0,
       textContent || "example",
       fontSize || 16,
       fontFamily || "Arial"
