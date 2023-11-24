@@ -23,10 +23,11 @@ export const mouseMove = (
       isCursorChange = true;
       canvas.style.cursor = "grab";
     }
-
     if (shape.isClick) {
       for (let i = 0; i < shape.selectionHandles.length; i++) {
         const handle = shape.selectionHandles[i];
+        const handleX = shape.x + shape.width / 2 - 4;
+        const handleY = shape.y - 38;
         if (
           moveX >= handle.x &&
           moveX <= handle.x + 8 &&
@@ -35,7 +36,15 @@ export const mouseMove = (
         ) {
           setCursorHandle(canvas, i);
           isCursorChange = true;
-          break;
+        } else if (
+          moveX >= handleX &&
+          moveX <= handleX + 8 &&
+          moveY >= handleY &&
+          moveY <= handleY + 8
+        ) {
+          state.isRotating = true;
+          canvas.style.cursor = "pointer";
+          isCursorChange = true;
         }
       }
       if (isCursorChange) break;

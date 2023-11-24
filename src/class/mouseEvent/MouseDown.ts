@@ -85,8 +85,8 @@ const checkRotateHandle = (state: State) => {
       state.mouseY >= handleY &&
       state.mouseY <= handleY + 8
     ) {
+      state.isDragging = false;
       state.isRotating = true;
-      console.log("ok");
     }
   }
 };
