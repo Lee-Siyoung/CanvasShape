@@ -60,7 +60,6 @@ const checkSelectHandle = (state: State) => {
     i++
   ) {
     const handle = state.shapes[state.ShapeIndex].selectionHandles[i];
-    console.log(state.shapes[state.ShapeIndex]);
     if (
       state.mouseX >= handle.x &&
       state.mouseX <= handle.x + 8 &&

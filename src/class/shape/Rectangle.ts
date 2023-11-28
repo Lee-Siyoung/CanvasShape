@@ -28,20 +28,15 @@ export class Rectangle extends Shape {
 
   draw(ctx: CanvasRenderingContext2D): void {
     ctx.fillStyle = this.color;
-    ctx.save();
-    ctx.translate(this.x + this.width / 2, this.y + this.height / 2);
-    ctx.rotate((this.rotation * Math.PI) / 180);
-    ctx.translate(-(this.x + this.width / 2), -(this.y + this.height / 2));
     ctx.fillRect(this.x, this.y, this.width, this.height);
-
     if (this.isClick) {
       this.drawHandle(ctx);
       this.drawRotate(ctx);
     }
-    ctx.restore();
   }
   drawHandle(ctx: CanvasRenderingContext2D): void {
     this.selectionHandles = [];
+
     // top left, middle, right
     this.selectionHandles.push({ x: this.x - 4, y: this.y - 4 });
     this.selectionHandles.push({

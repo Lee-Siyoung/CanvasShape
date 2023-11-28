@@ -28,6 +28,11 @@ export class Triangle extends Shape {
 
   draw(ctx: CanvasRenderingContext2D): void {
     ctx.beginPath();
+    ctx.save();
+    ctx.translate(this.x + this.width / 2, this.y + this.height / 2);
+    ctx.rotate((this.rotation * Math.PI) / 180);
+    ctx.translate(-(this.x + this.width / 2), -(this.y + this.height / 2));
+
     ctx.moveTo(this.x + this.width / 2, this.y);
     ctx.lineTo(this.x, this.y + this.height);
     ctx.lineTo(this.x + this.width, this.y + this.height);
@@ -38,6 +43,7 @@ export class Triangle extends Shape {
       this.drawHandle(ctx);
       this.drawRotate(ctx);
     }
+    ctx.restore();
   }
   drawHandle(ctx: CanvasRenderingContext2D): void {
     this.selectionHandles = [];
@@ -90,16 +96,12 @@ export class Triangle extends Shape {
     ctx.strokeRect(this.x, this.y, this.width, this.height);
   }
   drawRotate(ctx: CanvasRenderingContext2D): void {
+    const lineY = this.height < 0 ? 30 : -30;
+    const rectY = this.height < 0 ? 30 : -38;
     ctx.beginPath();
-    if (this.height < 0) {
-      ctx.moveTo(this.x + this.width / 2, this.y);
-      ctx.lineTo(this.x + this.width / 2, this.y + 30);
-      ctx.strokeRect(this.x + this.width / 2 - 4, this.y + 30, 8, 8);
-    } else {
-      ctx.moveTo(this.x + this.width / 2, this.y);
-      ctx.lineTo(this.x + this.width / 2, this.y - 30);
-      ctx.strokeRect(this.x + this.width / 2 - 4, this.y - 38, 8, 8);
-    }
+    ctx.moveTo(this.x + this.width / 2, this.y);
+    ctx.lineTo(this.x + this.width / 2, this.y + lineY);
+    ctx.strokeRect(this.x + this.width / 2 - 4, this.y + rectY, 8, 8);
     ctx.stroke();
   }
   isPointInside(x: number, y: number): boolean {
