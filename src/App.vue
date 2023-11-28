@@ -51,6 +51,7 @@ export default defineComponent({
       shapeId: 0,
       resizeHandleIndex: -1,
       rotateHandle: { x: 0, y: 0 },
+      oriRotation: 0,
       isDragging: false,
       isResizing: false,
       isMovingArrow: false,

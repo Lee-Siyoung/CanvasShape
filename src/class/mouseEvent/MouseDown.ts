@@ -104,6 +104,7 @@ const checkRotateHandle = (state: State, mouseX: number, mouseY: number) => {
     ) {
       state.isDragging = false;
       state.isRotating = true;
+      state.oriRotation = shape.rotation;
     }
   }
 };

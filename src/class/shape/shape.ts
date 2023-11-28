@@ -18,7 +18,7 @@ export abstract class Shape {
     isClick = false,
     color = "#000000",
     selectionHandles = [],
-    rotation: number
+    rotation = 0
   ) {
     this.id = id;
     this.x = x;

@@ -60,6 +60,13 @@ export const mouseUp = (
   } else if (state.isRotating) {
     event.preventDefault();
     shape.isClick = true;
+    state.history.pushHistory({
+      Rotate: {
+        shapeId: shape.id,
+        oldRotation: state.oriRotation,
+        newRotation: shape.rotation,
+      },
+    });
     state.isRotating = false;
   }
   for (const shape of state.shapes) {

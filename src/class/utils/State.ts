@@ -15,6 +15,7 @@ export interface State {
   shapeId: number;
   resizeHandleIndex: number;
   rotateHandle: { x: number; y: number };
+  oriRotation: number;
   isDragging: boolean;
   isResizing: boolean;
   isMovingArrow: boolean;

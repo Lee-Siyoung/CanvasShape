@@ -3,12 +3,14 @@ import { redoCreate } from "./redo/Create";
 import { redoDelete } from "./redo/Delete";
 import { redoMove } from "./redo/Move";
 import { redoColor } from "./redo/Color";
+import { redoResize } from "./redo/Resize";
+import { redoRotate } from "./redo/Rotate";
 import { undoCreate } from "./undo/Create";
 import { undoDelete } from "./undo/Delete";
 import { undoMove } from "./undo/Move";
 import { undoColor } from "./undo/Color";
 import { undoResize } from "./undo/Resize";
-import { redoResize } from "./redo/Resize";
+import { undoRotate } from "./undo/Rotate";
 interface Create {
   shape: Shape;
 }
@@ -38,12 +40,19 @@ interface Resize {
   newW: number;
   newH: number;
 }
+interface Rotate {
+  shapeId: number;
+  oldRotation: number;
+  newRotation: number;
+}
+
 export interface IHistory {
   Create?: Create;
   Move?: Move;
   Delete?: Delete;
   Color?: Color;
   Resize?: Resize;
+  Rotate?: Rotate;
 }
 
 export class History {
@@ -75,6 +84,8 @@ export class History {
         undoColor(shape, historyId);
       } else if (historyId.Resize) {
         undoResize(shape, historyId);
+      } else if (historyId.Rotate) {
+        undoRotate(shape, historyId);
       }
     }
   }
@@ -93,6 +104,8 @@ export class History {
         redoColor(shape, historyId);
       } else if (historyId.Resize) {
         redoResize(shape, historyId);
+      } else if (historyId.Rotate) {
+        redoRotate(shape, historyId);
       }
     }
   }
