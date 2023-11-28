@@ -42,7 +42,6 @@ export const mouseMove = (
           moveY >= handleY &&
           moveY <= handleY + 8
         ) {
-          state.isRotating = true;
           canvas.style.cursor = "pointer";
           isCursorChange = true;
         }
@@ -84,5 +83,15 @@ export const mouseMove = (
       setCursorHandle(canvas, state.resizeHandleIndex);
       drawShape(canvas, ctx, state);
     }
+  } else if (state.isRotating) {
+    event.preventDefault();
+    const shape = state.shapes[state.ShapeIndex];
+    shape.isClick = true;
+    const centerX = shape.x + shape.width / 2;
+    const centerY = shape.y + shape.height / 2;
+    const angle = Math.atan2(moveY - centerY, moveX - centerX);
+    shape.rotation = angle * (180 / Math.PI) + 90;
+    drawShape(canvas, ctx, state);
+    canvas.style.cursor = "pointer";
   }
 };

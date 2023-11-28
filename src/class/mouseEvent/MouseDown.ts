@@ -1,3 +1,4 @@
+import { RotatePoint } from "../utils/RotatePoint";
 import { State } from "../utils/State";
 
 export const mouseDown = (
@@ -15,8 +16,8 @@ export const mouseDown = (
     updateShapeSelect(state, mouseX, mouseY, event.ctrlKey);
 
     if (state.shapes[state.ShapeIndex]) {
-      checkSelectHandle(state);
-      checkRotateHandle(state);
+      checkSelectHandle(state, state.mouseX, state.mouseY);
+      checkRotateHandle(state, state.mouseX, state.mouseY);
     }
   }
 };
@@ -53,18 +54,25 @@ const updateShapeSelect = (
   }
 };
 
-const checkSelectHandle = (state: State) => {
-  for (
-    let i = 0;
-    i < state.shapes[state.ShapeIndex].selectionHandles.length;
-    i++
-  ) {
-    const handle = state.shapes[state.ShapeIndex].selectionHandles[i];
+const checkSelectHandle = (state: State, mouseX: number, mouseY: number) => {
+  const shape = state.shapes[state.ShapeIndex];
+  const centerX = shape.x + shape.width / 2;
+  const centerY = shape.y + shape.height / 2;
+  const rotatedMousePos = RotatePoint(
+    mouseX,
+    mouseY,
+    centerX,
+    centerY,
+    shape.rotation
+  );
+
+  for (let i = 0; i < shape.selectionHandles.length; i++) {
+    const handle = shape.selectionHandles[i];
     if (
-      state.mouseX >= handle.x &&
-      state.mouseX <= handle.x + 8 &&
-      state.mouseY >= handle.y &&
-      state.mouseY <= handle.y + 8
+      rotatedMousePos.x >= handle.x &&
+      rotatedMousePos.x <= handle.x + 8 &&
+      rotatedMousePos.y >= handle.y &&
+      rotatedMousePos.y <= handle.y + 8
     ) {
       state.isDragging = false;
       state.isResizing = true;
@@ -74,16 +82,25 @@ const checkSelectHandle = (state: State) => {
     }
   }
 };
-const checkRotateHandle = (state: State) => {
+const checkRotateHandle = (state: State, mouseX: number, mouseY: number) => {
   if (state.shapes[state.ShapeIndex]) {
     const shape = state.shapes[state.ShapeIndex];
+    const centerX = shape.x + shape.width / 2;
+    const centerY = shape.y + shape.height / 2;
+    const rotatedMousePos = RotatePoint(
+      mouseX,
+      mouseY,
+      centerX,
+      centerY,
+      shape.rotation
+    );
     const handleX = shape.x + shape.width / 2 - 4;
     const handleY = shape.y - 38;
     if (
-      state.mouseX >= handleX &&
-      state.mouseX <= handleX + 8 &&
-      state.mouseY >= handleY &&
-      state.mouseY <= handleY + 8
+      rotatedMousePos.x >= handleX &&
+      rotatedMousePos.x <= handleX + 8 &&
+      rotatedMousePos.y >= handleY &&
+      rotatedMousePos.y <= handleY + 8
     ) {
       state.isDragging = false;
       state.isRotating = true;

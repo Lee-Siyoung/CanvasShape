@@ -27,8 +27,8 @@ export class Triangle extends Shape {
   }
 
   draw(ctx: CanvasRenderingContext2D): void {
-    ctx.beginPath();
     ctx.save();
+    ctx.beginPath();
     ctx.translate(this.x + this.width / 2, this.y + this.height / 2);
     ctx.rotate((this.rotation * Math.PI) / 180);
     ctx.translate(-(this.x + this.width / 2), -(this.y + this.height / 2));
