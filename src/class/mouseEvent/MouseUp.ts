@@ -74,5 +74,6 @@ export const mouseUp = (
       shape.selectClick();
     }
   }
+  console.log(shape);
   drawShape(canvas, ctx, state);
 };

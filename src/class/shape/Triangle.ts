@@ -1,3 +1,4 @@
+import { RotateTriangleXY } from "../utils/RotateTriangleXY";
 import { Shape } from "./Shape";
 
 export class Triangle extends Shape {
@@ -104,32 +105,61 @@ export class Triangle extends Shape {
     ctx.strokeRect(this.x + this.width / 2 - 4, this.y + rectY, 8, 8);
     ctx.stroke();
   }
-  isPointInside(x: number, y: number): boolean {
+  isPointInside(x: number, y: number) {
+    const centerX = this.x + this.width / 2;
+    const centerY = this.y + this.height / 2;
     const aPoint = { x: this.x + this.width / 2, y: this.y };
     const bPoint = { x: this.x, y: this.y + this.height };
     const cPoint = { x: this.x + this.width, y: this.y + this.height };
-
-    const areaOrig =
-      (-bPoint.y * cPoint.x +
-        aPoint.y * (-bPoint.x + cPoint.x) +
-        aPoint.x * (bPoint.y - cPoint.y) +
-        bPoint.x * cPoint.y) /
-      2;
-    const sign = areaOrig < 0 ? -1 : 1;
-    const area1 =
-      (aPoint.y * cPoint.x -
-        aPoint.x * cPoint.y +
-        (cPoint.y - aPoint.y) * x +
-        (aPoint.x - cPoint.x) * y) *
-      sign;
-    const area2 =
-      (aPoint.x * bPoint.y -
-        aPoint.y * bPoint.x +
-        (aPoint.y - bPoint.y) * x +
-        (bPoint.x - aPoint.x) * y) *
-      sign;
-    return area1 > 0 && area2 > 0 && area1 + area2 < 2 * areaOrig * sign;
+    const rotatedAPoint = RotateTriangleXY(
+      aPoint,
+      centerX,
+      centerY,
+      this.rotation
+    );
+    const rotatedBPoint = RotateTriangleXY(
+      bPoint,
+      centerX,
+      centerY,
+      this.rotation
+    );
+    const rotatedCPoint = RotateTriangleXY(
+      cPoint,
+      centerX,
+      centerY,
+      this.rotation
+    );
+    return this.isPointArea(
+      { x, y },
+      rotatedAPoint,
+      rotatedBPoint,
+      rotatedCPoint
+    );
   }
+
+  isPointArea(
+    pt: { x: number; y: number },
+    v1: { x: number; y: number },
+    v2: { x: number; y: number },
+    v3: { x: number; y: number }
+  ) {
+    const d1 = this.area(pt, v1, v2);
+    const d2 = this.area(pt, v2, v3);
+    const d3 = this.area(pt, v3, v1);
+
+    const hasNeg = d1 < 0 || d2 < 0 || d3 < 0;
+    const hasPos = d1 > 0 || d2 > 0 || d3 > 0;
+
+    return !(hasNeg && hasPos);
+  }
+  area(
+    p1: { x: number; y: number },
+    p2: { y: number; x: number },
+    p3: { x: number; y: number }
+  ) {
+    return (p1.x - p3.x) * (p2.y - p3.y) - (p2.x - p3.x) * (p1.y - p3.y);
+  }
+
   clone(): Shape {
     return new Triangle(
       this.id,

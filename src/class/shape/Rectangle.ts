@@ -1,3 +1,4 @@
+import { RotateRectangleXY } from "../utils/RotateRectangleXY";
 import { Shape } from "./Shape";
 
 export class Rectangle extends Shape {
@@ -95,13 +96,25 @@ export class Rectangle extends Shape {
     ctx.strokeRect(this.x + this.width / 2 - 4, this.y + rectY, 8, 8);
     ctx.stroke();
   }
-  isPointInside(x: number, y: number): boolean {
-    const shape_left = this.x;
-    const shape_right = this.x + this.width;
-    const shape_top = this.y;
-    const shape_bottom = this.y + this.height;
+  isPointInside(x: number, y: number) {
+    const centerX = this.x + this.width / 2;
+    const centerY = this.y + this.height / 2;
+    const rotatedPoint = RotateRectangleXY(
+      x,
+      y,
+      centerX,
+      centerY,
+      -this.rotation
+    );
+    const shapeLeft = this.x;
+    const shapeRight = this.x + this.width;
+    const shapeTop = this.y;
+    const shapeBottom = this.y + this.height;
     return (
-      x > shape_left && x < shape_right && y > shape_top && y < shape_bottom
+      rotatedPoint.x > shapeLeft &&
+      rotatedPoint.x < shapeRight &&
+      rotatedPoint.y > shapeTop &&
+      rotatedPoint.y < shapeBottom
     );
   }
   clone(): Shape {

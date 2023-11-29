@@ -1,4 +1,4 @@
-export const RotatePoint = (
+export const RotateRectangleXY = (
   mouseX: number,
   mouseY: number,
   centerX: number,
@@ -7,7 +7,7 @@ export const RotatePoint = (
 ) => {
   const dx = mouseX - centerX;
   const dy = mouseY - centerY;
-  const rad = (-rotation * Math.PI) / 180;
+  const rad = (rotation * Math.PI) / 180;
 
   return {
     x: dx * Math.cos(rad) - dy * Math.sin(rad) + centerX,

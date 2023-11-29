@@ -22,6 +22,7 @@ export const mouseMove = (
     if (shape.isPointInside(moveX, moveY)) {
       isCursorChange = true;
       canvas.style.cursor = "grab";
+      console.log("a");
     }
     if (shape.isClick) {
       for (let i = 0; i < shape.selectionHandles.length; i++) {
@@ -36,6 +37,7 @@ export const mouseMove = (
         ) {
           setCursorHandle(canvas, i);
           isCursorChange = true;
+          console.log("dd");
         } else if (
           moveX >= handleX &&
           moveX <= handleX + 8 &&
@@ -44,6 +46,7 @@ export const mouseMove = (
         ) {
           canvas.style.cursor = "pointer";
           isCursorChange = true;
+          console.log("??");
         }
       }
       if (isCursorChange) break;
