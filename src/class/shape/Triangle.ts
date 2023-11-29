@@ -1,4 +1,4 @@
-import { RotateTriangleXY } from "../utils/RotateTriangleXY";
+import { RotateTriangleXY } from "../rotate/RotateTriangleXY";
 import { Shape } from "./Shape";
 
 export class Triangle extends Shape {

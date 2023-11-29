@@ -9,7 +9,7 @@ import { resizeRectangle } from "../resize/ResizeRectangle";
 import { resizeTriangle } from "../resize/ResizeTriangle";
 import { resizeCircle } from "../resize/ResizeCircle";
 import { resizeText } from "../resize/ResizeText";
-import { rotatePoint } from "../utils/rotatePoint";
+import { rotatePoint } from "../rotate/rotatePoint";
 export const mouseMove = (
   canvas: HTMLCanvasElement,
   ctx: CanvasRenderingContext2D,
@@ -28,17 +28,17 @@ export const mouseMove = (
       const centerX = shape.x + shape.width / 2;
       const centerY = shape.y + shape.height / 2;
       for (let i = 0; i < shape.selectionHandles.length; i++) {
-        const rotatedHandle = rotatePoint(
+        const resizeHandle = rotatePoint(
           shape.selectionHandles[i],
           centerX,
           centerY,
           shape.rotation
         );
         if (
-          moveX >= rotatedHandle.x &&
-          moveX <= rotatedHandle.x + 8 &&
-          moveY >= rotatedHandle.y &&
-          moveY <= rotatedHandle.y + 8
+          moveX >= resizeHandle.x &&
+          moveX <= resizeHandle.x + 8 &&
+          moveY >= resizeHandle.y &&
+          moveY <= resizeHandle.y + 8
         ) {
           setCursorHandle(canvas, i);
           isCursorChange = true;

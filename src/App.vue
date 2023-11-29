@@ -76,12 +76,10 @@ export default defineComponent({
 
     const redo = () => {
       state.history.redo(state.shapes);
-      console.log(state.history);
       if (canvas.value && ctx.value) drawShape(canvas.value, ctx.value, state);
     };
     const undo = () => {
       state.history.undo(state.shapes);
-      console.log(state.history);
       if (canvas.value && ctx.value) drawShape(canvas.value, ctx.value, state);
     };
 
@@ -105,7 +103,6 @@ export default defineComponent({
         canvas.value.contains(event.target as Node)
       )
         click(canvas.value, ctx.value, state, event);
-      console.log(state.history);
     };
     const onMouseDown = (event: MouseEvent) => {
       if (canvas.value && canvas.value.contains(event.target as Node))

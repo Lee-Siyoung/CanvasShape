@@ -37,7 +37,6 @@ export const keyUp = (
   } else if (event.ctrlKey && event.key === "c") {
     const selectedShape = state.shapes.find((shape) => shape.isClick);
     state.copyShape = selectedShape ? selectedShape.clone() : null;
-    console.log("asd");
   } else if (event.ctrlKey && event.key === "v") {
     if (state.copyShape) {
       const newShape = state.copyShape.clone();

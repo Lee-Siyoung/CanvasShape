@@ -1,5 +1,5 @@
 import { State } from "../utils/State";
-import { rotatePoint } from "../utils/rotatePoint";
+import { rotatePoint } from "../rotate/rotatePoint";
 
 export const mouseDown = (
   canvas: HTMLCanvasElement,
@@ -88,7 +88,7 @@ const checkRotateHandle = (state: State) => {
     const shape = state.shapes[state.ShapeIndex];
     const centerX = shape.x + shape.width / 2;
     const centerY = shape.y + shape.height / 2;
-    const handleX = centerX;
+    const handleX = centerX - 4;
     const handleY = shape.y - 38;
     const rotatedHandle = rotatePoint(
       { x: handleX, y: handleY },
@@ -97,10 +97,10 @@ const checkRotateHandle = (state: State) => {
       shape.rotation
     );
     if (
-      state.mouseX >= rotatedHandle.x - 4 &&
-      state.mouseX <= rotatedHandle.x + 4 &&
-      state.mouseY >= rotatedHandle.y - 4 &&
-      state.mouseY <= rotatedHandle.y + 4
+      state.mouseX >= rotatedHandle.x &&
+      state.mouseX <= rotatedHandle.x + 8 &&
+      state.mouseY >= rotatedHandle.y &&
+      state.mouseY <= rotatedHandle.y + 8
     ) {
       state.isDragging = false;
       state.isRotating = true;
