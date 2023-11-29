@@ -9,6 +9,7 @@ import { resizeRectangle } from "../resize/ResizeRectangle";
 import { resizeTriangle } from "../resize/ResizeTriangle";
 import { resizeCircle } from "../resize/ResizeCircle";
 import { resizeText } from "../resize/ResizeText";
+import { rotatePoint } from "../utils/rotatePoint";
 export const mouseMove = (
   canvas: HTMLCanvasElement,
   ctx: CanvasRenderingContext2D,
@@ -22,31 +23,40 @@ export const mouseMove = (
     if (shape.isPointInside(moveX, moveY)) {
       isCursorChange = true;
       canvas.style.cursor = "grab";
-      console.log("a");
     }
     if (shape.isClick) {
+      const centerX = shape.x + shape.width / 2;
+      const centerY = shape.y + shape.height / 2;
       for (let i = 0; i < shape.selectionHandles.length; i++) {
-        const handle = shape.selectionHandles[i];
-        const handleX = shape.x + shape.width / 2 - 4;
-        const handleY = shape.y - 38;
+        const rotatedHandle = rotatePoint(
+          shape.selectionHandles[i],
+          centerX,
+          centerY,
+          shape.rotation
+        );
         if (
-          moveX >= handle.x &&
-          moveX <= handle.x + 8 &&
-          moveY >= handle.y &&
-          moveY <= handle.y + 8
+          moveX >= rotatedHandle.x &&
+          moveX <= rotatedHandle.x + 8 &&
+          moveY >= rotatedHandle.y &&
+          moveY <= rotatedHandle.y + 8
         ) {
           setCursorHandle(canvas, i);
           isCursorChange = true;
-          console.log("dd");
-        } else if (
-          moveX >= handleX &&
-          moveX <= handleX + 8 &&
-          moveY >= handleY &&
-          moveY <= handleY + 8
+        }
+        const rotateRotateHandle = rotatePoint(
+          { x: shape.x + shape.width / 2 - 4, y: shape.y - 38 },
+          centerX,
+          centerY,
+          shape.rotation
+        );
+        if (
+          moveX >= rotateRotateHandle.x &&
+          moveX <= rotateRotateHandle.x + 8 &&
+          moveY >= rotateRotateHandle.y &&
+          moveY <= rotateRotateHandle.y + 8
         ) {
           canvas.style.cursor = "pointer";
           isCursorChange = true;
-          console.log("??");
         }
       }
       if (isCursorChange) break;

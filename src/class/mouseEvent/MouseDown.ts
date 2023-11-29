@@ -1,4 +1,5 @@
 import { State } from "../utils/State";
+import { rotatePoint } from "../utils/rotatePoint";
 
 export const mouseDown = (
   canvas: HTMLCanvasElement,
@@ -55,13 +56,24 @@ const updateShapeSelect = (
 
 const checkSelectHandle = (state: State) => {
   const shape = state.shapes[state.ShapeIndex];
+  const rotation = shape.rotation;
+  const centerX = shape.x + shape.width / 2;
+  const centerY = shape.y + shape.height / 2;
+
   for (let i = 0; i < shape.selectionHandles.length; i++) {
     const handle = shape.selectionHandles[i];
+    const rotatedHandle = rotatePoint(
+      { x: handle.x, y: handle.y },
+      centerX,
+      centerY,
+      rotation
+    );
+
     if (
-      state.mouseX >= handle.x &&
-      state.mouseX <= handle.x + 8 &&
-      state.mouseY >= handle.y &&
-      state.mouseY <= handle.y + 8
+      state.mouseX >= rotatedHandle.x &&
+      state.mouseX <= rotatedHandle.x + 8 &&
+      state.mouseY >= rotatedHandle.y &&
+      state.mouseY <= rotatedHandle.y + 8
     ) {
       state.isDragging = false;
       state.isResizing = true;
@@ -74,13 +86,21 @@ const checkSelectHandle = (state: State) => {
 const checkRotateHandle = (state: State) => {
   if (state.shapes[state.ShapeIndex]) {
     const shape = state.shapes[state.ShapeIndex];
-    const handleX = shape.x + shape.width / 2 - 4;
+    const centerX = shape.x + shape.width / 2;
+    const centerY = shape.y + shape.height / 2;
+    const handleX = centerX;
     const handleY = shape.y - 38;
+    const rotatedHandle = rotatePoint(
+      { x: handleX, y: handleY },
+      centerX,
+      centerY,
+      shape.rotation
+    );
     if (
-      state.mouseX >= handleX &&
-      state.mouseX <= handleX + 8 &&
-      state.mouseY >= handleY &&
-      state.mouseY <= handleY + 8
+      state.mouseX >= rotatedHandle.x - 4 &&
+      state.mouseX <= rotatedHandle.x + 4 &&
+      state.mouseY >= rotatedHandle.y - 4 &&
+      state.mouseY <= rotatedHandle.y + 4
     ) {
       state.isDragging = false;
       state.isRotating = true;
@@ -95,4 +115,5 @@ const setShapeState = (state: State) => {
   state.oriY = shape.y;
   state.oriW = shape.width;
   state.oriH = shape.height;
+  state.oriRotation = shape.rotation;
 };
